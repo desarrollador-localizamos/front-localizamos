@@ -1,0 +1,120 @@
+<div class="flex mb-3">
+    <div>
+        <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [disabled]="isFirstPage()" styleClass="p-button-text"></p-button>
+        <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
+        <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [disabled]="isLastPage()" styleClass="p-button-text"></p-button>
+    </div>
+    <div class="flex ml-auto">
+        <button type="button" pButton pRipple icon="pi pi-file-pdf" class="p-button-danger mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+        <button type="button" pButton pRipple icon="pi pi-file-excel"  class="p-button-success" pTooltip="XLS" tooltipPosition="bottom"></button>
+    </div>
+</div>
+<p-table
+    #dt
+    [value]="filterCustomers()"
+    [rows]="5"
+    [paginator]="true"
+    [pageLinks]="3"
+    [first]="first"
+    [rowHover]="true"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 30, {showAll: 'Todos'}]"
+    [globalFilterFields]="['nombre', 'departamento', 'ciudad', 'estado']"
+    [scrollable]="true"
+    scrollHeight="650px"
+    [autoLayout]="true"
+    [tableStyle]="{'max-width': 'auto'}"
+    (onPage)="pageChange($event)"
+    [showCurrentPageReport]="true"
+    stateStorage="session"
+    stateKey="statedemo-session"
+    dataKey="nombre"
+    responsiveLayout="stack"
+    [breakpoint]="'780px'"
+>
+    <ng-template pTemplate="caption">
+        <div class="flex align-items-center justify-content-between">
+            <h4 class="m-0"> Lista de clientes </h4>
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" [(ngModel)]="searchTerm" placeholder="Buscar..." />
+            </span>
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem"></th>
+            <th pSortableColumn="nombre"> Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+            <th>Plan</th>
+            <th>Correo electrónico</th>
+            <th>Tipo de usuario</th>
+            <th pSortableColumn="departamento"> Departamento <p-sortIcon field="departamento"></p-sortIcon></th>
+            <th pSortableColumn="ciudad"> Ciudad <p-sortIcon field="ciudad"></p-sortIcon></th>
+            <th>Celular</th>
+            <th>Última conexión</th>
+            <th pSortableColumn="estado"> Estado <p-sortIcon field="estado"></p-sortIcon></th>
+            <th>Acciones</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-customer let-expanded="expanded">
+        <tr>
+            <td>
+                <button type="button" pButton pRipple [pRowToggler]="customer" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td><span class="p-column-title">Nombre</span>{{ customer.nombre }}</td>
+            <td><span class="p-column-title">Plan</span>{{ customer.plan }}</td>
+            <td><span class="p-column-title">Correo</span>{{ customer.correo }}</td>
+            <td><span class="p-column-title">Tipo de Usuario</span>{{ customer.tipoUsuario }}</td>
+            <td><span class="p-column-title">Departamento</span>{{ customer.departamento }}</td>
+            <td><span class="p-column-title">Ciudad</span>{{ customer.ciudad }}</td>
+            <td><span class="p-column-title">Celular</span>{{ customer.celular }}</td>
+            <td><span class="p-column-title">Última conexión</span>{{ customer.ultimaConexion }}</td>
+            <td><p-tag [value]="customer.estado" [severity]="getSeverity(customer.estado)"></p-tag></td>
+            <td>
+                <i class="pi pi-user mr-3" tooltipPosition="top" pTooltip="Usuarios"></i>
+                <i class="pi pi-book mr-3" tooltipPosition="top" pTooltip="Contactos"></i>
+                <i class="pi pi-th-large mr-3" tooltipPosition="top" pTooltip="Grupos"></i>
+                <i class="pi pi-pencil mr-3" tooltipPosition="top" pTooltip="Editar"></i>
+                <i class="pi pi-trash" tooltipPosition="top" pTooltip="Eliminar"></i>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-customer>
+        <tr>
+            <td colspan="7">
+                <div class="p-1">
+                    <p-table [value]="customer.orders" dataKey="id">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="despositivo">Dispositivo </th>
+                                <th pSortableColumn="placa">Placa </th>
+                                <th pSortableColumn="imei">IMEI </th>
+                                <th pSortableColumn="modelo">Modelo </th>
+                                <th pSortableColumn="clase">Clase </th>
+                                <th pSortableColumn="clase">Runt </th>
+                                <th pSortableColumn="estado">Estado </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-order>
+                            <tr>
+                                <td>{{order.dispositivo}}</td>
+                                <td>{{order.placa}}</td>
+                                <td>{{order.imei}}</td>
+                                <td>{{order.modelo}}</td>
+                                <td>{{order.clase}}</td>
+                                <td>{{order.runt}}</td>
+                                <td>{{order.estado}}</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="6">There are no order for this product yet.</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
