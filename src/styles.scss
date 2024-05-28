@@ -1,8 +1,58 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
 @import "primeicons/primeicons.css";
+@import "primeng/resources/themes/lara-light-blue/theme.css";
+@import "primeng/resources/primeng.css";
+
+@import "../node_modules/quill/dist/quill.core.css";
+@import "../node_modules/quill/dist/quill.snow.css";
 
 body{
     font-family: 'Poppins', sans-serif;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+   // overflow-y: hidden;
     
 }
+
+//#D1D5DB
+    //#9CA3AF
+    //#6B7280 grises
+   // #E5E7EB
+
+
+*::-webkit-scrollbar {
+    height: 10px;
+    width: 10px;
+  }
+  *::-webkit-scrollbar-track {
+    border-radius: 5px;
+    background-color: #DFE9EB;
+  }
+  
+  *::-webkit-scrollbar-track:hover {
+    background-color: #e4e5e6;
+  }
+  
+  *::-webkit-scrollbar-track:active {
+    background-color: #c2ccce;
+  }
+  
+  *::-webkit-scrollbar-thumb {
+    border-radius: 5px;
+    background-color: #c4cac2;
+  }
+  
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: #b0b2b4;
+  }
+  
+  *::-webkit-scrollbar-thumb:active {
+    background-color: #898a8b;
+  }
+
+
+
+
+ 

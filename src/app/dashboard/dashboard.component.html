@@ -1,5 +1,67 @@
-<p>dashboard works!</p>
+<app-multi-input  type="number" id="input1" name="input1" label="Input 1" 
+  (valueChange)="handleValueChange($event.value, $event.id)">
+</app-multi-input>
 
-<br>
-<br>
-<button (click)="obtenerLlaves()">mostrar unidades moviles</button>
+<div style="padding: 30px;">
+  <app-multi-input  type="password" id="input2" name="input2" label="Input 2" 
+    (valueChange)="handleValueChange($event.value, $event.id)">
+  </app-multi-input>
+</div>
+
+<div style="padding: 30px;">
+    <app-input-range></app-input-range></div>
+
+
+<app-input-select 
+  [options]="countries" 
+  [(ngModel)]="selectedCountry"
+  placeholder="Selecciona una ciudad"
+  label="Departamento"
+  id="countrySelect"
+  (valueChange)="handleValueChange($event.value, $event.id)">
+</app-input-select>
+
+
+<input type="color">
+
+
+
+<app-input-file-sencillo>
+
+</app-input-file-sencillo>
+
+
+<app-input-file-sencillo-alerta>
+    
+</app-input-file-sencillo-alerta>
+
+<app-input-file-visualizacion></app-input-file-visualizacion>
+   
+ 
+<app-input-check></app-input-check>
+      
+<app-input-check-avanzado></app-input-check-avanzado>
+
+<app-input-radio></app-input-radio>
+
+<app-input-switch></app-input-switch>
+
+<app-input-calendar-sencillo></app-input-calendar-sencillo>
+
+<app-input-calendar-template></app-input-calendar-template>
+
+<app-input-textarea></app-input-textarea>
+
+
+
+<app-input-password-sencillo></app-input-password-sencillo>
+
+<app-input-password-msg-seguridad></app-input-password-msg-seguridad>
+
+<app-input-mask></app-input-mask>
+
+<app-input-multi-number></app-input-multi-number>
+
+
+<app-editor></app-editor>
+

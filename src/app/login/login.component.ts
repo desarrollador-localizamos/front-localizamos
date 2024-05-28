@@ -1,19 +1,24 @@
 import { CommonModule } from '@angular/common';
-import { Component,OnInit } from '@angular/core';
+import { Component,OnInit, inject } from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ApirestService } from '../apirest.service';
+import { AuthService } from '../core/services/auth.service';
+import {CarouselModule} from 'primeng/carousel';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [RouterOutlet,RouterLink,CommonModule,FormsModule],
+  imports: [RouterOutlet,CarouselModule,RouterLink,CommonModule,FormsModule,ReactiveFormsModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit{
+
+  private fb = inject (FormBuilder);
+  private authService = inject(AuthService);
 
   public user = {email: '', password: ''};
   public url = '';
@@ -22,8 +27,11 @@ export class LoginComponent implements OnInit{
    		
   public recoverData = new FormData();
 
-
-
+  
+images: string[] = ['https://djwaiia8q94ix.cloudfront.net/04.139.00/images/logo/trakzee/image1.jpg',
+'https://djwaiia8q94ix.cloudfront.net/04.139.00/images/logo/trakzee/image1.jpg', 'https://djwaiia8q94ix.cloudfront.net/04.139.00/images/logo/trakzee/image1.jpg'];
+autoplayInterval = 2000;
+showNavigators = false;
 
   constructor(private router: Router,
     public service: ApirestService) { }
@@ -34,85 +42,30 @@ export class LoginComponent implements OnInit{
     {
       this.router.navigate(['/dashboard']);
     }
+
   }
 
-  login(){
-    
-    let body = new FormData;
+  public loginForm: FormGroup = this.fb.group({
+    email: ['', [Validators.required, Validators.email]],
+    password: ['', [Validators.required, Validators.minLength(5)]],
+  })
 
-    body.append('email', this.user.email);
-  	body.append('password', this.user.password);
-    body.append('customer_id', '');
-    
-      console.log(this.user.email);
-      console.log(this.user.password);
-      
 
-      this.service.queryPostRegular('login', body).subscribe(
-        
-        response=>{
-          let result = response;   
+  login() {
+    console.log(this.loginForm.value);
 
-          console.log(result);
-
-                   
-          if(result.success) 
-          {
-              let token = result.token ; 
-              let characters = "abcdefghijkmnpqrtuvwxyzABCDEFGHJKMNPQRTUVWXYZ2346789";
-              let text = "";
-              for (let i=0; i<4; i++) text +=characters.charAt(Math.floor(Math.random()*characters.length)); 
-              token = 'ey'+text+token;
-              sessionStorage.setItem('sid', token);
-              localStorage.setItem('userid', result.user.id);
-              //this.session.setUserSession(JSON.stringify(result.user));
-              this.router.navigate(['/dashboard']);
-          } else {
-            this.errorMessage = result.message;
-          }
-
-        },
-        err => 
-        {
-          console.log(err);
+    const {email,password} = this.loginForm.value;
+    this.authService.login(email,password)
+      .subscribe({
+          next: () => 
+          console.log('todo bien'),
+        error: (error) =>{
+          console.log({LoginError: error});
         }
-        
-      );
+
+      })
   }
-
-  recover()
-  	{ 
-  		this.recoverData.append('email', this.user.email);
-
-      console.log("email "+this.user.email);
-      
-      this.service.queryPost('recover-password', this.recoverData).subscribe(
-        response=>
-        {      
-           console.log("hubo una repuesta");
-            let result = response.json();                 
-            if(result.success)
-            {
-                this.errorMessage = result.message;
-                //Show success message
-
-              
-
-            }
-            else
-            {
-                this.errorMessage = result.message;
-              
-            }
-        },
-        err => 
-        {
-            console.log(err);         
-        }
-    );
-
-
-  	}
+  
 
   showConfirmAlert() {
     Swal.fire({
@@ -137,3 +90,10 @@ export class LoginComponent implements OnInit{
  
   
 }
+
+
+
+
+
+
+

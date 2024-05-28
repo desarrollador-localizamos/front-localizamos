@@ -1,14 +1,4 @@
-<div class="flex mb-3">
-    <div>
-        <p-button type="button" icon="pi pi-chevron-left" (click)="prev()" [disabled]="isFirstPage()" styleClass="p-button-text"></p-button>
-        <p-button type="button" icon="pi pi-refresh" (click)="reset()" styleClass="p-button-text"></p-button>
-        <p-button type="button" icon="pi pi-chevron-right" (click)="next()" [disabled]="isLastPage()" styleClass="p-button-text"></p-button>
-    </div>
-    <div class="flex ml-auto">
-        <button type="button" pButton pRipple icon="pi pi-file-pdf" class="p-button-danger mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
-        <button type="button" pButton pRipple icon="pi pi-file-excel"  class="p-button-success" pTooltip="XLS" tooltipPosition="bottom"></button>
-    </div>
-</div>
+
 <p-table
     #dt
     [value]="filterCustomers()"
@@ -33,13 +23,18 @@
     [breakpoint]="'780px'"
 >
     <ng-template pTemplate="caption">
-        <div class="flex align-items-center justify-content-between">
-            <h4 class="m-0"> Lista de clientes </h4>
-            <span class="p-input-icon-left">
+        <div class="container">
+            <div class="buttons mb-3">
+              <button type="button" pButton pRipple icon="pi pi-file-pdf" class="p-button-danger mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+              <button type="button" pButton pRipple icon="pi pi-file-excel" class="p-button-success" pTooltip="XLS" tooltipPosition="bottom"></button>
+            </div>
+            <div class="search  mb-3">
+              <span class="p-input-icon-left">
                 <i class="pi pi-search"></i>
                 <input pInputText type="text" [(ngModel)]="searchTerm" placeholder="Buscar..." />
-            </span>
-        </div>
+              </span>
+            </div>
+          </div>
     </ng-template>
     <ng-template pTemplate="header">
         <tr>

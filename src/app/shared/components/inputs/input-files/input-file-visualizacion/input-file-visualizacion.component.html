@@ -1,0 +1,21 @@
+<div class="card flex justify-content-center">
+    <p-toast></p-toast>
+    <p-fileUpload 
+        name="demo[]" 
+        url="https://www.primefaces.org/cdn/api/upload.php" 
+        (onUpload)="onUpload($event)" 
+        [multiple]="true" 
+        accept="image/*" 
+        [maxFileSize]="1000000">
+            <ng-template pTemplate="content">
+                <ul *ngIf="uploadedFiles.length">
+                    <li *ngFor="let file of uploadedFiles" style="list-style: none;">
+                        <div style="display: flex ;list-style: none;  flex-wrap: wrap; justify-content: center;">
+                            <img [src]="file.objectURL" alt="Image preview" width="100" height="100" />
+                            <p>{{ file.name }} - {{ file.size }} bytes</p>
+                        </div>
+                    </li>
+                </ul>
+            </ng-template>
+    </p-fileUpload>
+</div>

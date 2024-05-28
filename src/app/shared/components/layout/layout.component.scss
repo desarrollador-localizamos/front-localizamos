@@ -1,0 +1,47 @@
+
+.contenedor-contenido {
+    display: flex;
+    flex-direction: column;
+   /* Opcional: ajusta la altura del contenedor principal */
+    height: 100%;
+}
+
+
+.main-content {
+    display: flex;
+    flex: 1; /* Esto permite que el contenido principal ocupe el espacio restante */
+    margin-top: 65px;
+}
+
+.home-section{
+    flex: 1; /* Esto permite que la sección principal ocupe todo el espacio restante */
+   background-color: #f6f6f7;
+   padding: 10px 20px;
+   overflow: auto;
+   height: calc(100vh - 65px);
+}
+
+.home-section .home-content .pi-bars,
+.home-section .home-content .text
+{
+  color: #535050;
+  font-size: 35px;
+    
+}
+
+.home-section .home-content .pi-bars
+{
+ margin: 0 15px;
+    
+}
+
+.home-section{
+    margin-left: 220px;
+    transition: all 0.5s ease;
+ }
+
+.home-section.icon-only{
+   margin-left: 70px;
+   transition: all 0.5s ease;
+}
+

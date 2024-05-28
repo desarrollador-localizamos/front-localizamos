@@ -12,8 +12,6 @@ export class ApirestService {
   // public apiUrl: string ='http://localhost/Localizamos/back-postgres/public/api/v1';
 
 
-  
-
   constructor(private http: HttpClient) { }
 
   queryGet(endpoint: string): Observable<any> {
@@ -24,8 +22,7 @@ export class ApirestService {
   queryPostRegular(route: string, body: any): Observable<any> {
     const url = `${this.apiUrl}/${route}`;
     const headers = new HttpHeaders({
-  
-     
+   
     });
 
     return this.http.post<any>(url, body, { headers });
@@ -35,20 +32,16 @@ export class ApirestService {
   queryPost(route: string, body: any): Observable<any> {
     let token = 'Bearer';
 
-   
-  
     if (null != sessionStorage.getItem('sid') && undefined != sessionStorage.getItem('sid') && 'null' != sessionStorage.getItem('sid')) {
       token += sessionStorage.getItem('sid')?.substring(6);
-
     } else {
       token = '';
     }
-  
+
     const headers = new HttpHeaders({ 'Authorization': token });
     const url = `${this.apiUrl}/${route}`;
     let result = this.http.post<any>(url, body, { headers: headers });
 
-    console.log(result)
     return result;
   }
     

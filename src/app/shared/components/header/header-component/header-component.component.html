@@ -1,0 +1,97 @@
+<header class="header">
+    <div class="logo">
+        <div class="logo1">
+            <img class="img-logo1" src="../../assets/imagenes/logo_icono.png" alt="Logo">
+        </div>
+        <div class="logo2">
+            <img class="img-logo2" src="../../assets/imagenes/logo_nombre.png" alt="Logo">
+        </div>
+       
+    </div>
+
+
+    <nav class="navbar">
+      
+        <ul class="nav-links-header">
+           
+            <li>
+                <form action="">
+                    <input class="buscador" type="search" required placeholder="Buscar">
+                    <i class="pi pi-search icono-buscador"></i>
+                </form>
+            </li>
+            <li><i class="pi pi-bell text-4xl icono-notificacion" pBadge value="2" (click)="op2.toggle($event)" ></i>
+                <p-overlayPanel #op2  >
+                    <ng-template pTemplate="content" >
+
+                        <div>
+                            <span >
+                                Santiago Alarcon
+                            </span>
+                            <br>
+                            <br>
+                            <span>
+                                developer
+                            </span>
+                        </div>
+                       <ul class="popover-profile">
+                        <li><i class="pi pi-user"></i> Perfil</li>
+                        <li><i class="pi pi-cog"></i> Configuración</li>
+                        <li><i class="pi pi-question"></i> ¿Necesitas ayuda?</li>
+                        <li><i class="pi pi-sign-out"></i> Cerrar sesión</li>
+                       </ul>
+                    </ng-template>
+                </p-overlayPanel>
+            </li>
+            
+            <li>
+                <div class="profile-details" (click)="op.toggle($event)" (click)="toggleRotation()">
+                    <div class="profile-content">
+                        <img src="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" alt="">
+                    </div>
+                        <div class="name-job">
+                            <div class="profile-name" >
+                                Santiago 
+                            </div>
+                            <div class="job">
+                                Último Inicio de Sesión <br> <span style="font-weight: 600;">19/03/2024 1:52 PM</span>
+                            </div>
+                         
+                        </div>
+                       <i  class="pi pi-angle-down arrow-profile" [style.transform]="arrowTransform"></i>     
+                </div>
+
+                <p-overlayPanel #op  >
+                    <ng-template pTemplate="content" >
+
+                        <div>
+                            <span style="font-size: 18px;
+                            margin-bottom: 0;
+                            font-weight: 600;
+                            color: #363949">
+                                Santiago Alarcon
+                            </span>
+                            <br>
+                            <span style="color: #6c757d; font-size: 21px;
+                            font-weight: 600;">
+                                developer
+                            </span>
+                        </div>
+                       <ul class="popover-profile">
+                        <li style="font-size: 20px;
+                        padding: 10px 15px !important;
+                        transition: 0.3s;
+                        font-weight: 500;
+                        font-family: 'Poppins';
+                        color: #363949"><i class="pi pi-user" ></i> Perfil</li>
+                        <li><i class="pi pi-cog"></i> Configuración</li>
+                        <li><i class="pi pi-question"></i> ¿Necesitas ayuda?</li>
+                        <li><i class="pi pi-sign-out"></i> Cerrar sesión</li>
+                       </ul>
+                    </ng-template>
+                </p-overlayPanel>
+              
+            </li>
+        </ul>
+    </nav>
+</header>

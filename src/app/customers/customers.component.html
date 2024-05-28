@@ -1,3 +1,85 @@
-<h3> Clientes </h3>
-<hr>
+
+
+<div class="container">
+    <div class="left">
+      <h2 class="title-customers">Clientes</h2>
+    </div>
+    <div class="right">
+        <p-button type="button" label="Agregar" class="mr-2" (click)="sidebarVisible2 = true" icon="pi pi-plus"></p-button>
+    </div>
+  </div>
+
+  <p-sidebar [(visible)]="sidebarVisible2" position="right">
+    <div class="card">
+        Formulario Cliente
+        <p-steps [model]="items" [readonly]="false" [activeIndex]="activeIndex" (activeIndexChange)="onActiveIndexChange($event)"></p-steps>
+    </div>
+</p-sidebar>
+
+
+
+<style>
+    .container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.left {
+  align-self: center; /* Para alinear verticalmente al centro */
+}
+
+.right {
+  align-self: center; /* Para alinear verticalmente al centro */
+}
+</style>
+
+
+
+
+<div class="card flex align-items-center justify-content-center flex-wrap gap-3">
+   
+    <div >
+        <h5 class="title-select">Tipo de usuario</h5>
+        <p-dropdown [options]="userTypes" [(ngModel)]="selectedUser" optionLabel="name" [showClear]="true" placeholder="Selecciona el tipo"></p-dropdown>
+    </div>
+
+    <div>
+        <h5 class="title-select">Estado</h5>
+        <p-dropdown [options]="EstadoTypes" [(ngModel)]="selectedEstado" optionLabel="name" [showClear]="true" placeholder="Selecciona estado"></p-dropdown>
+    </div>
+
+    <div>
+        <h5 class="title-select">Departamento</h5>
+        <p-dropdown [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Selecciona una ciudad">
+            <ng-template pTemplate="selectedItem" let-selectedOption>
+                <div class="flex align-items-center gap-2">
+                    <div>{{ selectedOption.name }}</div>
+                </div>
+            </ng-template>
+            <ng-template let-country pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                    <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px"/>
+                    <div>{{ country.name }}</div>
+                </div>
+            </ng-template>
+        </p-dropdown>
+    </div>
+    <div>
+        <h5 class="title-select">Ciudad</h5>
+        <p-dropdown [options]="countries" [(ngModel)]="selectedCountry" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Country">
+            <ng-template pTemplate="selectedItem" let-selectedOption>
+                <div class="flex align-items-center gap-2">
+                    <div>{{ selectedOption.name }}</div>
+                </div>
+            </ng-template>
+            <ng-template let-country pTemplate="item">
+                <div class="flex align-items-center gap-2">
+                    <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + country.code.toLowerCase()" style="width: 18px"/>
+                    <div>{{ country.name }}</div>
+                </div>
+            </ng-template>
+        </p-dropdown>
+    </div>
+</div>
+
 <app-table-customers/>

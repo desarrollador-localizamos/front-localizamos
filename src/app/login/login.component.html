@@ -1,232 +1,5 @@
-<style>
-    .container {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-items: center;
-      height: 100vh; /* Ajusta la altura al 100% de la ventana */
-      font-family: 'Poppins', sans-serif;
-    }
-  
-    .image-container {
-      flex: 1;
-      order: 1;
-      text-align: center; /* Centra horizontalmente */
-      padding: 40px 30px 0px 30px;
-    }
-  
-    .login-container {
-      flex: 1;
-      order: 2;
-      text-align: center; /* Centra horizontalmente */
-      display: flex;
-      padding: 50px;
-      justify-content: center;
-      align-items: center;
-    }
-  
-    .image-container img {
-      max-width: 100%; /* Ajusta la imagen al ancho máximo del contenedor */
-      height: auto;
-      animation: moverArriba 4s infinite alternate;
-    }
-  
-    @keyframes moverArriba {
-    0% {
-      transform: translateY(0); /* Comienza sin desplazamiento */
-    }
-    100% {
-      transform: translateY(-20px); /* Termina con un desplazamiento hacia arriba */
-    }
-  }
-    .login-card {
-      background-color: #f0f0f0;
-      border-radius: 10px;
-      padding: 20px;
-      margin: 20px;
-    }
-  
-    .login-card h2 {
-      text-align: center;
-    }
-  
-    .login-card input {
-      width: 100%;
-      margin-bottom: 10px;
-      padding: 10px;
-      box-sizing: border-box;
-    }
-  
-    .login-card button {
-      width: 100%;
-      padding: 10px;
-      background-color: #007bff;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-  
-    .div-1 {
-      width: 50%;
-    }
-  
-    .div-2 {
-      width: 50%;
-      
-    }
-  
-    .main{
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      background-color: #fff;
-      max-height: 470px;
-      width: 390px;
-      overflow: hidden;
-      border-radius: 12px;
-      box-shadow: 7px 7px 10px 3px #24004628;
-  
-    }
-  
-    .form{
-      display: flex;
-      align-items: center;
-      flex-direction: column;
-      gap: 14px;
-      padding: 24px;
-    }
-  
-    #chk{
-      display: none;
-    }
-  
-    .login{
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-  
-  
-    .login label{
-      margin:  25% 0 5%;
-    }
-  
-    label{
-      color: #fff;
-      font-size: 2rem;
-      justify-content: center;
-      display: flex;
-      font-weight: bold;
-      cursor: pointer;
-      transition: .5s ease-in-out;
-    }
-  
-    input{
-      width: 100%;
-      height: 30px;
-      background: #f9f9f9;
-      padding: 10px;
-      border: none;
-      outline: none;
-      border-radius: 4px;
-    }
-  
-    .register{
-      background: #eee;
-      border-radius: 70% / 10%;
-      transform:  translateY(-5%);
-      transition: .8 ease-in-out;
-    }
-  
-  
-  .register-label{
-    color: #573b8a;
-    transform: scale(.6);
-  
-  }
-  
-  
-  #chk:checked ~ .register  {
-    transform: translateY(-71%);
-  
-  }
-  
-  #chk:checked ~ .register  label{
-   
-    transform: scale(1);
-    margin: 10% 0 10%;
-    
-  }
-  
-  
-  
-  #chk:checked ~ .login  label{
-   
-   transform: scale(.7);
-   margin: 5% 0 5%;
-  
-  }
-  
-  .form button{
-    width: 85%;
-    height: 40px;
-    margin: 12px auto 10%;
-    color: #fff;
-    background-color: #0100ff;
-    font-size: 1rem;
-    font-weight: bold;
-    border: none;
-    border-radius:4px;
-    transition: .2s ease-in;
-    cursor: pointer;
-  
-  }
-  
-  
-  .form button:hover{
-   background-color: #0018b0;
-  }
-  
-  
-    @media (max-width:700px) {
-  
-    .image-container img {
-      max-width: 50%; /* Ajusta la imagen al ancho máximo del contenedor */
-      height: auto;
-    }
-  
-     .login-container{
-      padding: 0px 30px 50px 30px;
-     }
-  
-      .div-1,
-      .div-2 {
-        width: 100%; /* Ajusta el ancho al 100% en dispositivos pequeños  https://img.freepik.com/vector-gratis/fondo-luminoso-puntos_1055-3132.jpg?w=740&t=st=1709700859~exp=1709701459~hmac=8a33d3c…*/
-      }
-    }
-  
-    
-    @media (max-width:580px) {
-  
-  .image-container img {
-    max-width: 60%; /* Ajusta la imagen al ancho máximo del contenedor */
-    
-  }
-  
-  }
-  
-  @media (max-width:540px) {
-  
-  .image-container img {
-    max-width: 70%; /* Ajusta la imagen al ancho máximo del contenedor */
-    
-  }
-  
-  }
-</style>
 
-<div class="container"  style=" background-size: cover;
+<!--<div class="container"  style=" background-size: cover;
   background-image: url(http://aplicacion.localizamos.co/assets/images/fondos/fondo-fhd.jpg);
   background-repeat: no-repeat;
   background-position: center;">
@@ -242,11 +15,12 @@
         <input type="checkbox" id="chk" aria-hidden="true">
   
         <div class="login">
-          <form class="form">
+          <form class="form" [formGroup]="loginForm" (ngSubmit)="login();">
             <label for="chk" aria-hidden="true" style="color: #848484;">Iniciar sesión</label>
-            <input class="input"  [(ngModel)]="user.email"  name="email" id="email" placeholder="Correo electronico">
-            <input class="input"  [(ngModel)]="user.password" type="password" name="password" id="password" placeholder="Contraseña">
-            <button type="button" (click)="login()">Ingresar</button>
+            <input class="input"  formControlName="email"  name="email" id="email" placeholder="Correo electronico">
+            <input class="input"  formControlName="password" type="password" name="password" id="password" placeholder="Contraseña">
+            <button class="my-disabled-button" type="submit" [disabled]="loginForm.invalid"
+             >Ingresar</button>
           
           </form>
   
@@ -257,8 +31,8 @@
             <label for="chk" aria-hidden="true" style="font-size: 1.5rem;
             color: #5d5d5d;">¿Olvido su contraseña?</label>
             <input class="input" type="email"  [(ngModel)]="user.email" name="email-recover"  id="email-recover" placeholder="Email">
-          
-            <button (click)="recover()">Recuperar</button>
+            
+            <button>Recuperar</button>
           </form>
   
         </div>
@@ -266,5 +40,80 @@
        </div>
       </div>
     </div>
-  </div>
+  </div>-->
   
+    <section>
+        
+     
+          <div class="imgBx">
+            <p-carousel [value]="images" [autoplayInterval]="autoplayInterval" [showNavigators]="showNavigators">
+              <ng-template let-image pTemplate="item">
+                <img [src]="image" alt="imagen" style="width:100%" />
+              </ng-template>
+            </p-carousel>
+          </div>
+    
+        
+        <div class="contentBx">
+          
+            <div class="formBx">
+                <div class="logo">
+                    <img src="https://localizamos.co/wp-content/uploads/2019/06/logo_localizamos_tsa.png" alt="">
+                </div>
+                <h2>Bienvenido de vuelta</h2>
+
+                <form [formGroup]="loginForm" (ngSubmit)="login();">
+                    <div class="input">
+                        <span>Email</span>
+                        <div class="password-container">
+                            <input type="email" formControlName="email"  name="email" id="email" placeholder="Ingresa tu correo">
+                        </div>
+                    </div>
+
+                    <div class="input">
+                        <div style="display: flex; flex-wrap: nowrap; width: 100%;">
+                            <span style="width: 50%;">Contraseña</span> 
+                            <span class="mensaje-contraseña">¿Has olvidado tu contraseña?</span>
+                        </div>
+                       
+                        <div class="password-container">
+                            <input formControlName="password" type="password" name="password" id="password" placeholder="Ingresa tu contraseña">
+                            <i class="fi fi-rr-eye-crossed"></i>
+                        </div>
+                    </div>
+
+                    <div class="remember">
+                        <label for=""><input type="checkbox"> Recuerdame</label>
+                    </div>
+
+                    <div class="div-button-login">
+                        <button type="submit" class="button-login my-disabled-button" [disabled]="loginForm.invalid">Iniciar sesión</button>
+                    </div>
+
+                    <div class="text-inicio">
+                        <p>O inicia sesión con</p>
+                    </div>
+
+                    <div style="display: flex;">
+                        <button class="button-redes" >
+                            <img src="../../assets/login/logo-google.png" alt=""> Google
+                        </button>
+
+                        <button class="button-redes">
+                            <img src="../../assets/login/logo-facebook.png" alt=""> Facebook
+                        </button>
+                    </div>
+
+                </form>
+
+               
+               
+            </div>
+            <div class="mensaje-footer">
+                <span >¿Todavia no tienes una cuenta?  <a class="enlace-asesor"  href="#"> Comunicate con un asesor</a></span>
+           </div>
+        </div>
+    </section>
+
+
+

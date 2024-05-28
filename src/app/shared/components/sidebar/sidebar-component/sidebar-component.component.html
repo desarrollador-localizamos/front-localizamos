@@ -1,0 +1,188 @@
+
+    <div class="sidebar" >
+        <div class="menu-burger">
+            <i class="pi pi-arrow-left icono-contraer" (click)="toggleMenu()"></i>
+            <span class="link_name">Contraer</span>
+            <hr style="margin-top: 10px;">
+        </div>
+        
+        <ul class="nav-links">
+            <li>
+                <a href="">
+                    <i class="pi pi-home"></i>
+                    <span class="link_name">Inicio</span>
+                </a>
+                <ul class="menu-desplegable">
+                    <li class="lista-submenu">
+                        <a class="link_name-desplegable" href="#">
+                            Inicio
+                        </a>
+                    </li>
+    
+                </ul>
+            </li>
+
+            <li>
+                <a href="">
+                    <i class="pi pi-map"></i>
+                    <span class="link_name">Mapa</span>
+                </a>
+                <ul class="menu-desplegable">
+                    <li class="lista-submenu">
+                        <a class="link_name-desplegable" href="#">Mapa</a></li>
+    
+                </ul>
+            </li>
+
+            <li>
+                <a href="">
+                    <i class="pi pi-globe"></i>
+                    <span class="link_name">Visor general</span>
+                </a>
+                <ul class="menu-desplegable">
+                    <li class="lista-submenu"><a class="link_name-desplegable" href="#">Visor general</a></li>
+    
+                </ul>
+            </li>
+
+            <li>
+                <a href="">
+                    <i class="pi pi-desktop"></i>
+                    <span class="link_name">Central de monitoreo</span>
+                </a>
+                <ul class="menu-desplegable">
+                    <li class="lista-submenu"><a class="link_name-desplegable" href="#">Central de monitoreo</a></li>
+    
+                </ul>
+            </li>
+
+            
+            <li>
+                <a href="">
+                    <i class="pi pi-users"></i>
+                    <span class="link_name">Clientes</span>
+                </a>
+                <ul class="menu-desplegable">
+                    <li class="lista-submenu"><a class="link_name-desplegable" href="#">Clientes</a></li>
+    
+                </ul>
+            </li>
+    
+            <li>
+                <div class="icon-link" (click)="toggleSubMenu($event)">
+                    <a >
+                        <i class="pi pi-box"></i>
+                        <span class="link_name">Recursos</span>
+                    </a>
+                    <i  class="pi pi-angle-down arrow"></i>
+                </div>
+                <ul class="sub-menu ">
+                    <li><a class="link_name-desplegable" href="#">Recursos</a></li>
+                    <li><a class="blank2" href=""> <i class="pi pi-truck"></i> Activos móviles</a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-tablet"></i> Dispositivos</a></li>
+                    <li><a  class="blank2" href=""><i class="pi pi-map-marker"></i> Recursos geográficos</a></li>
+                    <li><a  class="blank2" href=""><i class="pi  pi-bell"></i> Notificaciónes</a></li>
+                    <li><a  class="blank2" href=""><i class="pi pi-key"></i> Llaves dallas</a></li>
+                    <li><a  class="blank2" href=""><i class="pi pi-users"></i> Conductores</a></li>
+                    <li><a  class="blank2" href=""><i class="pi pi-directions"></i> Dibujar ruta</a></li>
+                    <li><a  class="blank2" href=""><i class="pi pi-credit-card"></i> Simcards</a></li>
+                    <li><a  class="blank2" href=""><i class="pi pi-clone"></i> Planes simcard</a></li>
+                    <li><a  class="blank2" href=""><i class="pi pi-shield"></i> Control-T</a></li>
+
+                </ul>
+            </li>
+    
+            <li>
+                <div class="icon-link" (click)="toggleSubMenu($event)">
+                    <a >
+                        <i class="pi pi-th-large"></i>
+                        <span class="link_name">Administración</span>
+                    </a>
+                    <i class="pi pi-angle-down arrow"></i>
+                </div>
+                <ul class="sub-menu ">
+                    <li><a class="link_name-desplegable" href="">Administración</a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-users"></i> Usuarios</a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-unlock"></i>Permisos</a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-clone"></i> Planes</a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-verified"></i> Asesores comerciales</a></li>  
+                </ul>
+            </li>
+    
+            <li >
+                <div class="icon-link " (click)="toggleSubMenu($event)">
+                    <a >
+                        <i class="pi pi-cog"></i>
+                        <span class="link_name">Configuración</span>
+                    </a>
+                    <i class="pi pi-angle-down arrow"></i>
+                </div>
+                <ul class="sub-menu " >
+                    <li ><a class="link_name-desplegable" href="">Configuración</a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-list"></i> Tipos de dispositivos </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-align-center"></i> Tramas </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-align-center"></i> Tramas de dispositivos </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-list"></i> Clases de vehículos </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-list"></i> Subclases de vehículos </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-car"></i> Tipos de vehículos </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-check-square"></i> Estados de vehículos </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-comments"></i> Tipos de contacto </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-exclamation-triangle"></i> Alertas </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-list"></i> Tipos de eventos </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-list"></i> Tipos de novedad </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-cog"></i> Maquinaria amarilla </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-tags"></i> Marcas </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-directions-alt"></i> Direcciones </a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-code"></i> Comandos </a></li>
+
+                 
+                </ul>
+            </li>
+    
+            <li>
+                <div class="icon-link" (click)="toggleSubMenu($event)">
+                    <a >
+                        <i class="pi pi-copy"></i>
+                        <span class="link_name">Reportes</span>
+                    </a>
+                    <i class="pi pi-angle-down arrow"></i>
+                </div>
+                <ul class="sub-menu " style="margin-bottom: 80px;">
+                    <li><a class="link_name-desplegable" href="">Reportes</a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-file-export"></i> Reporte histórico</a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-file-export"></i> Reporte de clientes</a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-file-export"></i> Reporte de novedades</a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-file-export"></i> Reporte y estadisticas</a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-file-export"></i> Reporte log de tramas</a></li>
+                    <li><a class="blank2" href=""><i class="pi pi-file-export"></i> Reporte de la policía</a></li>
+  
+                </ul>
+            </li>
+    
+        
+        
+            <li>
+                <div class="profile-details">
+                    <div class="profile-content">
+                        <img src="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" alt="">
+                    </div>
+            
+                    <div class="name-job">
+                        <div class="profile-name">
+                            Santiago 
+                        </div>
+                        <div class="job">
+                             Web designer
+                        </div>
+                         
+                    </div>
+                    <div>
+                        <i  class="pi pi-sign-out logout"></i>
+                    </div>
+                       
+                </div>
+            </li>
+        </ul>
+    </div>
+
+  

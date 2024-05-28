@@ -1,3 +1,57 @@
 body {
     color: black;
 }
+
+::ng-deep .p-dropdown{
+
+    width: 230px;
+    
+}
+
+
+.button-agregar-cliente ::ng-deep button.p-ripple.p-element.p-button.p-component  {
+    font-size: 0.8rem;
+  
+ }
+
+ .button-agregar-cliente ::ng-deep span.pi.pi-plus.p-button-icon.p-button-icon-left.ng-star-inserted {
+    font-size: 0.9rem;
+ 
+ }
+
+ .button-agregar-cliente ::ng-deep span.p-button-label.ng-star-inserted{
+    font-weight: 600;
+ }
+
+ .title-customers{
+    font-weight: 600;
+ }
+
+.title-select{
+    font-weight: 500;
+    color: #4c4f52;
+    margin-bottom: 2px;
+
+}
+
+.card.flex.align-items-center.justify-content-center.flex-wrap.gap-3{
+    background-color: #fff;
+    padding-bottom: 20px;
+    margin-bottom: 40px;
+    border-radius: 10px;
+}
+
+
+::ng-deep .p-dropdown {
+    display: inline-flex;
+    cursor: pointer;
+    position: relative;
+    border: 0;
+    background-color: #e5e7eb;
+    -webkit-user-select: none;
+    user-select: none;
+}
+
+::ng-deep span.p-element.p-dropdown-label.p-inputtext.p-placeholder.ng-star-inserted{
+    font-size: 0.9rem;
+}

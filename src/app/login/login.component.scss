@@ -1,0 +1,437 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins:200,300,400,500,600,700,800,900&display=swap');
+
+*{
+    margin: 0;
+    padding: 0px;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+section{
+    position: relative;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+}
+
+
+section .imgBx{
+    position: relative;
+    width: 60%;
+    height: 100%;
+}
+
+
+section .imgBx img{
+    width: 100%;
+    height: 100%;
+    object-fit: fill;
+}
+
+::ng-deep .p-carousel-item{
+  width: 100%;
+  height: 100vh;
+}
+
+::ng-deep .p-carousel-content{
+  overflow: visible;
+}
+
+::ng-deep ul.p-carousel-indicators.p-reset {
+  margin-top: -50px;
+    z-index: 999;
+}
+
+::ng-deep .p-carousel .p-carousel-indicators .p-carousel-indicator button {
+
+    border-radius: 5px;
+}
+
+::ng-deep .p-carousel .p-carousel-indicators .p-carousel-indicator.p-highlight button {
+    background-color: #3B82F6;
+}
+
+
+section .contentBx{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40%;
+    height: 100%;
+   
+}
+section .contentBx .logo {
+    position: absolute;
+    top: 30px;
+    right: 30px;
+    max-width: 200px; /* Ajusta el tamaño según tus necesidades */
+}
+
+section .contentBx .logo img {
+    width: 100%;
+    height: auto;
+}
+
+section .contentBx .formBx{
+    width: 100%;
+    padding: 60px;
+}
+
+section .contentBx .formBx h2{
+    color: #616364;
+    font-weight: 600;
+    font-size: 1.8em;
+    margin-bottom: 20px;
+    display: inline-block;  
+}
+
+
+section .contentBx .formBx .input{
+    margin-bottom: 20px;
+}
+
+
+section .contentBx .formBx .input span{
+   
+   font-size: 14px;
+   margin-left: 10px;
+   margin-bottom: 5px;
+   font-weight: 500;
+   letter-spacing: 0.5px;
+   color:  #545657;
+}
+
+section .contentBx .formBx .input .password-container {
+    position: relative;
+    width: 100%;
+}
+
+section .contentBx .formBx .input .password-container input {
+    width: 100%;
+    padding: 10px;
+    outline: none;
+    font-weight: 400;
+    border: 0;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    color: rgb(103, 100, 100);
+    background: #ebecef;
+    border-radius: 8px;
+    padding-right: 40px; /* Espacio para el ícono */
+}
+
+span.mensaje-contraseña{
+    font-size: 12px !important;
+    width: 80%;
+    display: flex;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    color: #696969;
+    justify-content: flex-end;
+}
+
+section .contentBx .formBx .input .password-container i {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    color: #607d8b;
+}
+
+.div-button-login{
+    text-align: center;
+    margin-bottom: 30px;
+    margin-top: 30px;
+    
+}
+
+button.button-login{
+    background-color: rgb(49, 49, 228);
+    padding: 10px;
+    width: 100%;
+    border-radius: 8px;
+    color: white;
+    outline: none;
+    border: none;
+    cursor: pointer;
+}
+
+button.button-login:hover{
+    background-color: rgb(30, 30, 244);
+}
+
+
+button.my-disabled-button:disabled {
+  background-color: #0100ff9e !important;
+
+}
+
+.remember{
+    margin-bottom: 10px;
+    color: rgb(103, 100, 100);
+    font-weight: 400;
+    font-size: 14px;
+    margin-left: 3px;
+   
+}
+
+
+section .contentBx .formBx .input p{
+
+    color: #607d8b; 
+}
+
+
+section .contentBx .formBx .input p a{
+
+    color: rgb(49, 49, 228); 
+}
+
+
+.text-inicio{
+    text-align: center;
+}
+
+.text-inicio p{
+    color: #545657;
+    font-weight: 500;
+}
+
+.button-redes{
+    margin: 10px 0px 10px 10px;
+    padding: 10px 0px;
+    font-size: 16px;
+    font-weight: 500;
+    width: 50%;
+    background-color: #ebecef;
+    border-radius: 3px;
+    border: 0;
+   
+}
+
+.button-redes img{
+    width: 20px;
+    height: 20px;
+    margin-bottom: -5px;
+    object-fit: cover;
+}
+
+.mensaje-footer{
+    position: absolute;
+    bottom: 15px;
+    padding: 20px; 
+    text-align: center;
+}
+
+.enlace-asesor{
+    color: #3B82F6;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+@media (max-width: 1110px) {
+
+    section .imgBx{
+        width: 50%;
+    }
+    
+    section .contentBx{  
+        width: 50%;   
+    }
+}
+
+
+@media (max-width: 768px) {
+    section .imgBx{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+
+    section .imgBx::before{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgb(255 255 255 / 21%);  
+        z-index: 1;
+        mix-blend-mode: screen;
+    }
+
+    section .contentBx{
+       display: flex;
+       justify-content: center;
+       align-items: center;
+       width: 100%;
+       height: 100%;
+       z-index: 1;
+    }
+
+    section .contentBx .logo {
+        position: relative;
+        top: 0;
+        right: 0;
+        display: flex;
+        max-width: 100%;
+        justify-content: center;
+    }
+
+    section .contentBx .logo img{
+       width: 200px;
+    }
+
+    ::ng-deep ul.p-carousel-indicators.p-reset {
+      display: none;
+    }
+
+    section .contentBx .formBx {
+        width: 100%;
+        padding: 40px;
+        background-color: white;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        margin: 70px;
+        border-radius: 10px;
+    }
+
+    section .contentBx .formBx h2 {
+        margin-top: 30px;
+        font-size: 1.5em;
+    }
+
+
+     section .contentBx .formBx h3{
+        color: #607d8b;
+        text-align: center;
+        margin: 30px 0 10px;
+        font-weight: 500;
+     }
+
+     button.button-login{
+        padding: 8px;
+        width: 100%;
+        border-radius: 6px;
+        font-size: 12px;
+       
+    }
+    
+ 
+}
+ 
+
+
+@media (max-width: 550px) {
+    section .contentBx .logo img{
+        width: 180px;
+     }
+ 
+    section .contentBx .formBx h2 {
+        font-size: 1.5em;
+    }
+
+    section .contentBx .formBx {
+        width: 100%;
+        padding: 40px;
+        background-color: white;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+        margin: 50px;
+        border-radius: 10px;
+    }
+
+
+    section .contentBx .formBx .input .password-container input {
+        width: 100%;
+        padding: 8px;
+        font-size: 13px;
+        border-radius: 5px;
+    }
+
+    .remember{
+ 
+        font-size: 13px;
+    }
+    
+    .button-redes{
+        margin: 8px 0px 0px 8px;
+        padding: 8px 0px;
+        font-size: 13px;
+        font-weight: 500;
+        width: 50%;
+        background-color: #ebecef;
+        border-radius: 3px;
+        border: 0;
+       
+    }
+    
+    .button-redes img{
+        width: 18px;
+        height: 18px;
+        margin-bottom: -5px;
+        object-fit: cover;
+    }
+
+    .mensaje-footer {
+        bottom: 1px;
+        padding: 10px 20px;
+    }
+
+    span.mensaje-contraseña {
+        font-size: 10px !important;
+    
+}   
+
+}
+
+
+@media (max-width: 380px) {
+
+    section .contentBx .logo img{
+        width: 150px;
+    }
+
+    section .contentBx .formBx h2 {
+        font-size: 1em;
+    }
+
+    section .contentBx .formBx .input {
+        margin-bottom: 15px;
+    }
+
+    section .contentBx .formBx .input span{
+   
+        font-size: 12px;
+     }
+     
+    
+     section .contentBx .formBx .input .password-container input {
+         padding: 8px;
+         font-size: 13px;
+         border-radius: 6px;
+
+     }
+
+     span.mensaje-contraseña {
+        font-size: 8px !important;
+        
+    }
+
+    .div-button-login {
+        text-align: center;
+        margin-bottom: 20px;
+        margin-top: 20px;
+    }
+
+    .text-inicio p {
+        font-size: 12px;
+    }
+
+    
+}
+    
+
+
+

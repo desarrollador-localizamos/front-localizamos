@@ -107,17 +107,7 @@ export class TableCustomersComponent implements OnInit {
   //     FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   // }
 
-  next() {
-    this.first = this.first + this.rows;
-  }
-
-  prev() {
-      this.first = this.first - this.rows;
-  }
-
-  reset() {
-      this.first = 0;
-  }
+ 
 
   pageChange(event: any) {
       this.first = event.first;

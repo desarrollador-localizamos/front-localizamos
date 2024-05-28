@@ -1,0 +1,9 @@
+<p-fileUpload 
+    mode="basic" 
+    chooseLabel="Choose" 
+    chooseIcon="pi pi-upload"
+    name="demo[]" 
+    url="https://www.primefaces.org/cdn/api/upload.php" 
+    accept="image/*" 
+    [maxFileSize]="1000000" 
+    (onUpload)="onUpload($event)" />

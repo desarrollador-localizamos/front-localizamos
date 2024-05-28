@@ -1,0 +1,47 @@
+<div>
+    <h5 class="title-select">Departamento</h5>
+    <p-dropdown [options]="options" [(ngModel)]="value" optionLabel="name" [filter]="true" filterBy="name" [showClear]="value ? true : false" 
+     [placeholder]="placeholder"  [disabled]="disabled" [id]="id" [name]="name" (onChange)="onValueChange($event)">
+        <ng-template pTemplate="selectedItem" let-selectedOption>
+            <div class="flex align-items-center gap-2">
+                <div>{{ selectedOption.name }}</div>
+            </div>
+        </ng-template>
+       
+    <ng-template let-country pTemplate="item">
+        <div class="flex align-items-center gap-2">
+          <img [src]="country.flagUrl" style="width: 18px"/>
+          <div>{{ country.name }}</div>
+        </div>
+      </ng-template>
+    </p-dropdown>
+</div>
+
+<!--<div>
+    <h5 class="title-select">{{ label }}</h5>
+    <p-dropdown  [options]="options"  [(ngModel)]="value" optionLabel="name"  [filter]="true"  filterBy="name" [showClear]="true" 
+      [placeholder]="placeholder" [disabled]="disabled" [id]="id" [name]="name"(onChange)="onValueChange($event)">
+      
+      <ng-template pTemplate="selectedItem" let-selectedOption>
+        <div class="flex align-items-center gap-2">
+          <div>{{ selectedOption.name }}</div>
+        </div>
+      </ng-template>
+  
+      <ng-template let-option pTemplate="item">
+        <div class="flex align-items-center gap-2">
+          <img src="https://primefaces.org/cdn/primeng/images/demo/flag/flag_placeholder.png" [class]="'flag flag-' + option.code.toLowerCase()" style="width: 18px"/>
+          <div>{{ option.name }}</div>
+        </div>
+      </ng-template>
+  
+    </p-dropdown>
+  </div>-->
+  
+
+
+<!--<div >
+    <h5 class="title-select">Tipo de usuario</h5>
+    <p-dropdown [options]="userTypes" [(ngModel)]="selectedUser" optionLabel="name" [showClear]="true" placeholder="Selecciona el tipo"></p-dropdown>
+</div>-->
+
