@@ -1,0 +1,172 @@
+<!-- <p-table
+    #dt
+    [value]="filterCustomers()"
+    [rows]="5"
+    [paginator]="true"
+    [pageLinks]="3"
+    [first]="first"
+    [rowHover]="true"
+    [showCurrentPageReport]="true"
+    [rowsPerPageOptions]="[10, 25, 30, {showAll: 'Todos'}]"
+    [globalFilterFields]="['nombre', 'departamento', 'ciudad', 'estado']"
+    [scrollable]="true"
+    scrollHeight="650px"
+    [autoLayout]="true"
+    [tableStyle]="{'max-width': 'auto'}"
+    (onPage)="pageChange($event)"
+    [showCurrentPageReport]="true"
+    stateStorage="session"
+    stateKey="statedemo-session"
+    dataKey="nombre"
+    responsiveLayout="stack"
+    [breakpoint]="'780px'"
+>
+    <ng-template pTemplate="caption">
+        <div class="container">
+            <div class="buttons mb-3">
+              <button type="button" pButton pRipple icon="pi pi-file-pdf" class="p-button-danger mr-2" pTooltip="PDF" tooltipPosition="bottom"></button>
+              <button type="button" pButton pRipple icon="pi pi-file-excel" class="p-button-success" pTooltip="XLS" tooltipPosition="bottom"></button>
+            </div>
+            <p-button label="Clear" [outlined]="true" icon="pi pi-filter-slash" (click)="clear(dt)" />
+            <div class="search  mb-3">
+              <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText type="text" [(ngModel)]="searchTerm" placeholder="Buscar..." />
+              </span>
+            </div>
+          </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width: 3rem"></th>
+            <th pSortableColumn="nombre"> Nombre <p-sortIcon field="nombre"></p-sortIcon></th>
+            <th>Plan</th>
+            <th>Correo electrónico</th>
+            <th>Tipo de usuario</th>
+            <th pSortableColumn="departamento"> Departamento <p-sortIcon field="departamento"></p-sortIcon></th>
+            <th pSortableColumn="ciudad"> Ciudad <p-sortIcon field="ciudad"></p-sortIcon></th>
+            <th>Celular</th>
+            <th>Última conexión</th>
+            <th pSortableColumn="estado"> Estado <p-sortIcon field="estado"></p-sortIcon></th>
+            <th>Acciones</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-customer let-expanded="expanded">
+        <tr>
+            <td>
+                <button type="button" pButton pRipple [pRowToggler]="customer" class="p-button-text p-button-rounded p-button-plain" [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"></button>
+            </td>
+            <td><span class="p-column-title">Nombre</span>{{ customer.nombre }}</td>
+            <td><span class="p-column-title">Plan</span>{{ customer.plan }}</td>
+            <td><span class="p-column-title">Correo</span>{{ customer.correo }}</td>
+            <td><span class="p-column-title">Tipo de Usuario</span>{{ customer.tipoUsuario }}</td>
+            <td><span class="p-column-title">Departamento</span>{{ customer.departamento }}</td>
+            <td><span class="p-column-title">Ciudad</span>{{ customer.ciudad }}</td>
+            <td><span class="p-column-title">Celular</span>{{ customer.celular }}</td>
+            <td><span class="p-column-title">Última conexión</span>{{ customer.ultimaConexion }}</td>
+            <td><p-tag [value]="customer.estado" [severity]="getSeverity(customer.estado)"></p-tag></td>
+            <td>
+                <i class="pi pi-user mr-3" tooltipPosition="top" pTooltip="Usuarios"></i>
+                <i class="pi pi-book mr-3" tooltipPosition="top" pTooltip="Contactos"></i>
+                <i class="pi pi-th-large mr-3" tooltipPosition="top" pTooltip="Grupos"></i>
+                <i class="pi pi-pencil mr-3" tooltipPosition="top" pTooltip="Editar"></i>
+                <i class="pi pi-trash" tooltipPosition="top" pTooltip="Eliminar"></i>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="rowexpansion" let-customer>
+        <tr>
+            <td colspan="7">
+                <div class="p-1">
+                    <p-table [value]="customer.orders" dataKey="id">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th pSortableColumn="despositivo">Dispositivo </th>
+                                <th pSortableColumn="placa">Placa </th>
+                                <th pSortableColumn="imei">IMEI </th>
+                                <th pSortableColumn="modelo">Modelo </th>
+                                <th pSortableColumn="clase">Clase </th>
+                                <th pSortableColumn="clase">Runt </th>
+                                <th pSortableColumn="estado">Estado </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-order>
+                            <tr>
+                                <td>{{order.dispositivo}}</td>
+                                <td>{{order.placa}}</td>
+                                <td>{{order.imei}}</td>
+                                <td>{{order.modelo}}</td>
+                                <td>{{order.clase}}</td>
+                                <td>{{order.runt}}</td>
+                                <td>{{order.estado}}</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="6">There are no order for this product yet.</td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+ -->
+
+
+ <div class="card">
+    <p-table 
+        [value]="data.body"
+        [paginator]="paginator"
+        [rows]="rows"
+        [dataKey]="dataKey"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [loading]="loading"
+        [globalFilterFields]="['name', 'country.name', 'representative.name', 'status', 'title']"
+        #table>
+      <ng-template pTemplate="caption">
+        <div class="flex">
+        
+            <app-button-toolti class="mr-2" (onClick)="pdf()" [icon]="'pi pi-file-pdf'" [tooltipPosition]="'bottom'" [tooltipText]="'Pdf'" [rounded]="false" [text]="false" [severity]="'danger'"></app-button-toolti>
+            <app-button-toolti class="mr-2" (onClick)="excel()" [icon]="'pi pi-file-excel'" [tooltipPosition]="'bottom'" [tooltipText]="'Excel'" [rounded]="false" [text]="false" [severity]="'success'"></app-button-toolti>
+            
+            <app-button-toolti class="mr-2" (click)="clear(table)" [icon]="'pi pi-filter-slash'" [tooltipPosition]="'bottom'" [tooltipText]="'Limpiar'" [rounded]="false" [text]="false" [severity]="''"></app-button-toolti>
+             
+          <span class="p-input-icon-left ml-auto">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" [(ngModel)]="searchValue" (input)="onSearchInput($event)" placeholder="Buscar" />
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+            <ng-container *ngFor="let column of data.header">
+                <th *ngIf="column.filter || column.sortable" pSortableColumn="{{ column.texto }}">
+                    {{ column.texto }} 
+                    <p-sortIcon *ngIf="column.sortable" field="{{ column.texto }}"></p-sortIcon>
+                    <p-columnFilter *ngIf="column.filter" type="text" field="{{ column.texto }}" display="menu"></p-columnFilter>
+                </th>
+                <th *ngIf="!column.filter && !column.sortable">
+                    {{ column.texto }} 
+                </th>
+            </ng-container>
+        </tr>
+        
+      </ng-template>
+      <ng-template *ngIf="bodyTemplate" pTemplate="body" let-rowData>
+      
+          <ng-container *ngTemplateOutlet="bodyTemplate; context: {$implicit: rowData}"></ng-container>
+    
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="10">No se encontraron datos</td>
+        </tr>
+      </ng-template> 
+      <tfoot *ngIf="data.footer">
+        <!-- Contenido del footer si lo hay -->
+      </tfoot>
+    </p-table>
+  </div>
+  

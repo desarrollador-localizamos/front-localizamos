@@ -1,6 +1,7 @@
 import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { CustomersComponent } from "../../../../customers/customers.component";
 import { BurgerMenuService } from '../../../../burger-menu.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-sidebar-component',
@@ -13,7 +14,7 @@ export class SidebarComponentComponent {
 
 
   constructor(
-    private burgerMenuService: BurgerMenuService, private renderer: Renderer2, private elementRef: ElementRef) { }
+    private burgerMenuService: BurgerMenuService, private renderer: Renderer2, private elementRef: ElementRef,private router: Router) { }
 
     arrowTransform: string = 'rotate(0deg)'; // Inicialmente, la flecha no está rotada
 
@@ -73,7 +74,12 @@ export class SidebarComponentComponent {
       }
     }
   }
-  
+ 
+
+  onLinkClick(linkName: string, viewNumber: number) {
+    this.burgerMenuService.setSelectedLink(linkName);
+    this.router.navigate([linkName, viewNumber]);
+  }
 
   
 }

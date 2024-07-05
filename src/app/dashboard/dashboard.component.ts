@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2 } from '@angular/core';
+import { Component, ElementRef, Renderer2, computed, inject } from '@angular/core';
 import { ApirestService } from '../apirest.service';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';
@@ -37,23 +37,140 @@ import { InputPasswordSencilloComponent } from '../shared/components/inputs/inpu
 import { InputPasswordMsgSeguridadComponent } from '../shared/components/inputs/input-password/input-password-msg-seguridad/input-password-msg-seguridad.component';
 import { InputMaskComponent } from '../shared/components/inputs/inputs-number/input-mask/input-mask.component';
 import { InputMultiNumberComponent } from '../shared/components/inputs/inputs-number/input-multi-number/input-multi-number.component';
+import { ButtonSencilloComponent } from "../shared/components/buttons/button-sencillo/button-sencillo.component";
+import { SidebarRegistrosComponent } from "../shared/components/sidebar/sidebar-registros/sidebar-registros.component";
+import { TableSencillaComponent } from "../shared/components/tables/table-sencilla/table-sencilla.component";
+import { TableAvanzadaComponent } from "../shared/components/tables/table-avanzada/table-avanzada.component";
+import { TablePruebaComponent } from "../shared/components/tables/table-prueba/table-prueba.component";
 
+import { TagModule } from 'primeng/tag';
+import { ButtonTooltiComponent } from "../shared/components/buttons/button-toolti/button-toolti.component";
+import { AuthService } from '../core/services/auth.service';
+import { DataService } from '../core/services/data.service';
 @Component({
     selector: 'app-dashboard',
     standalone: true,
     templateUrl: './dashboard.component.html',
     providers: [MessageService],
     styleUrl: './dashboard.component.scss',
-    imports: [EditorComponent,FormsModule,ToastModule,ButtonModule,  CardModule, TableModule, MenubarModule, InputTextModule, SidebarModule, CommonModule,
-      InputFileSencilloComponent,InputMaskComponent,InputPasswordMsgSeguridadComponent,InputPasswordSencilloComponent,InputCalendarTemplateComponent,InputTextareaComponent,
-      InputCalendarSencilloComponent, InputSwitchComponent, InputRadioComponent,InputCheckAvanzadoComponent,InputCheckComponent,InputFileVisualizacionComponent,
-      InputFileSencilloAlertaComponent,  AvatarModule, BadgeModule, OverlayPanelModule, TableCustomersComponent, CustomersComponent, HeaderComponentComponent, SidebarComponentComponent, MultiInputComponent,
-      InputSelectComponent,InputRangeComponent,InputMultiNumberComponent
-    ]
+    imports: [EditorComponent, TagModule, FormsModule, ToastModule, ButtonModule, CardModule, TableModule, MenubarModule, InputTextModule, SidebarModule, CommonModule,
+        InputFileSencilloComponent, InputMaskComponent, InputPasswordMsgSeguridadComponent, InputPasswordSencilloComponent, InputCalendarTemplateComponent, InputTextareaComponent,
+        InputCalendarSencilloComponent, InputSwitchComponent, InputRadioComponent, InputCheckAvanzadoComponent, InputCheckComponent, InputFileVisualizacionComponent,
+        InputFileSencilloAlertaComponent, AvatarModule, BadgeModule, OverlayPanelModule, TableCustomersComponent, CustomersComponent, HeaderComponentComponent, SidebarComponentComponent, MultiInputComponent,
+        InputSelectComponent, InputRangeComponent, InputMultiNumberComponent, ButtonSencilloComponent, SidebarRegistrosComponent, TableSencillaComponent, TableAvanzadaComponent, TablePruebaComponent, ButtonTooltiComponent]
 })
+
+
 export class DashboardComponent {
 
     //Funcion para comprobar el metodo post
+    
+    private authService = inject( AuthService);
+    
+
+    //public user = computed(() => this.authService.currentUser());
+
+    public user = computed(() => this.authService.currentUser() );
+
+    tableData = {  // Ejemplo de estructura de datos que se pasa al componente de tabla reutilizable
+    header: [
+      {
+        texto:"id",
+        sortable: true,
+        filter: true
+      },
+      {
+        texto:"name",
+        sortable: false,
+        filter: true
+      },
+      {
+        texto:"country",
+        sortable: true,
+        filter: true
+      },
+      {
+        texto:"company",
+        sortable: false,
+        filter: true
+      },
+      {
+        texto:"date",
+        sortable: false,
+        filter: false
+      },
+      {
+        texto:"status",
+        sortable: true,
+        filter: true
+      },
+      {
+        texto:"verified",
+        sortable: false,
+        filter: false
+      },
+      {
+        texto:"activity",
+        sortable: false,
+        filter: true
+      },
+      {
+        texto:"balance",
+        sortable: false,
+        filter: false
+      },
+      {
+        texto:"status",
+        sortable: true,
+        filter: true
+      },
+      {
+        texto:"acciones",
+        sortable: false,
+        filter: false
+      }
+
+    ],
+    body: [
+      {
+        id: 1000,
+        name: 'James Butt',
+        country: 'Algeria',
+        company: 'Benton, John B Jr',
+        date: '2015-09-13',
+        status: 'unqualified',
+        verified: true,
+        activity: 17,
+        balance: 70663,
+        representative: 'Ioni Bowcher'
+      },
+      {
+        id: 1001,
+        name: 'Josephine Darakjy',
+       
+        company: 'Chanay, Jeffrey A Esq',
+        date: '2019-02-09',
+        status: 'proposal',
+        verified: true,
+        activity: 0,
+        balance: 82429,
+        representative: [{ name: 'Anna Bowcher' }]
+      },
+      {
+        id: 1002,
+        name: 'Art Venere',
+        country: { name: 'France' },
+        company: 'Chemel, James L Cpa',
+        date: '2017-05-13',
+        status: 'qualified',
+        verified: false,
+        activity: 63,
+        balance: 28334,
+        representative: { name: 'Peter Bowcher' }
+      }
+    ],
+    footer: null
+    };
 
     items: MenuItem[] | undefined;
 
@@ -67,15 +184,24 @@ export class DashboardComponent {
     countries: any[] = [];
     selectedCountry: string = '';
 
-   
+    loading: boolean = false;
 
 
-   
+    public list = [];
+    public mobileUnits = [];
   
     constructor(
-      public service: ApirestService, private renderer: Renderer2, private elementRef: ElementRef,private messageService: MessageService) { }
+      public service: ApirestService, private renderer: Renderer2, private elementRef: ElementRef,private messageService: MessageService,
+      private dataService: DataService) { }
 
+      
       ngOnInit(){
+        const userData = this.user();
+        if (userData) {
+          console.log('User ID:', userData.id);
+        } else {
+          console.log('No user data available');
+        }
       
          this.userTypes  = [
             { name: 'Persona natural' },
@@ -84,7 +210,7 @@ export class DashboardComponent {
            
           ];
          
-      
+          console.log(this.tableData);
         this.countries = [
           { name: 'Australia', code: 'AU', flagUrl: 'https://www.countryflags.io/AU/flat/32.png' },
           { name: 'Brazil', code: 'BR', flagUrl: 'https://www.countryflags.io/BR/flat/32.png' },
@@ -100,10 +226,39 @@ export class DashboardComponent {
         }
       
       
-
+    
       handleValueChange(value: any, id: any): void {
         console.log('Valor del input:', id, value);
       }
+
+      load(){
+        console.log("button");
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+        }, 2000);
+      }
+      onLogout() {
+        this.authService.logout();
+        
+      }
+      
+      
+  openSidebar() {
+    this.sidebarVisible = true;
+  }
+
+  closeSidebar() {
+    this.sidebarVisible = false;
+  }
+
+  saveUser() {
+    console.log('User saved!');
+  }
+
+  updateUser() {
+    console.log('User updated!');
+  }
   
       arrowTransform: string = 'rotate(0deg)'; // Inicialmente, la flecha no está rotada
   
@@ -129,9 +284,7 @@ export class DashboardComponent {
         
         } else {
           this.renderer.addClass(logo1, 'cerrar');
-        }
-    
-       
+        }     
       }
   
       //Funcion para comprobar el metodo post
@@ -161,6 +314,12 @@ export class DashboardComponent {
       //funcion upload
 
      
+// 5499
 
+ubication(value: number) {
+  // Llama al método del servicio para guardar el valor
+  this.dataService.setUbicationValue(value);
+
+}
     
 }

@@ -15,10 +15,11 @@ import {CarouselModule} from 'primeng/carousel';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent implements OnInit{
+export class LoginComponent{
 
   private fb = inject (FormBuilder);
   private authService = inject(AuthService);
+  private router = inject (Router);
 
   public user = {email: '', password: ''};
   public url = '';
@@ -28,22 +29,11 @@ export class LoginComponent implements OnInit{
   public recoverData = new FormData();
 
   
-images: string[] = ['https://djwaiia8q94ix.cloudfront.net/04.139.00/images/logo/trakzee/image1.jpg',
-'https://djwaiia8q94ix.cloudfront.net/04.139.00/images/logo/trakzee/image1.jpg', 'https://djwaiia8q94ix.cloudfront.net/04.139.00/images/logo/trakzee/image1.jpg'];
-autoplayInterval = 2000;
-showNavigators = false;
+  images: string[] = ['https://djwaiia8q94ix.cloudfront.net/04.139.00/images/logo/trakzee/image1.jpg',
+  'https://djwaiia8q94ix.cloudfront.net/04.139.00/images/logo/trakzee/image1.jpg', 'https://djwaiia8q94ix.cloudfront.net/04.139.00/images/logo/trakzee/image1.jpg'];
+  autoplayInterval = 2000;
+  showNavigators = false;
 
-  constructor(private router: Router,
-    public service: ApirestService) { }
-
-
-  ngOnInit(): void {
-    if('null' != sessionStorage.getItem('sid') && null != sessionStorage.getItem('sid') && undefined != sessionStorage.getItem('sid'))
-    {
-      this.router.navigate(['/dashboard']);
-    }
-
-  }
 
   public loginForm: FormGroup = this.fb.group({
     email: ['', [Validators.required, Validators.email]],
@@ -52,15 +42,19 @@ showNavigators = false;
 
 
   login() {
-    console.log(this.loginForm.value);
+   
 
     const {email,password} = this.loginForm.value;
     this.authService.login(email,password)
       .subscribe({
-          next: () => 
-          console.log('todo bien'),
+          next: () => this.router.navigateByUrl('/dashboard'),
         error: (error) =>{
           console.log({LoginError: error});
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: error,
+          });
         }
 
       })
@@ -88,7 +82,6 @@ showNavigators = false;
   }
 
  
-  
 }
 
 

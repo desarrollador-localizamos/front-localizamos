@@ -1,0 +1,55 @@
+<div class="card">
+    <p-table 
+        [value]="data.body"
+        [paginator]="paginator"
+        [rows]="rows"
+        [dataKey]="dataKey"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [loading]="loading"
+        [globalFilterFields]="['name', 'country.name', 'representative.name', 'status']"
+        #table>
+      <ng-template pTemplate="caption">
+        <div class="flex">
+        
+            <app-button-toolti class="mr-2" (onClick)="pdf()" [icon]="'pi pi-file-pdf'" [tooltipPosition]="'bottom'" [tooltipText]="'Pdf'" [rounded]="false" [text]="false" [severity]="'danger'"></app-button-toolti>
+            <app-button-toolti class="mr-2" (onClick)="excel()" [icon]="'pi pi-file-excel'" [tooltipPosition]="'bottom'" [tooltipText]="'Excel'" [rounded]="false" [text]="false" [severity]="'success'"></app-button-toolti>
+            
+            <app-button-toolti class="mr-2" (click)="clear(table)" [icon]="'pi pi-filter-slash'" [tooltipPosition]="'bottom'" [tooltipText]="'Limpiar'" [rounded]="false" [text]="false" [severity]="''"></app-button-toolti>
+             
+          <span class="p-input-icon-left ml-auto">
+            <i class="pi pi-search"></i>
+            <input pInputText type="text" [(ngModel)]="searchValue" (input)="onSearchInput($event)" placeholder="Buscar" />
+          </span>
+        </div>
+      </ng-template>
+      <ng-template pTemplate="header">
+        <tr>
+            <ng-container *ngFor="let column of data.header">
+                <th *ngIf="column.filter || column.sortable" pSortableColumn="{{ column.texto }}">
+                    {{ column.texto }} 
+                    <p-sortIcon *ngIf="column.sortable" field="{{ column.texto }}"></p-sortIcon>
+                    <p-columnFilter *ngIf="column.filter" type="text" field="{{ column.texto }}" display="menu"></p-columnFilter>
+                </th>
+                <th *ngIf="!column.filter && !column.sortable">
+                    {{ column.texto }} 
+                </th>
+            </ng-container>
+        </tr>
+        
+      </ng-template>
+      <ng-template *ngIf="bodyTemplate" pTemplate="body" let-rowData>
+      
+          <ng-container *ngTemplateOutlet="bodyTemplate; context: {$implicit: rowData}"></ng-container>
+    
+      </ng-template>
+      <ng-template pTemplate="emptymessage">
+        <tr>
+          <td colspan="10">No customers found.</td>
+        </tr>
+      </ng-template> 
+      <tfoot *ngIf="data.footer">
+        <!-- Contenido del footer si lo hay -->
+      </tfoot>
+    </p-table>
+  </div>
+  

@@ -7,7 +7,7 @@ import { ButtonModule } from 'primeng/button';
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { InputTextModule } from 'primeng/inputtext';
 import { BadgeModule } from 'primeng/badge';
-
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-header-component',
@@ -26,7 +26,7 @@ export class HeaderComponentComponent {
 
   showMenu: boolean = false;
 
-  constructor(
+  constructor(public authService: AuthService,
   public service: ApirestService, private renderer: Renderer2, private elementRef: ElementRef) { }
 
 
@@ -35,33 +35,7 @@ export class HeaderComponentComponent {
     toggleRotation() {
       this.arrowTransform = this.arrowTransform === 'rotate(-180deg)' ? 'rotate(0deg)' : 'rotate(-180deg)';
     }
-  
-    ngOnInit() {
-     
-  }
+    
 
-    //Funcion para comprobar el metodo post
-
-    obtenerLlaves()
-    {
-        
-        let url = 'obtener-llaves';
-        let driver_id = "3";
-      
-        let body = new FormData();
-        body.append('Driver_id', driver_id);
-          this.service.queryPost(url, body).subscribe(
-            response=>
-            {
-                let result = response;
-             
-                console.log(result)
-            },
-            err => 
-            {
-                console.log(err);
-            }
-        );
-    }
 }
 

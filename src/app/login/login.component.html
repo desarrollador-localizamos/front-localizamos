@@ -1,119 +1,93 @@
+<section>
+  <div class="imgBx">
+    <p-carousel
+      [value]="images"
+      [autoplayInterval]="autoplayInterval"
+      [showNavigators]="showNavigators"
+    >
+      <ng-template let-image pTemplate="item">
+        <img [src]="image" alt="imagen" style="width: 100%" />
+      </ng-template>
+    </p-carousel>
+  </div>
 
-<!--<div class="container"  style=" background-size: cover;
-  background-image: url(http://aplicacion.localizamos.co/assets/images/fondos/fondo-fhd.jpg);
-  background-repeat: no-repeat;
-  background-position: center;">
-    <div class="div-2" >
-      <div class="image-container">
-      
-        <img src="http://aplicacion.localizamos.co/assets/images/logos/logo-login.png" alt="Imagen de fondo">
+  <div class="contentBx">
+    <div class="formBx">
+      <div class="logo">
+        <img
+          src="https://localizamos.co/wp-content/uploads/2019/06/logo_localizamos_tsa.png"
+          alt=""
+        />
       </div>
-    </div>
-    <div class="div-1">
-      <div class="login-container">
-       <div class="main">
-        <input type="checkbox" id="chk" aria-hidden="true">
-  
-        <div class="login">
-          <form class="form" [formGroup]="loginForm" (ngSubmit)="login();">
-            <label for="chk" aria-hidden="true" style="color: #848484;">Iniciar sesión</label>
-            <input class="input"  formControlName="email"  name="email" id="email" placeholder="Correo electronico">
-            <input class="input"  formControlName="password" type="password" name="password" id="password" placeholder="Contraseña">
-            <button class="my-disabled-button" type="submit" [disabled]="loginForm.invalid"
-             >Ingresar</button>
-          
-          </form>
-  
-        </div>
-  
-        <div class="register">
-          <form class="form">
-            <label for="chk" aria-hidden="true" style="font-size: 1.5rem;
-            color: #5d5d5d;">¿Olvido su contraseña?</label>
-            <input class="input" type="email"  [(ngModel)]="user.email" name="email-recover"  id="email-recover" placeholder="Email">
-            
-            <button>Recuperar</button>
-          </form>
-  
-        </div>
-  
-       </div>
-      </div>
-    </div>
-  </div>-->
-  
-    <section>
-        
-     
-          <div class="imgBx">
-            <p-carousel [value]="images" [autoplayInterval]="autoplayInterval" [showNavigators]="showNavigators">
-              <ng-template let-image pTemplate="item">
-                <img [src]="image" alt="imagen" style="width:100%" />
-              </ng-template>
-            </p-carousel>
+      <h2>Bienvenido de vuelta</h2>
+
+      <form [formGroup]="loginForm" (ngSubmit)="login()">
+        <div class="input">
+          <span>Email</span>
+          <div class="password-container">
+            <input
+              type="email"
+              formControlName="email"
+              name="email"
+              id="email"
+              placeholder="Ingresa tu correo"
+            />
           </div>
-    
-        
-        <div class="contentBx">
-          
-            <div class="formBx">
-                <div class="logo">
-                    <img src="https://localizamos.co/wp-content/uploads/2019/06/logo_localizamos_tsa.png" alt="">
-                </div>
-                <h2>Bienvenido de vuelta</h2>
-
-                <form [formGroup]="loginForm" (ngSubmit)="login();">
-                    <div class="input">
-                        <span>Email</span>
-                        <div class="password-container">
-                            <input type="email" formControlName="email"  name="email" id="email" placeholder="Ingresa tu correo">
-                        </div>
-                    </div>
-
-                    <div class="input">
-                        <div style="display: flex; flex-wrap: nowrap; width: 100%;">
-                            <span style="width: 50%;">Contraseña</span> 
-                            <span class="mensaje-contraseña">¿Has olvidado tu contraseña?</span>
-                        </div>
-                       
-                        <div class="password-container">
-                            <input formControlName="password" type="password" name="password" id="password" placeholder="Ingresa tu contraseña">
-                            <i class="fi fi-rr-eye-crossed"></i>
-                        </div>
-                    </div>
-
-                    <div class="remember">
-                        <label for=""><input type="checkbox"> Recuerdame</label>
-                    </div>
-
-                    <div class="div-button-login">
-                        <button type="submit" class="button-login my-disabled-button" [disabled]="loginForm.invalid">Iniciar sesión</button>
-                    </div>
-
-                    <div class="text-inicio">
-                        <p>O inicia sesión con</p>
-                    </div>
-
-                    <div style="display: flex;">
-                        <button class="button-redes" >
-                            <img src="../../assets/login/logo-google.png" alt=""> Google
-                        </button>
-
-                        <button class="button-redes">
-                            <img src="../../assets/login/logo-facebook.png" alt=""> Facebook
-                        </button>
-                    </div>
-
-                </form>
-
-               
-               
-            </div>
-            <div class="mensaje-footer">
-                <span >¿Todavia no tienes una cuenta?  <a class="enlace-asesor"  href="#"> Comunicate con un asesor</a></span>
-           </div>
         </div>
-    </section>
 
+        <div class="input">
+          <div style="display: flex; flex-wrap: nowrap; width: 100%">
+            <span style="width: 50%">Contraseña</span>
+            <span class="mensaje-contraseña">¿Has olvidado tu contraseña?</span>
+          </div>
 
+          <div class="password-container">
+            <input
+              formControlName="password"
+              type="password"
+              name="password"
+              id="password"
+              placeholder="Ingresa tu contraseña"
+            />
+            <i class="fi fi-rr-eye-crossed"></i>
+          </div>
+        </div>
 
+        <div class="remember">
+          <label for=""><input type="checkbox" /> Recuerdame</label>
+        </div>
+
+        <div class="div-button-login">
+          <button
+            type="submit"
+            class="button-login my-disabled-button"
+            [disabled]="loginForm.invalid"
+          >
+            Iniciar sesión
+          </button>
+        </div>
+
+        <div class="text-inicio">
+          <p>O inicia sesión con</p>
+        </div>
+
+        <div style="display: flex">
+          <button class="button-redes">
+            <img src="../../assets/login/logo-google.png" alt="" /> Google
+          </button>
+
+          <button class="button-redes">
+            <img src="../../assets/login/logo-facebook.png" alt="" /> Facebook
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="mensaje-footer">
+      <span
+        >¿Todavia no tienes una cuenta?
+        <a class="enlace-asesor" href="#"> Comunicate con un asesor</a></span
+      >
+    </div>
+  </div>
+</section>

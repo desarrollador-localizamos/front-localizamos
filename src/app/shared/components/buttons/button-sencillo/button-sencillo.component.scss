@@ -1,0 +1,47 @@
+/* button-sencillo.component.scss */
+  :host ::ng-deep{
+   .btn-primary {
+      background-color: #3B82F6;
+      border: 1px solid #3B82F6;
+      color: white;
+    }
+
+    .btn-primary:hover {
+        background-color: #1D4ED8;
+        border: 1px solid #1D4ED8;
+        color: white;
+      }
+
+    .btn-danger {
+        background-color: rgb(255, 8, 0);
+        border: 1px solid rgb(255, 8, 0);
+        color: white;
+      }
+      
+    
+    .btn-secondary {
+      background-color: grey;
+      border: 1px solid grey;
+      color: white;
+    }
+  
+    .btn-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.875rem;
+    }
+  
+    .btn-md {
+
+      font-size: 1rem;
+    }
+  
+    .btn-lg {
+      padding: 0.75rem 1.5rem;
+      font-size: 1.25rem;
+    }
+  
+    .btn-border {
+      border: 2px solid black;
+    }
+  }
+  

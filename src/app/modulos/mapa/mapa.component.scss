@@ -1,0 +1,10 @@
+.container{
+    width: 100%;
+    height: 100vh;
+    box-sizing: 0;
+}
+
+
+::ng-deep .p-card.p-component{
+    background-color: red !important;
+}

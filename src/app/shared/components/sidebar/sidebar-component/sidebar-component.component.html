@@ -8,62 +8,60 @@
         
         <ul class="nav-links">
             <li>
-                <a href="">
+                <a href="/dashboard" >
                     <i class="pi pi-home"></i>
                     <span class="link_name">Inicio</span>
                 </a>
                 <ul class="menu-desplegable">
                     <li class="lista-submenu">
-                        <a class="link_name-desplegable" href="#">
-                            Inicio
-                        </a>
+                        <a class="link_name-desplegable" href="/dashboard">
+                            Inicio  </a>
                     </li>
     
                 </ul>
             </li>
 
             <li>
-                <a href="">
+                <a (click)="onLinkClick('Customers', 1)">
                     <i class="pi pi-map"></i>
                     <span class="link_name">Mapa</span>
                 </a>
                 <ul class="menu-desplegable">
                     <li class="lista-submenu">
-                        <a class="link_name-desplegable" href="#">Mapa</a></li>
-    
+                        <a class="link_name-desplegable" (click)="onLinkClick('Customers',1)">Mapa</a></li>
                 </ul>
             </li>
 
             <li>
-                <a href="">
+                <a (click)="onLinkClick('mobile_unity_events' , 2)" >
                     <i class="pi pi-globe"></i>
                     <span class="link_name">Visor general</span>
                 </a>
                 <ul class="menu-desplegable">
-                    <li class="lista-submenu"><a class="link_name-desplegable" href="#">Visor general</a></li>
+                    <li class="lista-submenu"><a class="link_name-desplegable" (click)="onLinkClick('mobile_unity_events',2)">Visor general</a></li>
     
                 </ul>
             </li>
 
             <li>
-                <a href="">
+                <a (click)="onLinkClick('monitoreo',1)">
                     <i class="pi pi-desktop"></i>
                     <span class="link_name">Central de monitoreo</span>
                 </a>
                 <ul class="menu-desplegable">
-                    <li class="lista-submenu"><a class="link_name-desplegable" href="#">Central de monitoreo</a></li>
+                    <li class="lista-submenu"><a class="link_name-desplegable"(click)="onLinkClick('monitoreo',2)">Central de monitoreo</a></li>
     
                 </ul>
             </li>
 
             
             <li>
-                <a href="">
+                <a (click)="onLinkClick('customers',1)">
                     <i class="pi pi-users"></i>
                     <span class="link_name">Clientes</span>
                 </a>
                 <ul class="menu-desplegable">
-                    <li class="lista-submenu"><a class="link_name-desplegable" href="#">Clientes</a></li>
+                    <li class="lista-submenu"><a class="link_name-desplegable" (click)="onLinkClick('customers',1)">Clientes</a></li>
     
                 </ul>
             </li>
@@ -78,16 +76,17 @@
                 </div>
                 <ul class="sub-menu ">
                     <li><a class="link_name-desplegable" href="#">Recursos</a></li>
-                    <li><a class="blank2" href=""> <i class="pi pi-truck"></i> Activos móviles</a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-tablet"></i> Dispositivos</a></li>
-                    <li><a  class="blank2" href=""><i class="pi pi-map-marker"></i> Recursos geográficos</a></li>
-                    <li><a  class="blank2" href=""><i class="pi  pi-bell"></i> Notificaciónes</a></li>
-                    <li><a  class="blank2" href=""><i class="pi pi-key"></i> Llaves dallas</a></li>
-                    <li><a  class="blank2" href=""><i class="pi pi-users"></i> Conductores</a></li>
+                    <li><a class="blank2" (click)="onLinkClick('MobileUnities',1)"> <i class="pi pi-truck"></i> Activos móviles</a></li>
+                    <li><a class="blank2" (click)="onLinkClick('Devices',1)"><i class="pi pi-tablet"></i> Dispositivos</a></li>
+                    <li><a  class="blank2" (click)="onLinkClick('GeographicalResources',1)" ><i class="pi pi-map-marker"></i> Recursos geográficos</a></li>
+                    <li><a  class="blank2"  (click)="onLinkClick('Notifications',1)"><i class="pi  pi-bell"></i> Notificaciónes</a></li>
+                    <li><a  class="blank2" (click)="onLinkClick('DriversDallas',1)"><i class="pi pi-key"></i> Llaves dallas</a></li>
+                    <li><a  class="blank2" (click)="onLinkClick('MobileUnityDrivers',1)"><i class="pi pi-users"></i> Conductores</a></li>
+                    <li><a  class="blank2" (click)="onLinkClick('SharePreoperational',1)"><i class="pi pi-directions"></i> Preoperacional</a></li>
                     <li><a  class="blank2" href=""><i class="pi pi-directions"></i> Dibujar ruta</a></li>
-                    <li><a  class="blank2" href=""><i class="pi pi-credit-card"></i> Simcards</a></li>
-                    <li><a  class="blank2" href=""><i class="pi pi-clone"></i> Planes simcard</a></li>
-                    <li><a  class="blank2" href=""><i class="pi pi-shield"></i> Control-T</a></li>
+                    <li><a  class="blank2" (click)="onLinkClick('Simcards',1)"><i class="pi pi-credit-card"></i> Simcards</a></li>
+                    <li><a  class="blank2" (click)="onLinkClick('SimcardPlan',1)"><i class="pi pi-clone"></i> Planes simcard</a></li>
+                    <li><a  class="blank2" (click)="onLinkClick('MobileUnities2',1)"><i class="pi pi-shield"></i> Control-T</a></li>
 
                 </ul>
             </li>
@@ -102,10 +101,10 @@
                 </div>
                 <ul class="sub-menu ">
                     <li><a class="link_name-desplegable" href="">Administración</a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-users"></i> Usuarios</a></li>
+                    <li><a class="blank2" (click)="onLinkClick('Users',1)"><i class="pi pi-users"></i> Usuarios</a></li>
                     <li><a class="blank2" href=""><i class="pi pi-unlock"></i>Permisos</a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-clone"></i> Planes</a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-verified"></i> Asesores comerciales</a></li>  
+                    <li><a class="blank2" (click)="onLinkClick('Plans',1)"><i class="pi pi-clone"></i> Planes</a></li>
+                    <li><a class="blank2" (click)="onLinkClick('Consultans',1)"><i class="pi pi-verified"></i> Asesores comerciales</a></li>  
                 </ul>
             </li>
     
@@ -119,21 +118,21 @@
                 </div>
                 <ul class="sub-menu " >
                     <li ><a class="link_name-desplegable" href="">Configuración</a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-list"></i> Tipos de dispositivos </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-align-center"></i> Tramas </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-align-center"></i> Tramas de dispositivos </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-list"></i> Clases de vehículos </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-list"></i> Subclases de vehículos </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-car"></i> Tipos de vehículos </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-check-square"></i> Estados de vehículos </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-comments"></i> Tipos de contacto </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-exclamation-triangle"></i> Alertas </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-list"></i> Tipos de eventos </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-list"></i> Tipos de novedad </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-cog"></i> Maquinaria amarilla </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-tags"></i> Marcas </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-directions-alt"></i> Direcciones </a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-code"></i> Comandos </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('DeviceTypes',1)"><i class="pi pi-list"></i> Tipos de dispositivos </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('DevicePlots',1)"><i class="pi pi-align-center"></i> Tramas </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('DevicePlotDeviceType',1)"><i class="pi pi-align-center"></i> Tramas de dispositivos </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('MobileUnityClass',1)"><i class="pi pi-list"></i> Clases de vehículos </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('MobileUnitySubclass',1)"><i class="pi pi-list"></i> Subclases de vehículos </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('MobileUnityType',1)"><i class="pi pi-car"></i> Tipos de vehículos </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('MobileUnityStatus',1)"><i class="pi pi-check-square"></i> Estados de vehículos </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('ContactTypes',1)"><i class="pi pi-comments"></i> Tipos de contacto </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('Alerts',1)"><i class="pi pi-exclamation-triangle"></i> Alertas </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('EventTypes',1)"><i class="pi pi-list"></i> Tipos de eventos </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('NoveltyTypes',1)"><i class="pi pi-list"></i> Tipos de novedad </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('MobileUnityLine',1)"><i class="pi pi-cog"></i> Lineas </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('Brands',1)"><i class="pi pi-tags"></i> Marcas </a></li>
+                    <li><a class="blank2" ><i class="pi pi-directions-alt"></i> Direcciones </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('DeviceTypeCommands',1)"><i class="pi pi-code"></i> Comandos </a></li>
 
                  
                 </ul>

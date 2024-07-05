@@ -1,0 +1,33 @@
+<h2>Vista solicitada: {{ selectedLink }}</h2>
+
+<div style="padding: 30px;">
+  <app-table-sencilla [data]="result"
+        [paginator]="true"
+        [rows]="10"
+        [rowsPerPageOptions]="[10, 25, 50]"
+        [loading]="false"
+        [tableId]="'idTabladevice'"
+        [dataKey]="'tablaCustomer'"
+        [bodyTemplate]="bodyTemplate">
+  </app-table-sencilla>
+
+  <ng-template #bodyTemplate let-rowData>
+    <tr>
+      <td *ngFor="let key of displayedColumns">
+        <ng-container *ngIf="isObject(rowData[key]); else normalCell">
+          {{ formatObject(rowData[key]) }}
+        </ng-container>
+        <ng-template #normalCell>
+          {{ rowData[key] }}
+        </ng-template>
+      </td>
+      <td>
+        <app-button-toolti (onClick)="updateUser()" [icon]="'pi pi-user'" [tooltipPosition]="'bottom'" [tooltipText]="'Usuarios'" [rounded]="true" [text]="true" [severity]="'info'"></app-button-toolti>
+        <app-button-toolti (onClick)="saveUser()" [icon]="'pi pi-book'" [tooltipPosition]="'bottom'" [tooltipText]="'Contactos'" [rounded]="true" [text]="true" [severity]="'secondary'"></app-button-toolti>
+        <app-button-toolti [icon]="'pi pi-th-large'" [tooltipPosition]="'bottom'" [tooltipText]="'Grupos'" [rounded]="true" [text]="true" [severity]="'success'"></app-button-toolti>
+        <app-button-toolti [icon]="'pi pi-pencil'" [tooltipPosition]="'bottom'" [tooltipText]="'Editar'" [rounded]="true" [text]="true" [severity]="'warning'"></app-button-toolti>
+        <app-button-toolti [icon]="'pi pi-trash'" [tooltipPosition]="'bottom'" [tooltipText]="'Eliminar'" [rounded]="true" [text]="true" [severity]="'danger'"></app-button-toolti>
+      </td>
+    </tr>
+  </ng-template>
+</div>
