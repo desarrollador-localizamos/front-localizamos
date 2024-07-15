@@ -1,0 +1,14 @@
+<div class="card flex justify-content-center">
+    <p-multiSelect 
+      class="w-full !important"
+      [options]="options"
+      [(ngModel)]="selectedOptions"
+      [placeholder]="placeholder"
+      optionLabel="name"
+      [styleClass]="styleClass"
+      display="chip"
+      [showClear]="true"
+      (onChange)="onSelectionChange()"
+    ></p-multiSelect>
+  </div>
+  

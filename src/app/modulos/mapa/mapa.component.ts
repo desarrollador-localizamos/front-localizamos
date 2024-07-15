@@ -3,7 +3,11 @@ import * as L from 'leaflet';
 import 'leaflet-rotatedmarker';
 import { CardModule } from 'primeng/card';
 import { DataService } from '../../core/services/data.service';
-import { catchError, tap, throwError } from 'rxjs';
+import { Observable, Subscription, catchError, tap, throwError } from 'rxjs';
+import { ButtonTooltiComponent } from "../../shared/components/buttons/button-toolti/button-toolti.component";
+import { BannerInferiorComponent } from "./capas/banner-inferior/banner-inferior.component";
+import { ModalFiltroComponent } from "./capas/modal-filtro/modal-filtro.component";
+import { VentanaInfoAccionComponent } from "./capas/ventana-info-accion/ventana-info-accion.component";
 
 interface CarMarker {
   id: string;
@@ -15,36 +19,45 @@ interface CarMarker {
 }
 
 @Component({
-  selector: 'app-mapa',
-  standalone:true,
-  templateUrl: './mapa.component.html',
-  styleUrls: ['./mapa.component.scss'],
-  imports: [CardModule]
+    selector: 'app-mapa',
+    standalone: true,
+    templateUrl: './mapa.component.html',
+    styleUrls: ['./mapa.component.scss'],
+    imports: [CardModule, ButtonTooltiComponent, BannerInferiorComponent, ModalFiltroComponent, VentanaInfoAccionComponent]
 })
-export class MapaComponent implements AfterViewInit {
+export class MapaComponent  {
 
   
 // =========== VARIBALES ========= //
+ubicationValues: number[] = [];
+private ubicationSubscription: Subscription | undefined;
 
 protected selectedLink: string = '';
 protected result: any = {};
+protected result2: any = {};
+result$: Observable<any> | undefined;
+subscription: Subscription | undefined;
+protected formData: FormData | undefined;
 
-// VARIABLES MOBILEUNIT 
+// =========== VARIBALES MOBILEUNIT ========= //
  protected mobileUnit = null;
- protected totalSelected: number | undefined;
 
- // VARIABLES MAPA
-  protected urlImage: string | undefined;
+// =========== VARIBALES MAPA ========= //
+  protected urlImage!: string ;
   private map!: L.Map;
   private carIcon!: L.Icon;
   private carMarker!: L.Marker;
-  ubicationValue: number | undefined;
+  protected zoom!: number;
+  protected openZoom: number;
+  protected classIds :number;
 
-  public list: { [key: string]: any[] } = {
+
+  public list: { [key: string]: any[] } = {   
     MobileUnities:  [
       {campo:"endreport.battery", texto: "Nivel de bateria"},
       {campo:"brand", texto: "Marca"},
-      {campo:"class.name ", texto: "Clase"},
+      {campo:"class.name", texto: "Clase"},
+      {campo:"class.id", texto: "Clase"},
       {campo:"endreport.course", texto: "Orientación"},
       {campo:"createdAt", texto: "Fecha de creación"},
       // {campo:"customer.id", texto: "id del customer"},
@@ -128,12 +141,54 @@ protected result: any = {};
     //     type_name: "MOTO",
     //     // updated_at: "2024-07-02 20:58:39"
     // }
+     ] ,
+
+
+     MobileUnities2:  [
+      {campo:"endreport.battery", texto: "Placa"},
+      {campo:"class.id", texto: "Nombre"},
+      {campo:"endreport.course", texto: "Gps"},
+      {campo:"createdAt", texto: "Fecha de Imei dispositivo"},
+      {campo:"brand", texto: "Marca"},
+      {campo:"class.name", texto: "Modelo"},
+      {campo:"endreport.degree", texto: "Simcard"},
+      {campo:"device.id", texto: "Plan"},
+      {campo:"plate", texto: "ICCID"},
+      {campo:"id", texto: "Estado actual"},
+      {campo:"installationDate", texto: "Ubicacion"},
+      {campo:"soatDueDate", texto: "Orientación"},
+      {campo:"endreport.velocity", texto: "Latitud"},
+      {campo:"status", texto: "Longitud"},
+      {campo:"subclass.name", texto: "Bateria"},
+      {campo:"taxesDueDate", texto: "Fecha gps"},
+      {campo:"techMechRevitionDueDate", texto: "Tiempo en el mismo lugar"},
+      {campo:"endreport.offtime", texto: "Tipo"},
+      {campo:"type.image", texto: "Conductor"},
+      {campo:"type.name", texto: "Venc Impuestos"},
+      {campo:"type.name", texto: "Venc Tecnomecanica"},
+      {campo:"type.name", texto: "Venc Soat"},
+      {campo:"type.name", texto: "Fecha instalacion"},
+      {campo:"type.name", texto: "Tiempo "},
+      {campo:"type.name", texto: "id de la unidad mobil "},
+      {campo:"type.name", texto: "Velocidad"},
+      {campo:"type.name", texto: "Status mobile Unity"},
+      {campo:"type.name", texto: "Grados"},
+      {campo:"type.name", texto: "Curso "},
+      {campo:"type.name", texto: "Bateria"},
+      {campo:"type.name", texto: "Velocidad"},
+      {campo:"type.name", texto: "Limite de velocidad"},
+      {campo:"type.name", texto: "Nombre del plan"},
+      {campo:"type.name", texto: "Nombre geocercas"},
+      {campo:"type.name", texto: ""},
+    
+   
      ] 
-    };
+     
+  };
 
     private fieldRelations: { [key: string]: any[] } = {
       MobileUnities: [
-        "class", "device", "type", "subclass",
+        "device", "type", "subclass", "class",
       ],
    
     };
@@ -143,103 +198,179 @@ protected result: any = {};
       MobileUnities: [
         "customer", 
       ],
-
-
-   
     };
 
-  constructor(private dataService: DataService) {}
+    constructor(private dataService: DataService) {
 
- ngOnInit() {
+      // ======= VARIABLES INICIALES DEL MAPA  ========//
+        this.zoom = 12;
+        this.openZoom = 7;
+        this.classIds = 0;
+    }
 
-    // Recupera el valor de ubicación almacenado
-    this.ubicationValue = this.dataService.getUbicationValue();
-    console.log('Ubication value:', this.ubicationValue);
-    console.log('Lista inicial:', this.list);
-
-    let dt = new Date();
-    let month = dt.getMonth()+1;
-    let year = dt.getFullYear();
-    let day = dt.getDate();
-    let hourStart = new Date();
-    let hourEnd = new Date();
-    hourStart.setHours(0);
-    hourStart.setMinutes(0);
-    hourEnd.setHours(23);
-    hourEnd.setMinutes(59);
-
-    // if(null != this.list && this.list.length > 0){
-      
-    //   this.mobileUnit = this.list[0];
+    // ngOnInit() {
+    //   this.result$ = this.dataService.fetchData(this.list, "MobileUnities", this.fieldRelations, {"id": 1185 })
+    //     .pipe(
+    //       tap(response => {
+    //         this.result = response;
+    //         // console.log('Lista inicial en tap:', this.result); // Verifica aquí dentro de tap
+           
+    //       }),
+    //       catchError(error => {
+    //         console.log('Error en la solicitud:', error);
+    //         return throwError(() => error);
+    //       })
+    //     );
+    
+    //   this.subscription = this.result$.subscribe(() => {
+    //     // Aquí se ejecuta el código después de que se complete la llamada
+    //     this.ubicationValue = this.dataService.getUbicationValue();
+    //     // console.log('Ubication value:', this.ubicationValue);
+    
+    //     // Lógica que requiere this.result después de que se complete la llamada
+    //     // console.log('Lista inicial en subscribe:', this.result["body"]); // Aquí debería estar lleno
+        
+    //     if (this.result && this.result["body"].length > 0) {
      
-    //   if(null != this.mobileUnit)
-    //     {
-    //         if(1 == this.list[0].class_id)
-    //         {   
-    //             this.urlImage = '../../../assets/images/mobile_unity_types/vehiculo_de_transporte/'+this.list[0].image_type;
-    //         }
-    //         else if(2 == this.list[0].class_id)
-    //         {
-    //             this.urlImage = '../../../assets/images/mobile_unity_types/mascota/'+this.list[0].image_type;
-    //         }
-    //         else if(3 == this.list[0].class_id)
-    //         {
-    //             this.urlImage = '../../../assets/images/mobile_unity_types/persona/'+this.list[0].image_type;
-    //         }
-    //         else if(4 == this.list[0].class_id)
-    //         {
-    //             this.urlImage = '../../../assets/images/mobile_unity_types/moto/'+this.list[0].image_type;
-    //         }
-    //         else if(5 == this.list[0].class_id)
-    //         {
-    //             this.urlImage = '../../../assets/images/mobile_unity_types/maquina_amarilla/'+this.list[0].image_type;
-    //         }
-    //     }
-    //     this.refreshMap();
+    //       console.log("golaaaa en subscribe",  this.result["body"][0]["type.image"]);
 
-    // }else{
-    //   console.log("no hay datos disponibles");
+    //       if(null != this.result["body"][0]){
+
+    //             if(1 == this.result["body"][0]["class.id"])
+    //             {   
+    //                 this.urlImage = '../../../assets/images/mobile_unity_types/vehiculo_de_transporte/'+this.result["body"][0]["type.image"];
+    //             }
+    //             else if(2 == this.result["body"][0]["class.id"])
+    //             {
+    //                 this.urlImage = '../../../assets/images/mobile_unity_types/mascota/'+this.result["body"][0]["type.image"];
+    //             }
+    //             else if(3 == this.result["body"][0]["class.id"])
+    //             {
+    //                 this.urlImage = '../../../assets/images/mobile_unity_types/persona/'+this.result["body"][0]["type.image"];
+    //             }
+    //             else if(4 == this.result["body"][0]["class.id"])
+    //             {
+    //                 this.urlImage = '../../../assets/images/mobile_unity_types/moto/'+this.result["body"][0]["type.image"];
+    //             }
+    //             else if(5 == this.result["body"][0]["class.id"])
+    //             {
+    //                 this.urlImage = '../../../assets/images/mobile_unity_types/maquina_amarilla/'+this.result["body"][0]["type.image"];
+    //        console.log("url2",this.urlImage);
+    //             }
+    //       }   
+    //     }
+    //   });
+   
+    //   this.initMap();
+    //   this.addLayers();
     // }
 
+    //this.dataService.fetchData(this.list, "MobileUnities", this.fieldRelations,{}, {}, [{ "ref": "id", "valor": [1,2,3,4,5]},{ "ref": "plate", "valor": [1,2,3,4,5]}],)
+    //ejemplo de una estructura con multicondiciones
 
+    ngOnInit() {
+      this.ubicationSubscription = this.dataService.getUbicationValue().subscribe(
+        values => {
+          this.ubicationValues = values;
+          console.log('Valores de ubicación recibidos:', values);
+        }
+      );
+     
+        this.refreshMap();
+        this.initMap();
+    }
+    
+  
+
+    visudata() {
+      this.dataService.getResponse().subscribe(response => {
+      this.result2 = response;
+        // console.log("function3", this.result2["body"]);
+    
+        // // Verificación adicional
+        // console.log("this.result2:", this.result2);
+        // console.log("this.result2['body']:", this.result2["body"]);
+        // console.log("this.result2['body'].length:", this.result2["body"].length);
+    
+        // Verifica que el array "body" tenga elementos
+        if (this.result2 && this.result2["body"] && this.result2["body"].length > 0) {
+          // console.log("golaaaa en subscribe", this.result2["body"][0]["type.image"]);
+    
+          if (this.result2["body"][0] != null) {
+            const classId = this.result2["body"][0]["class.id"];
+            const typeImage = this.result2["body"][0]["type.image"];
+            // console.log("classId:", classId);
+            // console.log("typeImage:", typeImage);
+    
+            switch (classId) {
+              case 1:
+                this.urlImage = '../../../assets/images/mobile_unity_types/vehiculo_de_transporte/' + typeImage;
+                break;
+              case 2:
+                this.urlImage = '../../../assets/images/mobile_unity_types/mascota/' + typeImage;
+                break;
+              case 3:
+                this.urlImage = '../../../assets/images/mobile_unity_types/persona/' + typeImage;
+                break;
+              case 4:
+                this.urlImage = '../../../assets/images/mobile_unity_types/moto/' + typeImage;
+                break;
+              case 5:
+                this.urlImage = '../../../assets/images/mobile_unity_types/maquina_amarilla/' + typeImage;
+                console.log("url2", this.urlImage);
+                break;
+              default:
+                // console.log("Clase desconocida:", classId);
+            }
+          }
+        }
+        this.addLayers();
+        // console.log(this.urlImage);
+      });
+    }
+    
+
+  // ngAfterViewInit() {
+  //   this.dataService.getResponse().subscribe(response => {
+  //     this.result2 = response;
+  //     this.classIds = this.result2["body"][0]["class.id"];
+  //     // console.log("en el after", this.result2)
+  //     });
+     
+
+  // }
+
+  prueba(){
+  
+ 
   }
 
-  ngAfterViewInit() {
-
-
-    this.initMap();
-
-    const body =  this.dataService.fetchData(this.list, "MobileUnities", this.fieldRelations  )
-     .pipe(
-        tap(response => {
-          // Procesa la respuesta según sea necesario
-          
-          this.result = response;
-          console.log("respo",response);
-
-        }), 
-        catchError(error => {
-          console.log('Error en la solicitud:', error);
-          return throwError(() => error);
-        })
-      ).subscribe();
-
-    this.addLayers();
-  }
 
   private initMap(): void {
-    this.map = L.map('map').setView([4.81333, -75.69611], 17);
-
+    // Crea el mapa y establece la vista inicial
+    this.map = L.map('map', {
+      center: [4.81333, -75.69611], // Coordenadas iniciales del centro
+      zoom: this.zoom, // Nivel de zoom inicial
+      zoomControl: false // Desactiva el control de zoom por defecto de Leaflet
+    });
+  
+    // Añade la capa de mosaicos de OpenStreetMap
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '© OpenStreetMap contributors'
+    }).addTo(this.map);
+  
+    // Añade el control de zoom personalizado en la esquina superior derecha
+    L.control.zoom({
+      position: 'topright' // Ubica el control de zoom en la esquina superior derecha
     }).addTo(this.map);
 
   }
 
   private addLayers(): void {
+  //   console.log(this.urlImage);
     // Icono del coche
     this.carIcon = L.icon({
-      iconUrl: 'assets/icon/white_car.png',  // Asegúrate de tener esta imagen en tu carpeta de assets
+      iconUrl: this.urlImage,  // Asegúrate de tener esta imagen en tu carpeta de assets
       iconSize: [42, 42],
       iconAnchor: [16, 16]
     });
@@ -308,256 +439,20 @@ protected result: any = {};
   }
 
 
-  refreshMap()
-  {
-      // this.infowindowModal = {};
-      // this.timeOff= null
-      // this.listPoints = {};
-      // this.markerL = {};
-      // // this.refreschAnimate();
-      // this.listEvents = false;
-      // this.showDetailEvent = false;
-      // this.mobileUnitEvents = [];
-      // this.spinner.show();
-      // this.deleteMarkers();
-      // this.labelIndex = 0;
-      //this.totalSelected = this.list.length;
-
-      console.log( "total",this.totalSelected);
-
-
-      // if(1 === this.totalSelected){
-      //     //If the user select only one item show the last 3 point reported and show the info of last point in bottom panel
-      //     this.formData = new FormData();
-      //     //Gets the key of the report
-      //     let url = 'device-plots/'+this.list[0].id+'/get-normal';
-      //     this.service.queryGet(url).subscribe(
-      //         response=>
-      //         {
-      //             let result = response.json();
-      //             this.regularKey = result.key;
-      //             this.formData.append('key', this.regularKey);
-      //             this.formData.append('imei', this.list[0].device_imei);
-      //             this.formData.append('device_plot_id', result.device_plot_id);
-      //             this.formData.append('lines', '3');
-      //             if(true === this.realtime){
-      //                 this.timer = setInterval(() => {
-      //                     this.service.queryPost('mobile-units/show-single', this.formData).subscribe(response => {
-      //                         let result = [];
-      //                         let resVelocity = [];
-      //                         result = response.json();
-      //                         resVelocity = response.json();
-      //                         if(result){
-      //                             let len = result.length;
-      //                             //Check if response is not empty and add markers foreach point
-      //                             if(0 < len){
-      //                                 //If realtime is enabled show markers and not the route
-      //                                 var i=0
-      //                                 for(i; i<=len; i++){
-      //                                     if(result[i] && result[i].coordinates){
-      //                                         this.addMarker(result[i].coordinates, result);
-      //                                         //this.addMarkerWithTimeout(result[i].coordinates, i * 200);
-      //                                     }
-      //                                 }
-      //                                 this.getLastFiveEvents();
-
-      //                                 //Show information in bottom panel of last point
-      //                                 this.actualLocation = result[len-1].address;
-      //                                 // this.geocodeLatLng(result[len-1].coordinates);
-      //                                 this.getMapStreetView(result[len-1].coordinates);
-
-      //                                 if((-1 < resVelocity[i-1].velocity) && (5 >= resVelocity[i-1].velocity))
-      //                                 {
-      //                                     this.class = 'br-col-normally';
-      //                                 }
-      //                                 else if((6 < resVelocity[i-1].velocity) && (80 > resVelocity[i-1].velocity))
-      //                                 {
-      //                                     this.class = 'br-col-success';
-      //                                 }
-      //                                 else if((81 < resVelocity[i-1].velocity) && (100 >= resVelocity[i-1].velocity))
-      //                                 {
-      //                                     this.class = 'br-col-warning';
-      //                                 }
-      //                                 else if(100 < resVelocity[i-1].velocity)
-      //                                 {
-      //                                     this.class = 'br-col-danger';
-      //                                 }
-
-
-      //                             }
-      //                         }else{
-      //                             this.toastr.error('Server Error', 'Error', { enableHtml: true, positionClass: 'toast-top-center' });
-      //                         }
-      //                     },
-      //                     err => {
-      //                         console.log(err);
-      //                     });
-      //                 }, this.markerDuration);
-      //             }else{
-      //                 this.service.queryPost('mobile-units/show-single', this.formData).subscribe(response => {
-      //                     let result = [];
-      //                     this.respuesta =  response.json();
-      //               let auxResult= response.json();
-      //                 let resVelocity = [];
-      //                     /////esta desición permite que solo se muestre un evento del activo movil en movimiento
-      //                     ///pendiente revisas
-      //                     if (this.respuesta.length == 1) {
-      //                         result = response.json();
-      //                     }else{
-      //                         result.push(response.json()[0]);
-      //                     }
-      //                     /////////
-      //                     // result = response.json();
-      //                     resVelocity = response.json();
-      //                     if(result){
-      //                         let len = result.length;
-      //                         //Check if response is not empty and add markers foreach point
-      //                         if(0 < len){
-      //                             //Show information in bottom panel of last point
-      //                             let coordinates = result[0].coordinates;
-      //                             this.actualCoords = coordinates;
-      //                             this.timeAgo = result[0].time;
-      //                             this.fileDate = result[0].file_date;
-      //                             this.actualLocation = result[0].address;
-      //                             // this.geocodeLatLng(coordinates);
-      //                             this.getMapStreetView(coordinates);
-      //                             // this.initMap(coordinates);
-      //                             this.getLastFiveEvents();
-
-      //                             if (result[0].driver_name_dallas && this.lastDriverName == 'No asignado') {
-      //                                 this.lastDriverName = result[0].driver_name_dallas;
-      //                             }
-
-      //                             if(1 == resVelocity[0].status_mobile_unity.toString().charAt(0))
-      //                             {
-      //                                 this.class = 'br-col-success';
-      //                                 this.statusCurrent = 'Encendido';
-      //                                 this.statusClass = 'success';
-      //                                 if(2 >= resVelocity[0].velocity && 2 != this.list[0].class_id && 3 != this.list[0].class_id)
-      //                                 {
-      //                                     this.class = 'br-col-warning';
-      //                                     this.statusCurrent = 'Detenido';
-      //                                     this.statusClass = 'warning';
-      //                                 }
-      //                                 if(24 < resVelocity[0].hours)
-      //                                 {
-      //                                     this.class = 'br-col-normally';
-      //                                     this.statusCurrent = 'Sin reportar';
-      //                                     this.statusClass = 'normally';
-      //                                 }
-      //                             }
-      //                             else if(0 == resVelocity[0].status_mobile_unity.toString().charAt(0))
-      //                             {
-      //                                 this.class = 'br-col-danger';
-      //                                 this.statusCurrent = 'Apagado';
-      //                                 this.statusClass = 'danger';
-      //                                 if(24 < resVelocity[0].hours)
-      //                                 {
-      //                                     this.class = 'br-col-normally';
-      //                                     this.statusCurrent = 'Sin reportar';
-      //                                     this.statusClass = 'normally';
-      //                                 }
-      //                             }
-
-      //                             if(24 < resVelocity[0].hours)
-      //                             {
-      //                                 this.addMarker(coordinates, result);
-      //                             }
-      //                             else if(len == 1)
-      //                             {
-      //                                 result[0]['first'] = true;
-      //                                 this.addMarker(coordinates, result);
-      //                             }else
-      //                             {
-      //                                 if(this.googleMaps == '1')
-      //                                 {
-
-
-      //                                   var item   = {};
-      //                                     var dataNew= {};
-      //                                     for (var key in result) {
-
-      //                                         dataNew = result[key];
-
-      //                                         if (parseInt(key) == 0) {
-      //                                             dataNew['first'] = true;
-      //                                         }
-
-      //                                         item[0] = dataNew;
-      //                                         this.addMarker(result[key]['coordinates'],item);
-      //                                     }
-      //                                 }else
-      //                                 {
-      //                                     this.addMarker(coordinates,result);
-      //                                 }
-      //                             }
-      //                             this.imageType = '../../../assets/images/mobile_unity_types/blanco/'+this.mobileUnit.image_type;
-      //                             this.mobileUnit.course = auxResult[0].course;
-      //                             this.mobileUnit.degrees = auxResult[0].degrees;
-      //                             this.mobileUnit.batteryLevel = auxResult[0].batteryLevel;
-      //                             this.mobileUnit.speed = auxResult[0].speed;
-      //                             this.mobileUnit.plan_name = auxResult[0].planName;
-      //                             this.geofencesNames = auxResult[0].geofencesNames;
-      //                             this.mobileUnit.timeOff = null;
-      //                             //---------------Codigo temperatura --------------------------
-      //                             if (auxResult[0].temperature) { this.temperatura = auxResult[0].temperature; }
-      //                             else {
-      //                                 this.temperatura = null;
-      //                             }
-      //                             //------------------------------------------------------------
-                                  
-      //                             if (auxResult[0]['timeOff']) {
-      //                                 this.timeOff            = auxResult[0].timeOff;
-      //                                 this.mobileUnit.timeOff = auxResult[0].timeOff;
-      //                             }
-
-      //                             if('null' == auxResult[0].limitSpeed)
-      //                             {
-      //                                 this.mobileUnit.limitSpeed = '';                                
-      //                             }
-      //                             else{
-      //                                 this.mobileUnit.limitSpeed = auxResult[0].limitSpeed;
-      //                             }
-
-      //                             //Center map in the last point
-      //                             if(this.googleMaps == '1')
-      //                             {
-      //                                 // this.map.setCenter(result[0].coordinates);
-      //                             }
-      //                         }
-      //                         else
-      //                         {
-      //                             this.class = '';
-      //                             this.statusCurrent = '';
-      //                             this.statusClass = '';
-      //                             this.actualCoords = [];
-      //                             this.timeAgo = '';
-      //                             this.fileDate = '';
-      //                             this.actualLocation = '';
-      //                             jq('#pano').html('');
-      //                             this.mobileUnitEvents = [];
-      //                             this.loaderDataMap = true;
-      //                         }
-      //                         this.spinner.hide();
-      //                     }else{
-      //                         this.spinner.hide();
-      //                         this.toastr.error('Server Error', 'Error', { enableHtml: true, positionClass: 'toast-top-center' });
-      //                     }
-      //                 },
-      //                 err => {
-      //                     this.spinner.hide();
-      //                     console.log(err);
-      //                 });
-      //             }
-      //         },
-      //         err =>
-      //         {
-      //             console.log(err);
-      //         }
-      //     );
-      // }else{
-      //     this.spinner.hide();
-      // }
-
+  refreshMap() {
+    console.log(this.ubicationValues);
+  
+    if (this.ubicationValues && this.ubicationValues.length > 0) {
+      const ubicationIds = this.ubicationValues;
+  
+      this.dataService.fetchData(this.list, "MobileUnities", this.fieldRelations,{}, {}, [{ "ref": "id", "valor": ubicationIds }]
+      ).subscribe(response => {
+        console.log("holi",response);
+        this.dataService.setResponse(response);
+      });
+    } else {
+      console.log("No hay valores");
+    }
   }
 }
+

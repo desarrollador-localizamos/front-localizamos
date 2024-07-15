@@ -123,7 +123,7 @@
         [dataKey]="dataKey"
         [rowsPerPageOptions]="rowsPerPageOptions"
         [loading]="loading"
-        [globalFilterFields]="['name', 'country.name', 'representative.name', 'status', 'title']"
+        [globalFilterFields]="globalFilterFields"
         #table>
       <ng-template pTemplate="caption">
         <div class="flex">
@@ -142,15 +142,16 @@
       <ng-template pTemplate="header">
         <tr>
             <ng-container *ngFor="let column of data.header">
-                <th *ngIf="column.filter || column.sortable" pSortableColumn="{{ column.texto }}">
+                <th *ngIf="column.filter || column.sortable" pSortableColumn="{{ column.campo }}">
                     {{ column.texto }} 
-                    <p-sortIcon *ngIf="column.sortable" field="{{ column.texto }}"></p-sortIcon>
-                    <p-columnFilter *ngIf="column.filter" type="text" field="{{ column.texto }}" display="menu"></p-columnFilter>
+                    <p-sortIcon *ngIf="column.sortable" field="{{ column.campo }}"></p-sortIcon>
+                    <p-columnFilter *ngIf="column.filter" type="text" field="{{ column.campo }}" display="menu"></p-columnFilter>
                 </th>
                 <th *ngIf="!column.filter && !column.sortable">
                     {{ column.texto }} 
                 </th>
             </ng-container>
+            <th>Acciones</th>
         </tr>
         
       </ng-template>

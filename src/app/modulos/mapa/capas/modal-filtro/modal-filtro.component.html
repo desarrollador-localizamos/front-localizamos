@@ -1,0 +1,85 @@
+<div class="card flex justify-content-center">
+    <p-dialog [(visible)]="visible" closable="false" [style]="{ width: '25rem' }">
+        <ng-template pTemplate="header">
+            <div class="custom-dialog-header">
+                <div class="p-dialog-title">Filtro</div>
+                <div class="p-dialog-header-icons">
+                    <button pButton icon="pi pi-minus" class="p-dialog-header-icon p-link" style="height: 2rem; margin-left: 0px;"></button>
+                    <button pButton icon="pi pi-times" (click)="visible = false" class="p-dialog-header-icon p-link" style="height: 2rem; margin-left: 0px;"></button>
+                </div>
+            </div>
+        </ng-template>
+      
+      <div class="card flex justify-content-center gap-1">
+     
+        <div  class="p-tag-items "> 
+          <span class="valor">332 </span>
+          <br> 
+          <span class="etiqueta">Movimiento</span>
+        </div>
+        <div class="p-tag-items v2">
+           <span class="valor">584 </span>
+           <br> 
+          <span class="etiqueta">Detenidos</span> 
+        </div>
+        <div  class="p-tag-items v3">
+          <span class="valor">1375 </span>
+          <br> 
+          <span class="etiqueta">Apagados</span>
+        </div>
+        <div  class="p-tag-items v4"> 
+          <span class="valor">2859 </span>
+          <br> 
+          <span class="etiqueta"> Sin 
+           reportar</span>
+          </div>
+        <div  class="p-tag-items v5"> 
+          <span class="valor"> 5150 </span><br> 
+          <span class="etiqueta">Total</span></div>
+      
+    </div>
+    
+      <div style="margin-top: 15px;">
+        <div>
+            <p-iconField iconPosition="left">
+                <p-inputIcon styleClass="pi pi-search" />
+                <input type="text" pInputText placeholder="Search" />
+            </p-iconField>
+            <p-button icon="pi pi-check"/>
+            <p-button icon="pi pi-bookmark" severity="secondary" />
+        </div>
+      
+      </div>
+      <div class="flex align-items-center gap-3 mb-3">
+        <p-dataView [value]="result.body" [rows]="5" [paginator]="true">
+          <ng-template pTemplate="list" let-resultBody>
+            <div class="grid grid-nogutter">
+              @for (item of resultBody; track item; let first = $first) {
+                <div class="col-12">
+                  <div class="flex align-items-center justify-content-between">
+                    <div class="contenedor-check">
+                       <p-checkbox [(ngModel)]="checked" [binary]="true" inputId="binary"></p-checkbox>
+                    </div>
+                    <div class="info-text">
+                       <div *ngIf="item.plate">
+                          <strong>{{ item.plate }}</strong>
+                       </div>
+                       <div *ngIf="item.brand">
+                          <span class="cliente">{{ item.brand }}</span>
+                       </div>
+                    </div>
+                    <div class="p-tag-wrapper">
+                       <p-tag value="50 km/h" class="p-tag-km"></p-tag>
+                    </div>
+                 </div>
+                  <p-divider />
+                </div>
+              }
+             
+            </div>
+          </ng-template>
+        </p-dataView>
+      </div>
+    </p-dialog>
+  </div>
+  

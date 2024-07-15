@@ -1,0 +1,78 @@
+<div style="padding: 10px; width: 100%; height: auto;">
+    <h2>Reportes Generales</h2>
+    <p-divider />
+    <div class="grid min-h-screen w-full m-0">
+        <div class="col-12 md:col-4 p-0 h-screen md:h-auto">
+            <div class="box h-auto" style="padding: 20px;">
+                <p-panel header="Seleccionar reporte:" [toggleable]="true">
+                    <div class="p-1">
+                        <app-select-avanzado
+                            [options]="opciones"
+                            placeholder="Seleccionar"
+                            styleClass="w-full"
+                            (selectionChange)="onCountrySelect($event)">
+                        </app-select-avanzado>
+                    </div>
+                    <div class="p-1">
+                        <app-multi-select 
+                          [options]="clientOptions"
+                          placeholder="Seleccionar cliente"
+                          (selectionChange)="onClientSelectionChange($event)"
+                          (click)="consultarCliente()"
+                        ></app-multi-select>
+                    </div>
+                    <div class="p-1">
+                        <app-multi-select 
+                          [options]="groupOptions"
+                          placeholder="Seleccionar un grupo"
+                          (selectionChange)="GrupoClientSelectionChange($event)"
+                          (click)="consultarGrupoCliente()"
+                        ></app-multi-select>
+                    </div>
+                    <div class="p-1">
+                        <app-multi-select 
+                          [options]="activoOptions"
+                          placeholder="Seleccionar Activo"
+                          (selectionChange)="onActivoSelectionChange($event)"
+                          (click)="consultarActivo()"
+                        ></app-multi-select>
+                    </div>
+
+                    <div class="p-1">
+                        <app-select-avanzado
+                            [options]="rango"
+                            placeholder="Seleccionar Rango de tiempo"
+                            styleClass="w-full"
+                            (selectionChange)="rangoTiempo($event)">
+                        </app-select-avanzado>
+                    </div>
+
+                    <div class="p-1">
+                        <p-calendar styleClass="w-full"
+                        [(ngModel)]="rangeDates" 
+                        selectionMode="range" 
+                        [iconDisplay]="'input'" 
+                        [showIcon]="true" 
+                        [readonlyInput]="true" />
+                    </div>
+
+          
+                    <p-divider />
+
+                    <div class=" flex justify-content-center p-1">
+                        <p-button icon="pi pi-table" [rounded]="true" class="mx-2" />
+                        <p-button icon="pi pi-chart-bar" [rounded]="true" severity="secondary" class="mx-2" />
+                        <p-button icon="pi pi-chart-pie" [rounded]="true" severity="success" class="mx-2" />
+                    </div>
+                   
+                </p-panel>
+            </div>
+        </div>
+        <div class="col-12 md:col-8 p-0 h-screen md:h-auto">
+            <div class="box h-auto">
+              <!--<app-table-sencilla></app-table-sencilla> -->  
+              
+            </div>
+        </div>
+    </div>
+</div>

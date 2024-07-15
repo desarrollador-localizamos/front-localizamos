@@ -1,0 +1,109 @@
+.p-tag-items {
+    height: 60px !important;
+    text-align: center;
+ }
+ .p-tag-items {
+    background: rgb(34, 197, 94);
+    border-color: rgb(34, 197, 94);
+    color: white;
+    min-width: 80px;
+    border-radius: 5px;
+    text-align: center;
+    align-content: center;
+ }
+ .p-tag-items.v2 {
+    background: #f2b413;
+    border-color: #f2b413;
+ }
+ .p-tag-items.v3 {
+    background: #EF4444;
+    border-color: #EF4444;
+ }
+ .p-tag-items.v4 {
+    background: #64748B;
+    border-color: #64748B;
+ }
+ .p-tag-items.v5 {
+    background: #3B82F6;
+    min-width: 50px !important;
+ }
+ span.valor {
+    font-size: 13px;
+    font-weight: 500;
+ }
+ span.etiqueta {
+    font-size: 12px;
+    font-weight: 600;
+ }
+ ::ng-deep .custom-dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+ }
+ ::ng-deep .p-dialog-header-icons {
+    display: flex;
+    gap: 0.5rem;
+ }
+ .grid.grid-nogutter.ng-star-inserted {
+    margin-top: 15px;
+ }
+ 
+ ::ng-deep .p-button {
+    margin-left: 5px;
+    height: 40px;
+ }
+ ::ng-deep input.p-inputtext.p-component.p-element {
+    width: 69% !important;
+    height: 40px;
+ }
+ ::ng-deep .p-paginator {
+    padding: 1rem 0rem 0rem 0rem;
+ }
+ ::ng-deep .p-paginator .p-paginator-pages .p-paginator-page {
+    min-width: 2rem !important;
+    height: 2rem !important;
+ }
+ ::ng-deep .p-paginator .p-paginator-first {
+    min-width: 2rem !important;
+    height: 2rem !important;
+ }
+ ::ng-deep .p-paginator .p-paginator-last {
+    min-width: 2rem !important;
+    height: 2rem !important;
+ }
+ ::ng-deep .p-paginator .p-paginator-next {
+    min-width: 2rem !important;
+    height: 2rem !important;
+ }
+ ::ng-deep .p-paginator .p-paginator-prev {
+    height: 2rem !important;
+    min-width: 2rem !important;
+ }
+ .contenedor-check {
+    align-content: center;
+    margin-right: 10px;
+ }
+ strong {
+    font-size: 15px;
+ }
+ span.cliente {
+    font-size: 14px;
+    font-weight: 500;
+ }
+ .flex {
+    display: flex;
+ }
+ .align-items-center {
+    align-items: center;
+ }
+ .justify-content-between {
+    justify-content: space-between;
+ }
+ .info-text {
+    flex-grow: 1;
+ }
+ .p-tag-wrapper {
+    margin-left: auto;
+ }
+ 

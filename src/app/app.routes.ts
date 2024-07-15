@@ -7,6 +7,7 @@ import { LayoutComponent } from './shared/components/layout/layout.component';
 //import { isAuthenticatedGuard } from './core/guards';
 import { VistaDynamicComponent } from './vistas/vista-dynamic/vista-dynamic.component';
 import { VistaDynamic2Component } from './vistas/vista-dynamic2/vista-dynamic2.component';
+import { VistaDynamicReporteComponent } from './vistas/vista-dynamic-reporte/vista-dynamic-reporte.component';
 
 export const routes: Routes = [
     { path: '', component: LoginComponent, pathMatch: 'full' },
@@ -27,6 +28,9 @@ export const routes: Routes = [
 
             },
             {   path: ':page/2', component: VistaDynamic2Component
+
+            },
+            {   path: ':page/3', component: VistaDynamicReporteComponent
 
             },
             {

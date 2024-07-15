@@ -8,14 +8,15 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { InputTextModule } from 'primeng/inputtext';
 import { BadgeModule } from 'primeng/badge';
 import { AuthService } from '../../../../core/services/auth.service';
+import { FiltroComponent } from "../../filtro/filtro.component";
 
 @Component({
-  selector: 'app-header-component',
-  standalone: true,
-  imports: [ButtonModule, BadgeModule, InputTextModule,
-    AvatarModule, OverlayPanelModule, CustomersComponent],
-  templateUrl: './header-component.component.html',
-  styleUrl: './header-component.component.scss'
+    selector: 'app-header-component',
+    standalone: true,
+    templateUrl: './header-component.component.html',
+    styleUrl: './header-component.component.scss',
+    imports: [ButtonModule, BadgeModule, InputTextModule,
+        AvatarModule, OverlayPanelModule, CustomersComponent, FiltroComponent]
 })
 export class HeaderComponentComponent {
 

@@ -316,10 +316,11 @@ export class DashboardComponent {
      
 // 5499
 
-ubication(value: number) {
-  // Llama al método del servicio para guardar el valor
-  this.dataService.setUbicationValue(value);
 
+ubication(values: number[]) {
+  values.forEach(value => {
+    this.dataService.setUbicationValue(value);
+  });
 }
     
 }

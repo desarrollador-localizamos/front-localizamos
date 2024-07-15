@@ -32,7 +32,7 @@
                 </ul>
             </li>
 
-            <li>
+            <!-- <li>
                 <a (click)="onLinkClick('mobile_unity_events' , 2)" >
                     <i class="pi pi-globe"></i>
                     <span class="link_name">Visor general</span>
@@ -41,27 +41,38 @@
                     <li class="lista-submenu"><a class="link_name-desplegable" (click)="onLinkClick('mobile_unity_events',2)">Visor general</a></li>
     
                 </ul>
+            </li> -->
+
+             <li>
+                <a (click)="onLinkClick('MobileUnityEvents' , 1)" >
+                    <i class="pi pi-globe"></i>
+                    <span class="link_name">Visor general</span>
+                </a>
+                <ul class="menu-desplegable">
+                    <li class="lista-submenu"><a class="link_name-desplegable" (click)="onLinkClick('MobileUnityEvents',1)">Visor general</a></li>
+    
+                </ul>
             </li>
 
             <li>
-                <a (click)="onLinkClick('monitoreo',1)">
+                <a (click)="onLinkClick('CentralAlerts',1)">
                     <i class="pi pi-desktop"></i>
                     <span class="link_name">Central de monitoreo</span>
                 </a>
                 <ul class="menu-desplegable">
-                    <li class="lista-submenu"><a class="link_name-desplegable"(click)="onLinkClick('monitoreo',2)">Central de monitoreo</a></li>
+                    <li class="lista-submenu"><a class="link_name-desplegable"(click)="onLinkClick('CentralAlerts',2)">Central de monitoreo</a></li>
     
                 </ul>
             </li>
 
             
             <li>
-                <a (click)="onLinkClick('customers',1)">
+                <a (click)="onLinkClick('Customers',1)">
                     <i class="pi pi-users"></i>
                     <span class="link_name">Clientes</span>
                 </a>
                 <ul class="menu-desplegable">
-                    <li class="lista-submenu"><a class="link_name-desplegable" (click)="onLinkClick('customers',1)">Clientes</a></li>
+                    <li class="lista-submenu"><a class="link_name-desplegable" (click)="onLinkClick('Customers',1)">Clientes</a></li>
     
                 </ul>
             </li>
@@ -86,7 +97,7 @@
                     <li><a  class="blank2" href=""><i class="pi pi-directions"></i> Dibujar ruta</a></li>
                     <li><a  class="blank2" (click)="onLinkClick('Simcards',1)"><i class="pi pi-credit-card"></i> Simcards</a></li>
                     <li><a  class="blank2" (click)="onLinkClick('SimcardPlan',1)"><i class="pi pi-clone"></i> Planes simcard</a></li>
-                    <li><a  class="blank2" (click)="onLinkClick('MobileUnities2',1)"><i class="pi pi-shield"></i> Control-T</a></li>
+                    <li><a  class="blank2" (click)="onLinkClick('MobileUnities_',1)"><i class="pi pi-shield"></i> Control-T</a></li>
 
                 </ul>
             </li>
@@ -104,7 +115,7 @@
                     <li><a class="blank2" (click)="onLinkClick('Users',1)"><i class="pi pi-users"></i> Usuarios</a></li>
                     <li><a class="blank2" href=""><i class="pi pi-unlock"></i>Permisos</a></li>
                     <li><a class="blank2" (click)="onLinkClick('Plans',1)"><i class="pi pi-clone"></i> Planes</a></li>
-                    <li><a class="blank2" (click)="onLinkClick('Consultans',1)"><i class="pi pi-verified"></i> Asesores comerciales</a></li>  
+                    <li><a class="blank2" (click)="onLinkClick('Consultants',1)"><i class="pi pi-verified"></i> Asesores comerciales</a></li>  
                 </ul>
             </li>
     
@@ -130,8 +141,8 @@
                     <li><a class="blank2" (click)="onLinkClick('EventTypes',1)"><i class="pi pi-list"></i> Tipos de eventos </a></li>
                     <li><a class="blank2" (click)="onLinkClick('NoveltyTypes',1)"><i class="pi pi-list"></i> Tipos de novedad </a></li>
                     <li><a class="blank2" (click)="onLinkClick('MobileUnityLine',1)"><i class="pi pi-cog"></i> Lineas </a></li>
-                    <li><a class="blank2" (click)="onLinkClick('Brands',1)"><i class="pi pi-tags"></i> Marcas </a></li>
-                    <li><a class="blank2" ><i class="pi pi-directions-alt"></i> Direcciones </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('MobileUnityBrands',1)"><i class="pi pi-tags"></i> Marcas </a></li>
+                    <li><a class="blank2" (click)="onLinkClick('Directions',1)"><i class="pi pi-directions-alt"></i> Direcciones </a></li>
                     <li><a class="blank2" (click)="onLinkClick('DeviceTypeCommands',1)"><i class="pi pi-code"></i> Comandos </a></li>
 
                  
@@ -151,7 +162,8 @@
                     <li><a class="blank2" href=""><i class="pi pi-file-export"></i> Reporte histórico</a></li>
                     <li><a class="blank2" href=""><i class="pi pi-file-export"></i> Reporte de clientes</a></li>
                     <li><a class="blank2" href=""><i class="pi pi-file-export"></i> Reporte de novedades</a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-file-export"></i> Reporte y estadisticas</a></li>
+                    <li><a class="blank2" (click)="onLinkClick('ScheduledReports',3)"><i class="pi pi-file-export"></i> Reporte y estadisticas</a></li>
+                    <li><a class="blank2" (click)="onLinkClick('ScheduledReports',1)"><i class="pi pi-code"></i> Reportes programados </a></li>
                     <li><a class="blank2" href=""><i class="pi pi-file-export"></i> Reporte log de tramas</a></li>
                     <li><a class="blank2" href=""><i class="pi pi-file-export"></i> Reporte de la policía</a></li>
   

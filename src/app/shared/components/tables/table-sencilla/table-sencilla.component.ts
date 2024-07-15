@@ -52,6 +52,7 @@ export class TableSencillaComponent implements OnInit {
   @Input() tableId: string = "";
   @Input() headerTemplate: any;  // Nuevo input para el header
   @Input() bodyTemplate: any;    // Nuevo input para el body
+  @Input() globalFilterFields: any;
 
   @ViewChild('table') table: Table | undefined;
 

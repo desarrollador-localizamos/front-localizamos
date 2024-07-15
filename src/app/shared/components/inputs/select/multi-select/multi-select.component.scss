@@ -1,0 +1,27 @@
+::ng-deep .p-multiselect{
+    width: 100% !important;
+}
+
+.p-multiselect {
+    max-width: 100%; // Ajusta este valor según tus necesidades
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+     word-wrap: break-word;
+  }
+  ::ng-deep .p-multiselect-panel {
+    max-width: 500px; // Ajusta este valor según tus necesidades
+    word-wrap: break-word;
+  }
+  ::ng-deep .p-multiselect-label {
+   
+      word-wrap: break-word;
+ 
+  }
+  ::ng-deep  .p-multiselect-item {
+      white-space: normal; /* Permite que el texto se ajuste en múltiples líneas */
+      word-wrap: break-word;
+  }
+    
+  
+  

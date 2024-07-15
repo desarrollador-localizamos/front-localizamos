@@ -1,0 +1,102 @@
+.banner {
+    min-width: 200px;
+    max-width: 320px;
+    height: calc(100vh - 65px);
+    background-color: white; /* O el color que prefieras */
+}
+
+  /* Panel derecha */
+  .panel-container {
+    position: relative;
+    height: 100%;
+    display: flex ;
+  }
+  
+  .side-panel {
+    background-color: white;
+    padding: 15px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-size: 14px;
+    top: 0;
+    overflow-y: auto;
+    position:sticky;
+  
+  }
+  
+  .panel-section {
+    margin-bottom: 15px;
+  }
+  
+  .panel-section h2 {
+    margin: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
+    font-size: 16px;
+  }
+  
+  .panel-section p {
+    margin: 5px 0;
+  }
+  
+  .info-row {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  /* Estilos para la tabla del panel de la derecha */
+  .eventos-container {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow-x: auto;
+    width: 100%;
+  }
+  
+  .eventos-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .eventos-table th, .eventos-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    white-space: nowrap; /* Evita el salto de línea en textos largos */
+    text-align: left; /* Alinea el texto a la izquierda */
+  }
+  
+  .eventos-table th {
+    background-color: #f2f2f2;
+    text-align: center;
+  }
+  
+  /* Estilos para la barra de desplazamiento */
+  .rectangulo {
+    display: flex;
+    align-items: center;
+    height: calc(100vh - 65px); 
+  }
+  
+  .rectangulo-menor {
+    background-color: #007BFF;
+    width: 10px;
+    height: 100%;
+    z-index: 0; 
+  }
+  
+  .toggle-panel-btn {
+    position: fixed;
+    z-index: 999;
+    right: 320px;
+    height: 40px;
+    width: 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    margin: 0;
+  }

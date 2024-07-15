@@ -1,0 +1,25 @@
+<div class="card flex justify-content-center">
+    <p-dropdown  class=" w-full "
+      [options]="options"
+      [(ngModel)]="selectedOption"
+      (ngModelChange)="onSelectionChange()"
+      optionLabel="name"
+      [filter]="true"
+      filterBy="name"
+      [showClear]="true"
+      [placeholder]="placeholder"
+      [styleClass]="styleClass">
+      <ng-template pTemplate="selectedItem" let-selectedOption>
+        <div class="flex align-items-center gap-2">
+          <i [class]="'pi ' + selectedOption.icon"></i>
+          <div>{{ selectedOption.name }}</div>
+        </div>
+      </ng-template>
+      <ng-template let-option pTemplate="item">
+        <div class="flex align-items-center gap-2">
+          <i [class]="'pi ' + option.icon"></i>
+          <div>{{ option.name }}</div>
+        </div>
+      </ng-template>
+    </p-dropdown>
+  </div>

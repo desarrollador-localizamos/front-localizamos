@@ -132,18 +132,24 @@
                   <li class="linkAction"><i class="fa fa-power-off icon_real icon_map" aria-hidden="true" style="background-color: red;"></i><a href="javascript:;" (click)="stopRealTime()" *ngIf="1 == googleMaps">Apagar</a>
                 </ul>
               </div> -->
-        <p-card header="Simple Card">
-            <p class="m-0">
-                    Lorem ipsum dolor sit amet...
-            </p>
-        </p-card>
+   
+             <app-ventana-info-accion></app-ventana-info-accion>
+            <div class="container">
+                <div class="fl-panel item-details">
+                    <div class="content">
 
-        <div id="map" style="width: 100%; height: 100vh;"></div>
+                        <div id="map" class="map"></div>
+
+                        <app-modal-filtro></app-modal-filtro>
+
+                        <app-banner-inferior></app-banner-inferior>
+                        
+                    </div>
+                </div>
+            </div>
+            
     </div>
-
-
-       
-
+  
 </div>
 
 

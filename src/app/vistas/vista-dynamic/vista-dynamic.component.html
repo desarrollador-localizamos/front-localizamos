@@ -8,6 +8,7 @@
         [loading]="false"
         [tableId]="'idTabladevice'"
         [dataKey]="'tablaCustomer'"
+        [globalFilterFields]="fieldNames"
         [bodyTemplate]="bodyTemplate">
   </app-table-sencilla>
 
@@ -21,6 +22,7 @@
           {{ rowData[key] }}
         </ng-template>
       </td>
+    
       <td>
         <app-button-toolti (onClick)="updateUser()" [icon]="'pi pi-user'" [tooltipPosition]="'bottom'" [tooltipText]="'Usuarios'" [rounded]="true" [text]="true" [severity]="'info'"></app-button-toolti>
         <app-button-toolti (onClick)="saveUser()" [icon]="'pi pi-book'" [tooltipPosition]="'bottom'" [tooltipText]="'Contactos'" [rounded]="true" [text]="true" [severity]="'secondary'"></app-button-toolti>
