@@ -127,11 +127,14 @@
         #table>
       <ng-template pTemplate="caption">
         <div class="flex">
-        
-            <app-button-toolti class="mr-2" (onClick)="pdf()" [icon]="'pi pi-file-pdf'" [tooltipPosition]="'bottom'" [tooltipText]="'Pdf'" [rounded]="false" [text]="false" [severity]="'danger'"></app-button-toolti>
-            <app-button-toolti class="mr-2" (onClick)="excel()" [icon]="'pi pi-file-excel'" [tooltipPosition]="'bottom'" [tooltipText]="'Excel'" [rounded]="false" [text]="false" [severity]="'success'"></app-button-toolti>
+           
+            <app-button-toolti   [styles]="{ 'width': '40px', 'height': '40px', 'padding': '5px', 'background-color': '#EF4444', 'border-color' : '#EF4444', 'margin': '2px' }"
+             class="mr-2" (onClick)="pdf()" [icon]="'pi pi-file-pdf'" [tooltipPosition]="'bottom'" [tooltipText]="'Pdf'" [rounded]="false" [text]="false" [severity]="'danger'"></app-button-toolti>
+            <app-button-toolti  [styles]="{ 'width': '40px', 'height': '40px', 'padding': '5px', 'background-color': '#22c55e', 'border-color' : '#22c55e', 'margin': '2px' }"
+             class="mr-2" (onClick)="excel()" [icon]="'pi pi-file-excel'" [tooltipPosition]="'bottom'" [tooltipText]="'Excel'" [rounded]="false" [text]="false" [severity]="'success'"></app-button-toolti>
             
-            <app-button-toolti class="mr-2" (click)="clear(table)" [icon]="'pi pi-filter-slash'" [tooltipPosition]="'bottom'" [tooltipText]="'Limpiar'" [rounded]="false" [text]="false" [severity]="''"></app-button-toolti>
+            <app-button-toolti  [styles]="{ 'width': '40px', 'height': '40px', 'padding': '5px',  'margin': '2px' }"
+            class="mr-2" (click)="clear(table)" [icon]="'pi pi-filter-slash'" [tooltipPosition]="'bottom'" [tooltipText]="'Limpiar'" [rounded]="false" [text]="false" [severity]="''"></app-button-toolti>
              
           <span class="p-input-icon-left ml-auto">
             <i class="pi pi-search"></i>

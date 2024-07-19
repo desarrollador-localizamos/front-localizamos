@@ -13,6 +13,8 @@ export class DataService {
   constructor(private http: HttpClient ) {}
 
   private responseSubject = new BehaviorSubject<any>(null);
+  private responseSubjectEventos = new BehaviorSubject<any>(null);
+
   private itemsSelectedSubject = new BehaviorSubject<any[]>([]);
   itemsSelected = this.itemsSelectedSubject.asObservable();
 
@@ -33,7 +35,7 @@ export class DataService {
   }
 
 
-   fetchData(fieldMappings: any, selectedLink: string, fieldRelations : any, condition?: any, fieldJoins?: any, multiconditions?: any,): Observable<any> {
+   fetchData(fieldMappings: any, selectedLink: string, fieldRelations : any, condition?: any, fieldJoins?: any, multiconditions?: any, orders?:any, take?: number): Observable<any> {
 
     const data = fieldMappings[selectedLink] || [];
     let dataCompleta : any;
@@ -51,10 +53,11 @@ export class DataService {
     console.log("joins",fieldJoins);
     if(fieldJoins.length = 0){
       joins= [];
+    
     }
     else{
       joins = fieldJoins[selectedLink] || []
-      
+      console.log("joins2",joins);
     }
    
     const url = `${this.baseUrl}visor`;
@@ -65,6 +68,8 @@ export class DataService {
       relations: relations,
       joins: joins,
       multiconditions: multiconditions,
+      orders:orders,
+      takes:take
     } ;
     console.log('Formato del cuerpo:', JSON.stringify(body)); // Verifica el formato en consola
     
@@ -88,10 +93,24 @@ export class DataService {
 
   setResponse(response: any) {
     this.responseSubject.next(response);
-    //console.log("holisss",response);
   }
 
   getResponse(): Observable<any> {
     return this.responseSubject.asObservable();
   }
+
+  
+  setResponseUltimosEventos(response: any) {
+    this.responseSubjectEventos.next(response);
+
+  }
+
+  getResponseUltimosEventos(): Observable<any> {
+    return this.responseSubjectEventos.asObservable();
+  }
+
+
+
+  
+  
 }

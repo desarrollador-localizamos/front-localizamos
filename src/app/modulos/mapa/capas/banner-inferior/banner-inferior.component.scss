@@ -1,9 +1,4 @@
-.banner {
-    min-width: 200px;
-    max-width: 320px;
-    height: calc(100vh - 65px);
-    background-color: white; /* O el color que prefieras */
-}
+
 
   /* Panel derecha */
   .panel-container {
@@ -14,27 +9,33 @@
   
   .side-panel {
     background-color: white;
+    max-width: 320px;
     padding: 15px;
-    border-top-right-radius: 10px;
-    border-bottom-right-radius: 10px;
+    height: calc(100vh - 65px);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    font-size: 14px;
-    top: 0;
+    font-size: 13px;
+    top: 65px;
+    right: 0;
     overflow-y: auto;
-    position:sticky;
-  
-  }
-  
+    position: fixed;
+    z-index: 999;
+    border-left: #007BFF 6px solid; 
+    transition: all 0.5s ease;
+    transform: translateX(0); /* Estado inicial */
+}
+
+    .side-panel.cierre {
+        
+        transform: translateX(98%);
+
+    }
   .panel-section {
     margin-bottom: 15px;
   }
   
   .panel-section h2 {
     margin: 0;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 5px;
-    font-size: 16px;
+    font-size: 14px;
   }
   
   .panel-section p {
@@ -44,6 +45,8 @@
   .info-row {
     display: flex;
     justify-content: space-between;
+    margin: 3px 0px 3px 0px;
+    font-weight: 500;
   }
   
   /* Estilos para la tabla del panel de la derecha */
@@ -61,7 +64,7 @@
   
   .eventos-table th, .eventos-table td {
     border: 1px solid #ddd;
-    padding: 8px;
+    padding: 6px;
     white-space: nowrap; /* Evita el salto de línea en textos largos */
     text-align: left; /* Alinea el texto a la izquierda */
   }
@@ -78,12 +81,6 @@
     height: calc(100vh - 65px); 
   }
   
-  .rectangulo-menor {
-    background-color: #007BFF;
-    width: 10px;
-    height: 100%;
-    z-index: 0; 
-  }
   
   .toggle-panel-btn {
     position: fixed;
@@ -95,8 +92,66 @@
     color: white;
     border: none;
     cursor: pointer;
-    font-size: 20px;
+    font-size: 17px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
     margin: 0;
+    transition: all 0.5s ease;
   }
+  
+  .toggle-panel-btn.cierre {
+    right: 5px;
+  }
+
+  span.title{
+    font-weight: 600;
+    color: #525459;
+    font-size: 14px;
+  }
+
+  h2{
+    color: #3f4042;
+  }
+
+  ::ng-deep span.p-tag-icon.pi.pi-check.ng-star-inserted{
+    font-size: 0.6rem !important;
+  }
+
+  p{
+    font-weight: 500;
+  }
+
+  .battery-low {
+    color: #EF4444; /* rojo */
+  }
+  
+  .battery-medium {
+    color: #F2B413; /* amarillo */
+  }
+  
+  .battery-high {
+    color: #22c55e; /* verde por defecto */
+  }
+
+
+  span.placa{
+    background: #F2B413;
+    text-align: center;
+    padding: 5px 20px;
+    font-size: 17px;
+    font-weight: 600;
+    border-radius: 5px;
+  }
+
+  span.title.customer {
+    font-size: 15px;
+    color: #4b5563;
+  }
+
+  i.fi.fi-ss-compass-north{
+    font-size: 16px;
+   
+    color: #22c55e;
+    display: inline-block;
+  }
+  

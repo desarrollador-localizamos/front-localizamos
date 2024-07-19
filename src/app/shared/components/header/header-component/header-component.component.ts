@@ -9,6 +9,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { BadgeModule } from 'primeng/badge';
 import { AuthService } from '../../../../core/services/auth.service';
 import { FiltroComponent } from "../../filtro/filtro.component";
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-header-component',
@@ -28,7 +29,7 @@ export class HeaderComponentComponent {
   showMenu: boolean = false;
 
   constructor(public authService: AuthService,
-  public service: ApirestService, private renderer: Renderer2, private elementRef: ElementRef) { }
+  public service: ApirestService, private router: Router) { }
 
 
     arrowTransform: string = 'rotate(0deg)'; // Inicialmente, la flecha no está rotada
@@ -36,7 +37,10 @@ export class HeaderComponentComponent {
     toggleRotation() {
       this.arrowTransform = this.arrowTransform === 'rotate(-180deg)' ? 'rotate(0deg)' : 'rotate(-180deg)';
     }
-    
+
+    get isExactMapRoute(): boolean {
+      return this.router.url === '/mapa';
+    }
 
 }
 

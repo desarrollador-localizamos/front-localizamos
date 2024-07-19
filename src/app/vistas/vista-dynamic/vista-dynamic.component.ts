@@ -111,17 +111,18 @@ export class VistaDynamicComponent implements OnInit, OnDestroy {
 
     MobileUnities: [
       {campo:"id", texto: "id", sortable: true, filter: true },
-     // {campo:"endreport.customerName", texto: "Cliente", sortable: true, filter: true },
+      {campo:"endreport.customer_name", texto: "Cliente", sortable: true, filter: true },
       {campo:"device.deviceType.brand.name", texto: "Tipo de dispositivo",sortable: false, filter: true },
       {campo:"device.deviceType.code", texto: "Referencia del dispositivo",sortable: false, filter: true },
       {campo:"plate", texto: "Nombre / Placa", sortable: true, filter: true },
-     {campo:"device.imei", texto: "IMEI dispositivoil", sortable: false, filter: true },
+      {campo:"device.imei", texto: "IMEI dispositivoil", sortable: false, filter: true },
       {campo:"runt", texto: "Runt", sortable: true, filter: true },
       {campo:"model", texto: "Modelo", sortable: true, filter: true },
       {campo:"class.name", texto: "Clase", sortable: true, filter: true },
-     // {campo:"endreport.status", texto: "Estado actual", sortable: true, filter: true },  //no sabemos de donde viene
+      {campo:"endreport.status", texto: "Estado actual", sortable: true, filter: true },  //no sabemos de donde viene
       {campo:"status", texto: "Estado", sortable: true, filter: true },
     ],
+
     Devices: [
       {campo:"id", texto: "id", sortable: true, filter: true },
       {campo:"customer.fullName", texto: "Cliente", sortable: true, filter: true },
@@ -147,15 +148,14 @@ export class VistaDynamicComponent implements OnInit, OnDestroy {
       
     ],
     Notifications: [
-      // {campo:"id", texto: "id", sortable: true, filter: true },
-      // {campo:"Customers.fullName", texto: "Cliente", sortable: true, filter: true },
-      // {campo:"EventTypes.name", texto: "Tipo de evento",sortable: false, filter: true },
-      // {campo:"MobileUnities.plate", texto: "	Activos móviles", sortable: true, filter: true },
-      // {campo:"emails", texto: "Correos", sortable: false, filter: true },
-      // {campo:"notificationPush", texto: "Notificaciones push", sortable: true, filter: true },
-      // {campo:"notificationEmail", texto: "Notificaciones email", sortable: true, filter: true },
-      // {campo:"status", texto: "Estado", sortable: true, filter: true },
-
+      {campo:"id", texto: "id", sortable: true, filter: true },
+      {campo:"Customers.fullName", texto: "Cliente", sortable: true, filter: true },
+      {campo:"EventTypes.name", texto: "Tipo de evento",sortable: false, filter: true },
+      {campo:"MobileUnities.plate", texto: "	Activos móviles", sortable: true, filter: true },
+      {campo:"emails", texto: "Correos", sortable: false, filter: true },
+      {campo:"notificationPush", texto: "Notificaciones push", sortable: true, filter: true },
+      {campo:"notificationEmail", texto: "Notificaciones email", sortable: true, filter: true },
+      {campo:"status", texto: "Estado", sortable: true, filter: true },
       {campo:"id", texto: "id", sortable: true, filter: true },
       {campo:"plate", texto: "placa", sortable: true, filter: true },
       {campo:"MobileUnities.plate", texto: "	Activos móviles", sortable: true, filter: true },
@@ -418,7 +418,7 @@ export class VistaDynamicComponent implements OnInit, OnDestroy {
     ],
 
     MobileUnities: [
-       "class", "device", "device.deviceType","device.deviceType.brand",
+     "class", "device", "device.deviceType","device.deviceType.brand",
     ],
     Devices: [
       "customer","mobileUnities","deviceType","deviceType.brand","simcard"
@@ -465,17 +465,17 @@ export class VistaDynamicComponent implements OnInit, OnDestroy {
 
   private fieldJoins: { [key: string]: any[] } = {
       MobileUnities: [
-        {"mainkey":"brandId", "join":"Brands","joinkey":"id"},
+       {"mainkey":"brandId", "join":"Brands","joinkey":"id"},
       ],
       Consultants: [
         {"mainkey":"cityId", "join":"Cities","joinkey":"id"},
         {"mainkey":"departmentId", "join":"Departments","joinkey":"id"},
       ],
       Notifications: [
-        // {"mainkey":"customerId", "join":"Customers","joinkey":"id"},
-        // {"mainkey":"mobileUnityId", "join":"MobileUnities","joinkey":"id"},
-        // {"mainkey":"eventTypeId", "join":"EventTypes","joinkey":"id"},
+        {"mainkey":"customerId", "join":"Customers","joinkey":"id"},
         {"mainkey":"mobileUnityId", "join":"MobileUnities","joinkey":"id"},
+        {"mainkey":"eventTypeId", "join":"EventTypes","joinkey":"id"},
+       
       ],
       DriversDallas: [
         {"mainkey":"idDallas", "join":"MobileUnityDallasKeys","joinkey":"id"},

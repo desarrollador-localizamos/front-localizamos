@@ -2,9 +2,27 @@
 ::ng-deep .p-card {
     box-shadow: 0 2px 1px -1px #37415100, 0 1px 1px 0 rgb(0 0 0 / 0%), 0 1px 3px 0 rgba(0, 0, 0, 0.12);
 }
+.container-card {
+    display: flex;
+    align-items: flex-start;
+}
+
+.card-element {
+    margin-right: 20px;
+}
+
+.card-element:last-child {
+    margin-right: 0;
+}
 
 ::ng-deep .p-card .p-card-body {
     padding: 0.8rem 1rem;
+}
+
+::ng-deep .p-tieredmenu {
+    top: 18px !important;
+    left: auto !important;
+    margin-left: 20px;
 }
 
 .container-card {
@@ -12,6 +30,7 @@
     z-index: 500;
     margin: 8px 15px;
     max-width: 300px !important;
+    
 }
 
 ::ng-deep .p-card-content {
@@ -57,4 +76,12 @@ p.nombre{
 ::ng-deep .p-divider.p-divider-horizontal {
     margin: 0.50rem 0;
     padding: 0 1.25rem;
+}
+
+::ng-deep  .icon-red .pi {
+    color: #EF4444;
+}
+
+::ng-deep .icon-green .pi {
+    color: rgb(34, 197, 94);
 }

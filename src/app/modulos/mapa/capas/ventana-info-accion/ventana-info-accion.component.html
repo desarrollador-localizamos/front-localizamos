@@ -1,18 +1,40 @@
 <div class="container-card">
-    <p-card >
+                 
+    <p-card>
         <div class="contenedor1">
             <div style="display: flex;">
                 <div>
-                    <img src="http://aplicacion.localizamos.co/assets/images/mobile_unity_types_lateral/moto/027-motorcycle-1.png" alt="" style="width: 3.5rem;
+                    @if (responseData.classid == 1) {
+                        <img src="../../../assets/images/mobile_unity_types_lateral/vehiculo_de_transporte/{{responseData.typeimage}}"
+                             alt="{{responseData.classname}}"
+                             title="{{responseData.classname}}" class="">
+                      } @else if (responseData.classid == 2) {
+                        <img src="../../../assets/images/mobile_unity_types_lateral/mascota/{{responseData.typeimage}}"
+                             alt="{{responseData.classname}}"
+                             title="{{responseData.classname}}">
+                      } @else if (responseData.classid == 3) {
+                        <img src="../../../assets/images/mobile_unity_types_lateral/persona/{{responseData.typeimage}}"
+                             alt="{{responseData.classname}}"
+                             title="{{responseData.classname}}">
+                      } @else if (responseData.classid == 4) {
+                        <img src="../../../assets/images/mobile_unity_types_lateral/moto/{{responseData.typeimage}}"
+                             alt="{{responseData.classname}}"
+                             title="{{responseData.classname}}">
+                      } @else if (responseData.classid == 5) {
+                        <img src="../../../assets/images/mobile_unity_types_lateral/maquina_amarilla/{{responseData.typeimage}}"
+                             alt="{{responseData.classname}}"
+                             title="{{responseData.classname}}">
+                      }
+                    <img src="../../../assets/images/mobile_unity_types_lateral/maquina_amarilla/{{responseData.typeimage}}" alt="" style="width: 3.5rem;
                     height: 3.5rem;object-fit: contain; border: 3px solid;border-radius: 30px;border-color: #808080">
                 </div>
                 <div class="contenedor-info">
                     <div>
-                        <span class="placa">GMQ78G</span> 
+                        <span class="placa">{{ responseData?.plate }}</span> 
                     </div>
                     <div>
                         <p class="nombre">
-                            Localizamos tsa s.a.s 
+                            {{ responseData?.endreportcustomer_name }}
                         </p>
                         
                     </div>
@@ -21,24 +43,34 @@
             <p-divider />
             <div style="display: flex;">
                 <div>
-                    <p-tag severity="success" value="15 Km/h"/>
+                    <p-tag severity="success" value="10 km / h"/>
                 </div>
                 <div>
-                    <p-tag severity="danger" value="25 °"/>
+                    @if( responseData?.endreporttemperature != null){
+                        <p-tag severity="danger" value="{{ responseData?.endreporttemperature }} °"/>
+                    }
+                   
                 </div>
             </div>
         </div>
 
         <div class="contenedor-botones">
-            <app-button-toolti [icon]="'pi pi-chevron-right'"
-                [tooltipText]="'Ir a la derecha'"
-                [rounded]="true"
-                [text]="false"
-                [severity]="'info'"
-                [styles]="{ 'width': '25px', 'height': '25px', 'padding': '5px', 'background-color': '#007bff', 'margin': '2px' }">
-            </app-button-toolti>
-            <app-button-toolti  [icon]="'pi pi-refresh'"
-                [tooltipText]="'Ir a la derecha'"
+
+            <p-button 
+            [rounded]="true"
+            icon="pi pi-chevron-right" 
+            (onClick)="menu.toggle($event)" 
+            [style]="{
+              'width': '25px', 
+              'height': '25px', 
+              'padding': '5px', 
+              'margin': '2px', 
+              'color': 'white'
+            }">
+          </p-button>
+         
+            <app-button-toolti [icon]="'pi pi-refresh'"
+                [tooltipText]="'Ir a la derecha'" (onClick)="onRefresh()"
                 [rounded]="true"
                 [text]="false"
                 [severity]="'info'"
@@ -53,7 +85,7 @@
                 [styles]="{ 'width': '25px', 'height': '25px', 'padding': '5px', 'background-color': '#f2b413', 'border-color' : '#f2b413', 'margin': '2px' }">
             </app-button-toolti>
         </div>
-      
+
     </p-card>
-</div>          
-           
+    <p-tieredMenu #menu [model]="items" [popup]="true" />
+</div>

@@ -1,36 +1,30 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet-rotatedmarker';
 import { CardModule } from 'primeng/card';
 import { DataService } from '../../core/services/data.service';
-import { Observable, Subscription, catchError, tap, throwError } from 'rxjs';
+import { Observable, Subscription, } from 'rxjs';
 import { ButtonTooltiComponent } from "../../shared/components/buttons/button-toolti/button-toolti.component";
 import { BannerInferiorComponent } from "./capas/banner-inferior/banner-inferior.component";
 import { ModalFiltroComponent } from "./capas/modal-filtro/modal-filtro.component";
 import { VentanaInfoAccionComponent } from "./capas/ventana-info-accion/ventana-info-accion.component";
-
-interface CarMarker {
-  id: string;
-  lat: number;
-  lng: number;
-  rot: number;
-  type: number;
-  marker: L.Marker;
-}
-
+import { PopupCarroComponent } from "./popup-carro/popup-carro.component";
+import { icon, marker } from 'leaflet';
 @Component({
     selector: 'app-mapa',
     standalone: true,
     templateUrl: './mapa.component.html',
     styleUrls: ['./mapa.component.scss'],
-    imports: [CardModule, ButtonTooltiComponent, BannerInferiorComponent, ModalFiltroComponent, VentanaInfoAccionComponent]
+    imports: [CardModule, ButtonTooltiComponent, BannerInferiorComponent, ModalFiltroComponent, VentanaInfoAccionComponent,
+       PopupCarroComponent]
 })
-export class MapaComponent  {
+export class MapaComponent  implements AfterViewInit{
 
   
 // =========== VARIBALES ========= //
 ubicationValues: number[] = [];
 private ubicationSubscription: Subscription | undefined;
+protected realtime = false;
 
 protected selectedLink: string = '';
 protected result: any = {};
@@ -40,295 +34,345 @@ subscription: Subscription | undefined;
 protected formData: FormData | undefined;
 
 // =========== VARIBALES MOBILEUNIT ========= //
- protected mobileUnit = null;
+protected mobileUnit = null;
 
 // =========== VARIBALES MAPA ========= //
-  protected urlImage!: string ;
-  private map!: L.Map;
-  private carIcon!: L.Icon;
-  private carMarker!: L.Marker;
-  protected zoom!: number;
-  protected openZoom: number;
-  protected classIds :number;
+protected urlImage!: string;
+protected urlImage2!: string;
+private map!: L.Map;
+private carIcon!: L.Icon;
+private carMarker!: L.Marker;
+protected zoom!: number;
+protected openZoom: number;
+protected classIds: number;
 
-
-  public list: { [key: string]: any[] } = {   
-    MobileUnities:  [
-      {campo:"endreport.battery", texto: "Nivel de bateria"},
-      {campo:"brand", texto: "Marca"},
-      {campo:"class.name", texto: "Clase"},
-      {campo:"class.id", texto: "Clase"},
-      {campo:"endreport.course", texto: "Orientación"},
-      {campo:"createdAt", texto: "Fecha de creación"},
-      // {campo:"customer.id", texto: "id del customer"},
-      // {campo:"customer.name", texto: "Nombre del customer"}, // son joins
-      {campo:"endreport.degree", texto: "Grados"},
-      {campo:"device.id", texto: "Id del dispositivo"},
-      // {campo:"deviceType.code", texto: "Codigo del dispositivo"},
-      // {campo:"deviceType.id", texto: "id del codigo del dispositivo"}, // son relaciones anidadas con device
-      // {campo:"deviceType.brand", texto: "nombre del dispositivo"},
-      {campo:"plate", texto: "placa"},
-      {campo:"id", texto: "Id de la unidad"},
-      {campo:"installationDate", texto: "Fecha de instalacion"},
-      {campo:"soatDueDate", texto: "Fecha vencimiento soat"},
-      {campo:"endreport.velocity", texto: "Velocidad"},
-      {campo:"status", texto: "Estado"},
-      //{campo:"statusHistory", texto: "Estado historico DEL GPS y el activo"}, no se sabe de donde viene ??
-      {campo:"subclass.name", texto: "Tipo"},
-      {campo:"taxesDueDate", texto: "Impuestos"},
-      {campo:"techMechRevitionDueDate", texto: "Fecha vencimiento tecnomecanica"},
-      {campo:"endreport.offtime", texto: "Tiempo en el mismo lugar"},
-      {campo:"type.image", texto: "Imagen"},
-      {campo:"type.name", texto: "Tipo de dispositivo"},
-    
-    //   {
-    //     batteryLevel: "100",
-    //     brand: "BAJAJ",
-    //     // brand_id: null,
-    //     // brand_name: null,
-    //     // chassis: null,
-    //     // classTextColorSoat: "",
-    //     // classTextColorTaxes: "",
-    //     // classTextColorTechMech: "",
-    //     class_id: 4,
-    //     class_name: "Moto",
-    //     // color: "NEGRO NEBULOSA",
-    //     course: "Suroeste",
-    //     created_at: "2024-03-23 13:08:40",
-    //     customer_id: 2419,
-    //     customer_name: "CENTRALQUIPOS SAS BIC",
-    //     degrees: 155,
-    //     device_id: 5421,
-    //     // device_imei: "869487060506804",
-    //     // device_name: "869487060506804",
-    //     device_type_code: "PioneerX100",
-    //     device_type_id: 38,
-    //     device_type_name_brand: "TOPFLYtech",
-    //     // full_name: "RJB89E",
-    //     // gallons_x_hour_engine_on: null,
-    //     id: 5475,
-    //     // image: null,
-    //     // image_type: "027-motorcycle-1.png",
-    //     installation_date: "2024-03-30",
-    //     // installation_record_image: null,
-    //     // installation_record_number: 11667,
-    //     // key_id: null,
-    //     // keys_code: null,
-    //     // limitSpeed: 80,
-    //     // line_id: null,
-    //     // line_name: null,
-    //     // miles_approx: null,
-    //     // miles_x_gallon: null,
-    //     model: 2020,
-    //     // name: null,
-    //     // oil_change: null,
-    //     // plan_name: "",
-    //     plate: "RJB89E",
-    //     // runt: null,
-    //     // series: null,
-    //     soat_due_date: null,
-    //     speed: "0",
-    //     status: 1,
-    //     status_history: "Activo",
-    //     status_name: "Activo",
-    //     subclass_id: null,
-    //     subclass_name: null,
-    //     taxes_due_date: null,
-    //     tech_mech_revition_due_date: null,
-    //     timeOff: "2 horas 40 minutos 28 segundos",
-    //     // type_id: 28,
-    //     type_image: "027-motorcycle-1.png",
-    //     type_name: "MOTO",
-    //     // updated_at: "2024-07-02 20:58:39"
-    // }
-     ] ,
-
-
-     MobileUnities2:  [
-      {campo:"endreport.battery", texto: "Placa"},
-      {campo:"class.id", texto: "Nombre"},
-      {campo:"endreport.course", texto: "Gps"},
-      {campo:"createdAt", texto: "Fecha de Imei dispositivo"},
-      {campo:"brand", texto: "Marca"},
-      {campo:"class.name", texto: "Modelo"},
-      {campo:"endreport.degree", texto: "Simcard"},
-      {campo:"device.id", texto: "Plan"},
-      {campo:"plate", texto: "ICCID"},
-      {campo:"id", texto: "Estado actual"},
-      {campo:"installationDate", texto: "Ubicacion"},
-      {campo:"soatDueDate", texto: "Orientación"},
-      {campo:"endreport.velocity", texto: "Latitud"},
-      {campo:"status", texto: "Longitud"},
-      {campo:"subclass.name", texto: "Bateria"},
-      {campo:"taxesDueDate", texto: "Fecha gps"},
-      {campo:"techMechRevitionDueDate", texto: "Tiempo en el mismo lugar"},
-      {campo:"endreport.offtime", texto: "Tipo"},
-      {campo:"type.image", texto: "Conductor"},
-      {campo:"type.name", texto: "Venc Impuestos"},
-      {campo:"type.name", texto: "Venc Tecnomecanica"},
-      {campo:"type.name", texto: "Venc Soat"},
-      {campo:"type.name", texto: "Fecha instalacion"},
-      {campo:"type.name", texto: "Tiempo "},
-      {campo:"type.name", texto: "id de la unidad mobil "},
-      {campo:"type.name", texto: "Velocidad"},
-      {campo:"type.name", texto: "Status mobile Unity"},
-      {campo:"type.name", texto: "Grados"},
-      {campo:"type.name", texto: "Curso "},
-      {campo:"type.name", texto: "Bateria"},
-      {campo:"type.name", texto: "Velocidad"},
-      {campo:"type.name", texto: "Limite de velocidad"},
-      {campo:"type.name", texto: "Nombre del plan"},
-      {campo:"type.name", texto: "Nombre geocercas"},
-      {campo:"type.name", texto: ""},
-    
+@ViewChild(VentanaInfoAccionComponent) ventanaInfoAccion!: VentanaInfoAccionComponent;
+@ViewChild('popupContainer', { static: true }) popupContainer!: ElementRef;
+    public list: { [key: string]: any[] } = {   
    
+     MobileUnities:  [
+      {campo:"id", texto: "Id de la unidad"},
+      {campo:"plate", texto: "placa"},
+      {campo:"endreport.customer_name", texto: "Nombre del customer"},
+      {campo:"endreport.velocity", texto: "velocidad"},
+      {campo:"endreport.temperature", texto: "temperatura"},
+      {campo:"endreport.battery", texto: "Placa"},
+      {campo:"endreport.course", texto: "Curso"},
+      {campo:"endreport.degree", texto: "Grados"},
+      {campo:"brand", texto: "Marca"},
+      {campo:"model", texto: "Modelo"},
+      {campo:"device.deviceType.brand.name", texto: "Tipo de dispositivo"},
+      {campo:"device.deviceType.code", texto: "Referencia del dispositivo"},
+      {campo:"class.name", texto: "clase"},
+      {campo:"device.imei", texto: "imei "},
+      {campo:"device.simcard.lineNumber", texto: "sim"},
+      {campo:"device.simcard.imei", texto: "iccid"},
+      {campo:"device.simcard.simcardPlan.name", texto: "iccid"},
+      {campo:"endreport.offtime.address", texto: "fecha"}, // falta ingresar al objeto
+      {campo:"endreport.location", texto: "coordenadas"},
+      {campo:"endreport.eventOn.address", texto: "dirección"},
+      {campo:"endreport.battery", texto: "bateria"},
+      {campo:"endreport.timeOff", texto: "tiempo en el mismo lugar"},  // falta calculo desde el back
+      {campo:"endreport.device_date_hour", texto: "fecha gps"},  // falta calculo desde el back
+      {campo:"subclass.name", texto: "Sub clase"},
+      {campo:"MobileUnityDrivers.firstName", texto: "conductor"},
+      {campo:"MobileUnityDrivers.lastName", texto: "conductor"},
+      {campo:"class.id", texto: "clase"},
+      {campo:"subclass.id", texto: "Sub clase"},
+      {campo:"taxesDueDate", texto: "Venc Impuestos"},
+      {campo:"techMechRevitionDueDate", texto: "Venc Tecnomecanica"},
+      {campo:"soatDueDate", texto: "Venc Soat"},
+      {campo:"installationDate", texto: "Fecha instalacion"},
+      {campo:"status", texto: "Estado actual"}, //falta este dato que viene de un calculo 
+      {campo:"type.image", texto: "imagen"},
+     ],
+
+     MobileUnityEvents:  [
+      {campo:"id", texto: "unidad movil"},
+      {campo:"unityId", texto: "unidad movil"},
+      {campo:"status", texto: "estado"},
+      {campo:"address", texto: "direccion"},
+      {campo:"deviceDateHour", texto: "hora"},
+      {campo:"eventTypeId", texto: "hora"},
+      {campo:"EventTypes.name", texto: "hora"},
      ] 
      
-  };
+    };
 
     private fieldRelations: { [key: string]: any[] } = {
       MobileUnities: [
-        "device", "type", "subclass", "class",
+       "device","device.simcard","device.simcard.simcardPlan", "type", "subclass", "class",
+       "device.deviceType","device.deviceType.brand","subclass", 
       ],
-   
     };
 
-
     private fieldRelationsJoins: { [key: string]: any[] } = {
-      MobileUnities: [
-        "customer", 
-      ],
+  
+     MobileUnities: [
+      {"mainkey":"id", "join":"MobileUnityDrivers","joinkey":"mobileUnityId"},
+     ],
+
+     MobileUnityEvents: [
+      {"mainkey":"evenTypeId", "join":"EventTypes","joinkey":"id"},
+     ],
     };
 
     constructor(private dataService: DataService) {
 
       // ======= VARIABLES INICIALES DEL MAPA  ========//
-        this.zoom = 12;
-        this.openZoom = 7;
-        this.classIds = 0;
+      this.zoom = 12; // Nivel de zoom inicial
+      this.openZoom = 17; // Nivel de zoom al que se quiere llegar
+      this.classIds = 0;
     }
-
-    // ngOnInit() {
-    //   this.result$ = this.dataService.fetchData(this.list, "MobileUnities", this.fieldRelations, {"id": 1185 })
-    //     .pipe(
-    //       tap(response => {
-    //         this.result = response;
-    //         // console.log('Lista inicial en tap:', this.result); // Verifica aquí dentro de tap
-           
-    //       }),
-    //       catchError(error => {
-    //         console.log('Error en la solicitud:', error);
-    //         return throwError(() => error);
-    //       })
-    //     );
-    
-    //   this.subscription = this.result$.subscribe(() => {
-    //     // Aquí se ejecuta el código después de que se complete la llamada
-    //     this.ubicationValue = this.dataService.getUbicationValue();
-    //     // console.log('Ubication value:', this.ubicationValue);
-    
-    //     // Lógica que requiere this.result después de que se complete la llamada
-    //     // console.log('Lista inicial en subscribe:', this.result["body"]); // Aquí debería estar lleno
-        
-    //     if (this.result && this.result["body"].length > 0) {
-     
-    //       console.log("golaaaa en subscribe",  this.result["body"][0]["type.image"]);
-
-    //       if(null != this.result["body"][0]){
-
-    //             if(1 == this.result["body"][0]["class.id"])
-    //             {   
-    //                 this.urlImage = '../../../assets/images/mobile_unity_types/vehiculo_de_transporte/'+this.result["body"][0]["type.image"];
-    //             }
-    //             else if(2 == this.result["body"][0]["class.id"])
-    //             {
-    //                 this.urlImage = '../../../assets/images/mobile_unity_types/mascota/'+this.result["body"][0]["type.image"];
-    //             }
-    //             else if(3 == this.result["body"][0]["class.id"])
-    //             {
-    //                 this.urlImage = '../../../assets/images/mobile_unity_types/persona/'+this.result["body"][0]["type.image"];
-    //             }
-    //             else if(4 == this.result["body"][0]["class.id"])
-    //             {
-    //                 this.urlImage = '../../../assets/images/mobile_unity_types/moto/'+this.result["body"][0]["type.image"];
-    //             }
-    //             else if(5 == this.result["body"][0]["class.id"])
-    //             {
-    //                 this.urlImage = '../../../assets/images/mobile_unity_types/maquina_amarilla/'+this.result["body"][0]["type.image"];
-    //        console.log("url2",this.urlImage);
-    //             }
-    //       }   
-    //     }
-    //   });
-   
-    //   this.initMap();
-    //   this.addLayers();
-    // }
-
-    //this.dataService.fetchData(this.list, "MobileUnities", this.fieldRelations,{}, {}, [{ "ref": "id", "valor": [1,2,3,4,5]},{ "ref": "plate", "valor": [1,2,3,4,5]}],)
-    //ejemplo de una estructura con multicondiciones
 
     ngOnInit() {
       this.ubicationSubscription = this.dataService.getUbicationValue().subscribe(
         values => {
           this.ubicationValues = values;
-          console.log('Valores de ubicación recibidos:', values);
         }
       );
-     
-        this.refreshMap();
-        this.initMap();
+      this.initMap();
+      this.refreshMap();
     }
-    
-  
 
+    ngAfterViewInit() {
+      // Suscríbete al evento refresh del componente hijo
+      this.ventanaInfoAccion.refresh.subscribe(() => this.refreshMap());
+    }
+  
     visudata() {
       this.dataService.getResponse().subscribe(response => {
-      this.result2 = response;
-        // console.log("function3", this.result2["body"]);
-    
-        // // Verificación adicional
-        // console.log("this.result2:", this.result2);
-        // console.log("this.result2['body']:", this.result2["body"]);
-        // console.log("this.result2['body'].length:", this.result2["body"].length);
-    
-        // Verifica que el array "body" tenga elementos
+        this.result2 = response;
+  
         if (this.result2 && this.result2["body"] && this.result2["body"].length > 0) {
-          // console.log("golaaaa en subscribe", this.result2["body"][0]["type.image"]);
-    
-          if (this.result2["body"][0] != null) {
-            const classId = this.result2["body"][0]["class.id"];
-            const typeImage = this.result2["body"][0]["type.image"];
-            // console.log("classId:", classId);
-            // console.log("typeImage:", typeImage);
-    
+        
+        }
+        this.addLayers();
+      });
+    }
+  
+    private initMap(): void {
+      this.map = L.map('map', {
+        center: [4.81333, -75.69611], // Coordenadas iniciales del centro
+        zoom: this.zoom, // Nivel de zoom inicial
+        zoomControl: false // Desactiva el control de zoom por defecto de Leaflet
+      });
+  
+      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+      }).addTo(this.map);
+  
+      L.control.zoom({
+        position: 'bottomleft' // Ubica el control de zoom en la esquina inferior izquierda
+      }).addTo(this.map);
+  
+      // Transición suave al zoom 16
+      setTimeout(() => {
+        this.map.flyTo([4.81333, -75.69611], this.openZoom, {
+          duration: 3 
+        });
+      }, 1000); 
+    }
+  
+    refreshMap() {
+      console.log(this.ubicationValues);
+  
+      if (this.ubicationValues && this.ubicationValues.length > 0) {
+        const ubicationIds = this.ubicationValues;
+   
+        this.dataService.fetchData(this.list, "MobileUnities", this.fieldRelations,{}, this.fieldRelationsJoins, [{ "ref": "id", "valor": ubicationIds, "tipo" : "in" }])
+        .subscribe(response => {
+
+          console.log("response",response["body"][0][0]);
+          
+
+          if (response["body"][0][0] != null) {
+            const classId = response["body"][0][0]["classid"];
+            const typeImage = response["body"][0][0]["typeimage"];
+ 
             switch (classId) {
               case 1:
                 this.urlImage = '../../../assets/images/mobile_unity_types/vehiculo_de_transporte/' + typeImage;
+                this.urlImage2 = '../../../assets/images/mobile_unity_types_lateral/vehiculo_de_transporte/'+ typeImage;
                 break;
               case 2:
                 this.urlImage = '../../../assets/images/mobile_unity_types/mascota/' + typeImage;
+                this.urlImage2 = '../../../assets/images/mobile_unity_types_lateral/mascota/'+ typeImage;
                 break;
               case 3:
                 this.urlImage = '../../../assets/images/mobile_unity_types/persona/' + typeImage;
+                this.urlImage2 = '../../../assets/images/mobile_unity_types_lateral/persona/'+ typeImage;
                 break;
               case 4:
                 this.urlImage = '../../../assets/images/mobile_unity_types/moto/' + typeImage;
+                this.urlImage2 = '../../../assets/images/mobile_unity_types_lateral/moto/'+ typeImage;
                 break;
               case 5:
                 this.urlImage = '../../../assets/images/mobile_unity_types/maquina_amarilla/' + typeImage;
-                console.log("url2", this.urlImage);
+                this.urlImage2 = '../../../assets/images/mobile_unity_types_lateral/maquina_amarilla/'+ typeImage;  
                 break;
               default:
-                // console.log("Clase desconocida:", classId);
             }
           }
-        }
-        this.addLayers();
-        // console.log(this.urlImage);
+       
+          if (ubicationIds.length === 1) {
+            // Lógica para cuando hay solo un valor en el arreglo
+            if(true === this.realtime){
+              //realtime
+            }else{
+              //envio de informacion para el banner-lateral y el divinfo
+              this.dataService.setResponse(response);
+
+              let resultado = response["body"];
+              console.log("result",resultado);
+              
+              if(0 < resultado.length){
+                let coordinates = resultado[0][0].endreportlocation;
+                console.log("coordinates", coordinates, resultado);
+
+               this.UltimosEvents();
+
+               this.addMarker(coordinates, resultado);
+              }
+            }  
+      
+          } else {
+            // Lógica para cuando hay más de un valor en el arreglo
+            console.log("Múltiples valores recibidos:", ubicationIds);
+           
+          }
+        });
+
+      } else {
+        console.log("No hay valores");
+      }
+    }
+  
+
+    UltimosEvents(){
+      const ubicationIds = this.ubicationValues;
+      this.dataService.fetchData(this.list, "MobileUnityEvents", {}, {},this.fieldRelationsJoins, [{ "ref": "unityId", "valor": ubicationIds,}], {"id":"DESC"} , 5)
+      .subscribe(response => {
+        this.dataService.setResponseUltimosEventos(response);
       });
     }
     
+    // cuando se marca una sola unidad en el mapa
+    addMarker(coordinates: any, resultado: any): void {
+
+      let OrientacionCourse = resultado[0][0]['endreportdegree'];
+      let coordenadas = coordinates;
+
+      let icono = null;
+    
+      if(24 < resultado[0][0].endreportdevice_date_hour){
+        this.urlImage = '../../../assets/images/mapa/icono-sin-reportar-mapa_40x40.png';
+      }
+
+
+    
+      const carIcon = L.icon({
+        iconUrl: this.urlImage,
+        iconSize: [32, 42],
+        iconAnchor: [16, 32],
+        popupAnchor: [0, -32]
+      });
+  
+     // Crear el componente popup y establecer los datos
+      const popup = new PopupCarroComponent();
+        popup.img = this.urlImage2;
+        popup.additionalInfo = 'Reporte periodico';
+        popup.reportDate = '17-07-2024';
+        popup.reportHour = '08:25:46 Hace 7 seg';
+
+      const popupContent = popup.getPopupContent();
+      let markerl = marker([4.740290, -75.922571 ], { icon: carIcon}).bindPopup(popupContent).addTo(this.map);
+        markerl.setRotationAngle(OrientacionCourse);
+
+    }
+
+    // cuando se marca mas de una sola unidad en el mapa
+    addMultiMarker(): void {
+      
+    }
+  
+    private addLayers() {
+      // Implementar la lógica para agregar capas si es necesario
+    }
+}
+
+
+// private addLayers(): void {
+//   // //   console.log(this.urlImage);
+//   //   // Icono del coche
+//   //   this.carIcon = L.icon({
+//   //     iconUrl: this.urlImage,  // Asegúrate de tener esta imagen en tu carpeta de assets
+//   //     iconSize: [42, 42],
+//   //     iconAnchor: [16, 16]
+//   //   });
+
+//   //   // Marcador del coche
+//   //   this.carMarker = L.marker([4.81333, -75.69611], {
+//   //     icon: this.carIcon,
+//   //   }).addTo(this.map);
+//   //   this.carMarker.setRotationAngle(5);
+
+//   //   // Crear más iconos
+//   //   const markerIcon = L.icon({
+//   //     iconUrl: 'assets/icon/marker.png',  // Ruta del nuevo icono del marcador
+//   //     iconSize: [25, 41],
+//   //     iconAnchor: [12, 41],
+//   //     popupAnchor: [1, -34],
+//   //     shadowSize: [41, 41]
+//   //   }); 
+
+//   //   // Capas adicionales
+//   //   const markers = L.layerGroup([
+//   //     L.marker([4.81333, -75.69611], { icon: markerIcon }).bindPopup('Centro de Pereira'),
+//   //     L.marker([4.81433, -75.69711], { icon: markerIcon }).bindPopup('Punto 2')
+//   //   ]);
+
+//   //   const carRoutes = L.layerGroup([
+//   //     L.polyline([
+//   //       [4.81333, -75.69611],
+//   //       [4.81433, -75.69711],
+//   //       [4.81533, -75.69811]
+//   //     ], { color: 'blue' }).bindPopup('Ruta del carro 1')
+//   //   ]);
+
+//   //   const infoLayer = L.layerGroup([
+//   //     L.circle([4.81333, -75.69611], { radius: 200 }).bindPopup('Información adicional')
+//   //   ]);
+
+//   //   // Añadir capas al mapa
+//   //   markers.addTo(this.map);
+//   //   carRoutes.addTo(this.map);
+//   //   infoLayer.addTo(this.map);
+
+//   //   // Control de capas
+//   //   const overlayMaps = {
+//   //     "Marcadores": markers,
+//   //     "Rutas de Carros": carRoutes,
+//   //     "Información Adicional": infoLayer,
+//   //     "geocercas": infoLayer,
+//   //     "carro": infoLayer,
+//   //     "ruta": infoLayer,
+//   //     "modal_info_carro": infoLayer,
+//   //     "modal_emergente": infoLayer,
+//   //     "modal_banner_lateral_info": infoLayer,
+//   //     "sidebar": infoLayer,
+//   //     "filtro": infoLayer,
+//   //     "polyline": infoLayer,
+//   //     "modal_crud": infoLayer,
+//   //     "visualizacion": infoLayer,
+//   //     "creacion": infoLayer,
+//   //     "edicion": infoLayer,
+
+
+//   //   };
+
+//   //   L.control.layers({}, overlayMaps).addTo(this.map); 
+//   }
 
   // ngAfterViewInit() {
   //   this.dataService.getResponse().subscribe(response => {
@@ -339,120 +383,3 @@ protected formData: FormData | undefined;
      
 
   // }
-
-  prueba(){
-  
- 
-  }
-
-
-  private initMap(): void {
-    // Crea el mapa y establece la vista inicial
-    this.map = L.map('map', {
-      center: [4.81333, -75.69611], // Coordenadas iniciales del centro
-      zoom: this.zoom, // Nivel de zoom inicial
-      zoomControl: false // Desactiva el control de zoom por defecto de Leaflet
-    });
-  
-    // Añade la capa de mosaicos de OpenStreetMap
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '© OpenStreetMap contributors'
-    }).addTo(this.map);
-  
-    // Añade el control de zoom personalizado en la esquina superior derecha
-    L.control.zoom({
-      position: 'topright' // Ubica el control de zoom en la esquina superior derecha
-    }).addTo(this.map);
-
-  }
-
-  private addLayers(): void {
-  //   console.log(this.urlImage);
-    // Icono del coche
-    this.carIcon = L.icon({
-      iconUrl: this.urlImage,  // Asegúrate de tener esta imagen en tu carpeta de assets
-      iconSize: [42, 42],
-      iconAnchor: [16, 16]
-    });
-
-    // Marcador del coche
-    this.carMarker = L.marker([4.81333, -75.69611], {
-      icon: this.carIcon,
-    }).addTo(this.map);
-    this.carMarker.setRotationAngle(5);
-
-    // Crear más iconos
-    const markerIcon = L.icon({
-      iconUrl: 'assets/icon/marker.png',  // Ruta del nuevo icono del marcador
-      iconSize: [25, 41],
-      iconAnchor: [12, 41],
-      popupAnchor: [1, -34],
-      shadowSize: [41, 41]
-    }); 
-
-    // Capas adicionales
-    const markers = L.layerGroup([
-      L.marker([4.81333, -75.69611], { icon: markerIcon }).bindPopup('Centro de Pereira'),
-      L.marker([4.81433, -75.69711], { icon: markerIcon }).bindPopup('Punto 2')
-    ]);
-
-    const carRoutes = L.layerGroup([
-      L.polyline([
-        [4.81333, -75.69611],
-        [4.81433, -75.69711],
-        [4.81533, -75.69811]
-      ], { color: 'blue' }).bindPopup('Ruta del carro 1')
-    ]);
-
-    const infoLayer = L.layerGroup([
-      L.circle([4.81333, -75.69611], { radius: 200 }).bindPopup('Información adicional')
-    ]);
-
-    // Añadir capas al mapa
-    markers.addTo(this.map);
-    carRoutes.addTo(this.map);
-    infoLayer.addTo(this.map);
-
-    // Control de capas
-    const overlayMaps = {
-      "Marcadores": markers,
-      "Rutas de Carros": carRoutes,
-      "Información Adicional": infoLayer,
-      "geocercas": infoLayer,
-      "carro": infoLayer,
-      "ruta": infoLayer,
-      "modal_info_carro": infoLayer,
-      "modal_emergente": infoLayer,
-      "modal_banner_lateral_info": infoLayer,
-      "sidebar": infoLayer,
-      "filtro": infoLayer,
-      "polyline": infoLayer,
-      "modal_crud": infoLayer,
-      "visualizacion": infoLayer,
-      "creacion": infoLayer,
-      "edicion": infoLayer,
-
-
-    };
-
-    L.control.layers({}, overlayMaps).addTo(this.map); 
-  }
-
-
-  refreshMap() {
-    console.log(this.ubicationValues);
-  
-    if (this.ubicationValues && this.ubicationValues.length > 0) {
-      const ubicationIds = this.ubicationValues;
-  
-      this.dataService.fetchData(this.list, "MobileUnities", this.fieldRelations,{}, {}, [{ "ref": "id", "valor": ubicationIds }]
-      ).subscribe(response => {
-        console.log("holi",response);
-        this.dataService.setResponse(response);
-      });
-    } else {
-      console.log("No hay valores");
-    }
-  }
-}
-

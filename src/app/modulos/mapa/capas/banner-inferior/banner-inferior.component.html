@@ -1,59 +1,91 @@
 <div class="banner">
-    <div class="panel-container" [@slideContainer]="isPanelVisible ? 'in' : 'out'">
+    <div class="panel-container" >
       <div class="rectangulo">
-        <button (click)="togglePanel()" class="toggle-panel-btn">
+        <button  class="toggle-panel-btn" (click)="togglePanel()">
           {{ isPanelVisible ? "▶" : "◀" }}
         </button>
-        <div class="rectangulo-menor"></div>
+       
       </div>
-  
-      <div class="side-panel" [@slideInOut]="isPanelVisible ? 'in' : 'out'">
+      
+      <div class="side-panel" >
         <div class="panel-section">
-          <h2>SVF355</h2>
-          <p>COOPERATIVA DE TRANSPORTADORES DE RISARALDA</p>
-          <p>(TOPFLYtech - PioneerX100)</p>
-          <p>Dispositivo: 869487060419842</p>
-          <p>Clase: Vehículo de transporte</p>
+          <div>
+            <span class="placa">{{ responseData?.plate }}</span>
+          </div>
+         
+          <p-divider />
+          <span class="title customer">
+            {{ responseData?.endreportcustomer_name }}
+          </span>
+          <p>( {{ responseData?.devicedeviceTypebrandname }} - {{ responseData?.devicedeviceTypecode }} )</p>
+          <p> <span class="title">Dispositivo: </span>  {{ responseData?.deviceimei }}</p>
+          <p><span class="title">Clase: </span> {{ responseData?.classname }}</p>
           <div class="info-row">
-            <p>Marca: VOLKSWAGEN</p>
-            <p>Modelo: 2006</p>
+            <div>
+                <span class="title">Marca: </span> {{ responseData?.brand }}
+            </div>
+            <div>
+                <span class="title">Modelo: </span> {{ responseData?.model }} 
+            </div>
           </div>
           <div class="info-row">
-            <p>Simcard: 9102850742</p>
-            <p>Plan: Claro</p>
+            <div>
+                <span class="title">Plan: </span>  {{ responseData?.devicesimcardsimcardPlanname }}
+            </div>
+            <div>
+                <span class="title">Simcard:</span> {{ responseData?.devicesimcardlineNumber }}
+            </div>
+            
           </div>
-          <p>ICCID: 1702302390006</p>
-          <p>Estado actual: Encendido</p>
+          <p>  <span class="title">ICCID: </span> {{ responseData?.devicesimcardimei }}</p>
+          <p> <span class="title">Estado actual: </span> <p-tag icon="pi pi-check" severity="success" value="Success" ></p-tag>
+
+          </p>
         </div>
         <div class="panel-section">
           <div class="info-row">
-            <h2>Ubicación</h2>
-            <p>Hace 1 día 6 horas</p>
+            <h2>Ubicación :</h2>
+            <span class="title">{{ responseData?.endreportofftime }}</span>
           </div>
+          <p-divider />
           <p>Vía Ferroviaria Albania - Puerto Bolívar Albania, La Guajira</p>
-          <p>Orientación: Sureste</p>
+          <p style=" display: flex; flex-wrap: wrap; align-items: flex-end;">
+           <span class="title">Orientación: </span>  <span style=" padding:0px 5px;"> {{ responseData?.endreportcourse}} </span> <i class="fi fi-ss-compass-north" 
+            [ngStyle]="{
+              'transform': 'rotate(' + (responseData?.endreportdegree || 0) + 'deg)',
+        'transform-origin': 'center center'
+            }"></i></p>
           <div class="info-row">
-            <p>Lat: 11.135968</p>
-            <p>Lon: -72.618683</p>
+            <p><span class="title">Coordenadas: </span>  {{ responseData?.endreportlocation}}</p> 
+            
           </div>
-          <p>Batería: 10%</p>
-          <p>Fecha GPS: 2024-07-10 08:49:50</p>
-          <p>Tiempo en el mismo lugar:</p>
+          <p><span class="title">Batería: </span> {{ responseData?.endreportbattery}}%  <i class="fi fi-sr-battery-bolt"
+            [ngClass]="{
+              'battery-low': responseData?.endreportbattery === 0,
+              'battery-medium': responseData?.endreportbattery > 0 && responseData?.endreportbattery <= 20,
+              'battery-high': responseData?.endreportbattery > 20
+            }">
+         </i>
+          <p><span class="title">Fecha Gps: </span> {{ responseData?.endreportdevice_date_hour }}</p>
+          <p><span class="title">Tiempo en el mismo lugar: </span> {{ responseData?.endreportofftime }}</p>
         </div>
         <div class="panel-section">
-          <h2>Información</h2>
-          <p>Tipo: CAMION ESTACAS</p>
-          <p>Conductor: No asignado</p>
-          <p>Venc. Impuestos:</p>
-          <p>Venc. Tecnomecanica:</p>
-          <p>Venc. SOAT:</p>
-          <p>Fecha de instalación: 22-06-2024</p>
-          <p>Contactos de emergencia</p>
+          <h2>Información:</h2>
+          <p-divider />
+          <p><span class="title">Tipo: </span> {{ responseData?.subclassname }} </p>
+          <p><span class="title">Conductor: </span> {{ responseData?.MobileUnityDriversfirstName }} {{ responseData?.MobileUnityDriverslastName }} </p>
+          <p><span class="title">Venc. Impuestos: </span> {{ responseData?.taxesDueDate }}</p>
+          <p><span class="title">Venc. Tecnomecanica: </span> {{ responseData?.techMechRevitionDueDate }}</p>
+          <p><span class="title">Venc. SOAT: </span> {{ responseData?.soatDueDate }}</p>
+          <p><span class="title">Fecha de instalación: </span> {{ responseData?.installationDate }}</p>
+          <p><span class="title">Contactos de emergencia</span> </p>
         </div>
+       
   
         <!--Tabla del panel de la derecha -->
         <div class="panel-section">
-          <h2>Eventos Recientes</h2>
+          <h2 class="pb-3">Eventos Recientes :</h2>
+          
           <div class="eventos-container">
             <table class="eventos-table">
               <thead>
@@ -63,21 +95,37 @@
                   <th>Fecha hora</th>
                   <th>Dirección</th>
                 </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>•</td>
-                  <td>Conexión de batería</td>
-                  <td>11-07-2024 13:49:25</td>
-                  <td>Hatonuevo, Colombia</td>
-                </tr>
-                <tr>
-                  <td>•</td>
-                  <td>Conexión de batería</td>
-                  <td>11-07-2024 13:49:25</td>
-                  <td>Hatonuevo, Colombia</td>
-                </tr>
-              </tbody>
+                <tbody>
+                  @if (responseDataEventos && responseDataEventos.length === 0) {
+                    <tr>
+                      <td colspan="4" style="text-align: center;">No hay datos para mostrar</td>
+                    </tr>
+                  } @else if (responseDataEventos) {
+                    @for (eventoArray of responseDataEventos; track eventoArray) {
+                      <tr>
+                        @for (evento of eventoArray; track evento) {
+                          @if (evento) {
+                            <td style="text-align: center;">
+                              <span
+                                [style.color]="evento.status === 0 ? '#EF4444' : '#22c55e'"
+                                [style.fontSize]="'20px'"
+                              >
+                                ●
+                              </span>
+                            </td>
+                            <td>{{evento.EventTypesname}}</td>
+                            <td>{{evento.deviceDateHour}}</td>
+                            <td>{{evento.address}}</td>
+                          }
+                        }
+                      </tr>
+                    }
+                  } @else {
+                    <tr>
+                      <td colspan="4" style="text-align: center;">Cargando datos...</td>
+                    </tr>
+                  }
+                </tbody>
             </table>
           </div>
         </div>

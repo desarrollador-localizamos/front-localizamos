@@ -18,7 +18,6 @@ export class ButtonTooltiComponent {
   @Input() text: boolean = false ;
   @Input() severity: string | undefined;
   @Input() styles: any = {}; 
-  @Input() buttonText: string | undefined;
 
   @Output() onClick = new EventEmitter<void>();
 
