@@ -8,6 +8,7 @@ import { catchError, tap, throwError } from 'rxjs';
 import { DataService } from '../../core/services/data.service';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
+import {NgIf} from '@angular/common'
 
 interface EstructuraData {
   id: number;
@@ -36,10 +37,12 @@ interface dataMulti {
 export class VistaDynamicReporteComponent implements OnInit {
   opciones: data[] = [];
   rango: data[] = [];
-  seleccionarOpciones: data | undefined;
+  seleccionarOpciones!: data;
+  seleccionarFechas: any [] | undefined;
   filterValue: string = '';
+  
 
-  rangeDates: Date[] | undefined;
+  rangeDates!: Date[];
   protected auxi: any = {};
   protected selectedLink: string = '';
   protected data: { header: any[], body: EstructuraData[] } = { header: [], body: [] };
@@ -51,8 +54,12 @@ export class VistaDynamicReporteComponent implements OnInit {
   protected groupOptions: dataMulti[] = [];
   protected activoOptions: dataMulti[] = [];
   protected idCustomer: number[] = [];
-  protected idGroup : number ;
+  protected idGroup : any[]=[] ;
   protected idCustomerLogin: number;
+  protected resultActivo: any[]=[];
+  protected showcalendar: boolean=false;
+  protected fecha: Date= new Date();
+  
 
 
 
@@ -63,8 +70,8 @@ export class VistaDynamicReporteComponent implements OnInit {
     ],
 
     Devices: [
-      {campo:"mobileUnities.1id", texto: "id" },
-      {campo:"mobileUnities.1plate", texto: "campo" },
+      {campo:"mobileUnities.id", texto: "id" },
+      {campo:"mobileUnities.plate", texto: "campo" },
       {campo:"customerId", texto: "campo" },
     ],
     MobileUnityGroups: [
@@ -72,9 +79,9 @@ export class VistaDynamicReporteComponent implements OnInit {
       {campo:"name", texto: "campo" },
     ],
 
-    MobileUnityGroup: [
-      {campo:"mobileUnities.1id", texto: "id" },
-      {campo:"mobileUnities.1plate", texto: "campo" },
+    MobileUnityGroupunity: [
+      {campo:"unity.id", texto: "id" },
+      {campo:"unity.plate", texto: "campo" },
     ],
     
     
@@ -88,8 +95,8 @@ export class VistaDynamicReporteComponent implements OnInit {
       MobileUnityGroups: [
       "customer"
       ],
-      MobileUnityGroup: [
-        "mobileUnities"
+      MobileUnityGroupunity: [
+        "unity"
       ],
   };
 
@@ -108,7 +115,7 @@ export class VistaDynamicReporteComponent implements OnInit {
     this.idCustomerLogin = 779;
     this.idCustomer[0] =  this.idCustomerLogin;
 
-    this.idGroup = 0;
+    this.idGroup = [];
   }
 
   ngOnInit() {
@@ -175,7 +182,7 @@ export class VistaDynamicReporteComponent implements OnInit {
         this.idCustomer[0] = this.idCustomerLogin;
     }
 }
-
+  //seleccion del cliente
   protected consultarGrupoCliente() {
     this.selectedLink = "MobileUnityGroups";
     console.log("id del customer en el grupo",this.idCustomer);
@@ -198,30 +205,32 @@ export class VistaDynamicReporteComponent implements OnInit {
         })
       ).subscribe();
   }
-  
+
+  //seleccion grupos del cliente
   GrupoClientSelectionChange(selectedClients: dataMulti[]) {
     console.log('Selected groups:', selectedClients);
-   
+    this.idGroup = [];
     if(selectedClients.length > 0){
-      this.idGroup = selectedClients[0]["id"];
+      selectedClients.forEach(client => {
+        this.idGroup = [...this.idGroup,client.id];
+      console.log("this.idGroup",     this.idGroup)
+      });
     }else{
-      this.idGroup = 0;
+      this.idGroup = [];
     }
   }
   
   consultarActivo(){
     
-
-    if(this.idGroup == 0){
+    if(this.idGroup.length==0){
       this.selectedLink = "Devices";
-      
       this.dataService.fetchData(this.fieldMappings, this.selectedLink, this.fieldRelations,{}, {}, [{ "ref": "customerId", "valor": this.idCustomer }])
       .pipe(
         tap(response => {
           this.result = response;
           this.activoOptions = this.result.body.map((item: any) => ({
-            id: item["mobileUnities.1id"],
-            name: item["mobileUnities.1plate"]
+            id: item[0]["mobileUnitiesid"],
+            name: item[0]["mobileUnitiesplate"]
           }));
         }),
         catchError(error => {
@@ -230,15 +239,16 @@ export class VistaDynamicReporteComponent implements OnInit {
         })
       ).subscribe();
     }else{
-      this.selectedLink = "MobileUnityGroup";
-      console.log("entro aca")
-      this.dataService.fetchData(this.fieldMappings, this.selectedLink, this.fieldRelations, {"GroupId": this.idGroup }, {}, {})
+      this.selectedLink = "MobileUnityGroupunity";
+      //console.log("entro aca")
+      this.dataService.fetchData(this.fieldMappings, this.selectedLink, this.fieldRelations,  {},{}, [{ "ref": "groupId", "valor": this.idGroup,"tipo":"in" }])
       .pipe(
         tap(response => {
           this.result = response;
+          console.log("this.result",    this.result)
           this.activoOptions = this.result.body.map((item: any) => ({
-            id: item["mobileUnities.1id"],
-            name: item["mobileUnities.1plate"]
+            id: item[0]["unityid"],
+            name: item[0]["unityplate"]
           }));
         }),
         catchError(error => {
@@ -250,17 +260,49 @@ export class VistaDynamicReporteComponent implements OnInit {
    
   }
 
+  //seleccion activos a consultar
   onActivoSelectionChange(selectedActivo: dataMulti[]) {
-    console.log('Selected clients:', selectedActivo);
-   // this.resultActivo = selectedActivo;
-   
+    this.resultActivo=[];
+    console.log('Selected mobile unities:', selectedActivo);
+
+    selectedActivo.forEach(activo => {
+      this.resultActivo=[...this.resultActivo,activo.id];
+    });
+    console.log('Array mobile unities:', this.resultActivo);
   }
 
-  rangoTiempo(country: data){
-    console.log("seleccion", country);
-    this.seleccionarOpciones = country;
+  rangoTiempo(rangotiempo: data){
+    console.log("seleccion", rangotiempo);
+    // Lógica para determinar si se debe mostrar el calendario
+    switch(rangotiempo.value){
+      case 1:
+        this.seleccionarFechas=[this.fecha.toISOString().split('T')[0],this.fecha.toISOString().split('T')[0]]
+        console.log("fechas a consultar        ", this.seleccionarFechas);
+      break;
+      case 2:
+        this.fecha.setDate(this.fecha.getDate() - 1);
+        this.seleccionarFechas=[this.fecha.toISOString().split('T')[0],this.fecha.toISOString().split('T')[0]]
+        console.log("fechas a consultar        ", this.seleccionarFechas);
+      break;
+      case 3:
+        console.log("cambia estado", rangotiempo.value);
+        this.showcalendar = true;
+      break;
+    }
+
   }
 
+  calendardate(){
+    console.log("rangos        ", this.rangeDates);
+    if(this.rangeDates[1]==null){
+      this.seleccionarFechas=[this.rangeDates[0].toISOString().split('T')[0],this.rangeDates[0].toISOString().split('T')[0]];
+      console.log("fechas a consultar        ", this.seleccionarFechas);
+    }
+    else{
+      this.seleccionarFechas=[this.rangeDates[0].toISOString().split('T')[0],this.rangeDates[1].toISOString().split('T')[0]];
+      console.log("fechas a consultar        ", this.seleccionarFechas);
+    }
+  }
 
   private fetchData() {
     const conditions: any[] = ["", "como estas", 123, true];

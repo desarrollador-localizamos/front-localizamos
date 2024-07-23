@@ -47,15 +47,17 @@
                         </app-select-avanzado>
                     </div>
 
-                    <div class="p-1">
-                        <p-calendar styleClass="w-full"
-                        [(ngModel)]="rangeDates" 
-                        selectionMode="range" 
-                        [iconDisplay]="'input'" 
-                        [showIcon]="true" 
-                        [readonlyInput]="true" />
-                    </div>
-
+                    @if (showcalendar) {
+                        <div class="p-1" >
+                            <p-calendar styleClass="w-full"
+                            [(ngModel)]="rangeDates" 
+                            selectionMode="range" 
+                            [iconDisplay]="'input'" 
+                            [showIcon]="true" 
+                            [readonlyInput]="true" 
+                            (onSelect)="calendardate()"/>
+                        </div>
+                    }
           
                     <p-divider />
 
