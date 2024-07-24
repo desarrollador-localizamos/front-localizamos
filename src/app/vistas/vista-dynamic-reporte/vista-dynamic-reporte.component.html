@@ -13,6 +13,7 @@
                             (selectionChange)="onCountrySelect($event)">
                         </app-select-avanzado>
                     </div>
+                    @if (validar[0]) {
                     <div class="p-1">
                         <app-multi-select 
                           [options]="clientOptions"
@@ -21,6 +22,8 @@
                           (click)="consultarCliente()"
                         ></app-multi-select>
                     </div>
+                    }
+                    @if (validar[1]) {
                     <div class="p-1">
                         <app-multi-select 
                           [options]="groupOptions"
@@ -29,6 +32,8 @@
                           (click)="consultarGrupoCliente()"
                         ></app-multi-select>
                     </div>
+                    }
+                    @if (validar[2]) {
                     <div class="p-1">
                         <app-multi-select 
                           [options]="activoOptions"
@@ -37,7 +42,8 @@
                           (click)="consultarActivo()"
                         ></app-multi-select>
                     </div>
-
+                    }
+                    @if (validar[3]) {
                     <div class="p-1">
                         <app-select-avanzado
                             [options]="rango"
@@ -46,8 +52,8 @@
                             (selectionChange)="rangoTiempo($event)">
                         </app-select-avanzado>
                     </div>
-
-                    @if (showcalendar) {
+                    }
+                    @if (validar[4]) {
                         <div class="p-1" >
                             <p-calendar styleClass="w-full"
                             [(ngModel)]="rangeDates" 

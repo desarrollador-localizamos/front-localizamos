@@ -1,13 +1,14 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, computed, OnInit } from '@angular/core';
 import { DividerModule } from 'primeng/divider';
 import { PanelModule } from 'primeng/panel';
 import { SelectAvanzadoComponent, data } from "../../shared/components/inputs/select/select-avanzado/select-avanzado.component";
 import { TableSencillaComponent } from "../../shared/components/tables/table-sencilla/table-sencilla.component";
 import { MultiSelectComponent} from "../../shared/components/inputs/select/multi-select/multi-select.component";
-import { catchError, tap, throwError } from 'rxjs';
+import { catchError, Observable, of, tap, throwError } from 'rxjs';
 import { DataService } from '../../core/services/data.service';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
+import { User } from '../../core/interfaces';
 import {NgIf} from '@angular/common'
 
 interface EstructuraData {
@@ -57,8 +58,10 @@ export class VistaDynamicReporteComponent implements OnInit {
   protected idGroup : any[]=[] ;
   protected idCustomerLogin: number;
   protected resultActivo: any[]=[];
-  protected showcalendar: boolean=false;
+  protected validar: boolean[]=[false,false,false,false,false];
   protected fecha: Date= new Date();
+  protected user:User={"id":1,"email":"a@l"}; // debe llamarse por variable computada desde el componente de login pero sin hacer publica la variable por encapsulacion
+  
   
 
 
@@ -111,7 +114,7 @@ export class VistaDynamicReporteComponent implements OnInit {
       conditions: [],
       joins: []
     }
-
+    
     this.idCustomerLogin = 779;
     this.idCustomer[0] =  this.idCustomerLogin;
 
@@ -145,15 +148,34 @@ export class VistaDynamicReporteComponent implements OnInit {
 
   }
 
-  onCountrySelect(country: data) {
+  async onCountrySelect(country: data): Promise<void>  {
+    this.validar=[false,false,false,false,false];
+    this.groupOptions=[]; //inicializa el vector de grupos
+    this.activoOptions=[];//inicializa el vector de activos
+    this.idGroup = [];
     console.log("seleccion", country);
     this.seleccionarOpciones = country;
+    //*************************************************aqui falta hacer la validacion para el cliente localizamos
+    // y activar la opcion de cliente sino asignar directamente el id del cliente logeado */
+    if(this.user.id==1)
+      this.validar[0]=true;
+    else{
+      this.validar[0]=false;
+      this.idCustomer=[this.user.id];
+      await this.consultarGrupoCliente().toPromise();
+      if(this.groupOptions.length==0){
+        this.validar[2]=true;
+      }
+      else{
+        this.validar[1]=true;
+    }
+    }
   }
   
 
   protected consultarCliente() {
     this.selectedLink = "Customers";
-    
+    if(this.clientOptions.length==0) //realiza la consulta solo por primera vez
     this.dataService.fetchData(this.fieldMappings, this.selectedLink, {}, {}, {})
       .pipe(
         tap(response => {
@@ -172,55 +194,70 @@ export class VistaDynamicReporteComponent implements OnInit {
       ).subscribe();
   }
   
-  onClientSelectionChange(selectedClients: dataMulti[]): void {
+  async onClientSelectionChange(selectedClients: dataMulti[]): Promise<void> {
     console.log('Selected clients:', selectedClients);
-   
     if (selectedClients.length > 0) {
         this.idCustomer = selectedClients.map(client => client.id);
         console.log('Selected clients IDs:', this.idCustomer);
     } else {
         this.idCustomer[0] = this.idCustomerLogin;
     }
+
+    await this.consultarGrupoCliente().toPromise(); //evaua si hay grupo spara ese cliente para activar el selector de grupos
+      if(this.groupOptions.length==0){
+        this.validar[2]=true;
+      }
+      else{
+        this.validar[1]=true;
+        this.idGroup=[];
+    }
 }
   //seleccion del cliente
-  protected consultarGrupoCliente() {
+  protected consultarGrupoCliente(): Observable<any> {
     this.selectedLink = "MobileUnityGroups";
     console.log("id del customer en el grupo",this.idCustomer);
     const valor = this.idCustomer[0]
     console.log("id del customer en el grupo2", valor);
-    this.dataService.fetchData(this.fieldMappings, this.selectedLink, {} , {"customerId" :valor}, {}, )
-      .pipe(
-        tap(response => {
-          this.result = response;
-          console.log("respo", response);
-          this.groupOptions = this.result.body.map((item: any) => ({
-            id: item.id,
-            name: item.name
-          }));
-        
-        }),
-        catchError(error => {
-          console.log('Error en la solicitud:', error);
-          return throwError(() => error);
-        })
-      ).subscribe();
+    if (this.groupOptions.length == 0) {
+      return this.dataService.fetchData(this.fieldMappings, this.selectedLink, {}, {"customerId": valor}, {})
+        .pipe(
+          tap(response => {
+            this.result = response;
+            console.log("respo", response);
+            this.groupOptions = this.result.body.map((item: any) => ({
+              id: item.id,
+              name: item.name
+            }));
+          }),
+          catchError(error => {
+            console.log('Error en la solicitud:', error);
+            return throwError(() => error);
+          })
+        );
+    } else {
+      return of(null); // Retorna un Observable que emite null si groupOptions ya tiene elementos
+    }
   }
 
   //seleccion grupos del cliente
   GrupoClientSelectionChange(selectedClients: dataMulti[]) {
+    this.validar=[true,true,false,false,false];
     console.log('Selected groups:', selectedClients);
     this.idGroup = [];
     if(selectedClients.length > 0){
       selectedClients.forEach(client => {
         this.idGroup = [...this.idGroup,client.id];
       console.log("this.idGroup",     this.idGroup)
+      this.validar[2]=true;
       });
     }else{
       this.idGroup = [];
+      this.validar[2]=false;
     }
   }
   
   consultarActivo(){
+    console.log("activo grupo?   ",this.idGroup.length);
     
     if(this.idGroup.length==0){
       this.selectedLink = "Devices";
@@ -262,6 +299,7 @@ export class VistaDynamicReporteComponent implements OnInit {
 
   //seleccion activos a consultar
   onActivoSelectionChange(selectedActivo: dataMulti[]) {
+    this.validar[3]=true;
     this.resultActivo=[];
     console.log('Selected mobile unities:', selectedActivo);
 
@@ -286,7 +324,7 @@ export class VistaDynamicReporteComponent implements OnInit {
       break;
       case 3:
         console.log("cambia estado", rangotiempo.value);
-        this.showcalendar = true;
+        this.validar[4] = true;
       break;
     }
 
@@ -304,7 +342,7 @@ export class VistaDynamicReporteComponent implements OnInit {
     }
   }
 
-  private fetchData() {
+  private consultadatos() {
     const conditions: any[] = ["", "como estas", 123, true];
 
     this.dataService.fetchData(this.fieldMappings, this.selectedLink, this.fieldRelations, conditions, {})
