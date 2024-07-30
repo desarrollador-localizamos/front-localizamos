@@ -29,9 +29,9 @@ interface EstructuraData {
 export class VistaDynamicReporteComponent implements OnInit {
   protected datos: data[]=[];
   private res:any[]=[];
-  protected opciones= {reportes:this.datos,rangos:this.datos,clientes: this.datos,grupos:this.datos,activos:this.datos,eventos:this.datos}
-  protected result = {reportes: "",rangos:this.res,clientes: this.res,grupos:this.res,activos:this.res,eventos:this.res}
-  protected validar: boolean[]=[false,false,false,false,false,false]; // valida la visibilidad de cada selector
+  protected opciones= {reportes:this.datos,rangos:this.datos,clientes: this.datos,grupos:this.datos,activos:this.datos,eventos:this.datos,repgerencial:this.datos,geocercas:this.datos,mantenimiento:this.datos,gasolina:this.datos}
+  protected result = {reportes: "",rangos:this.res,clientes: this.res,grupos:this.res,activos:this.res,eventos:this.res,repgerencial:this.res,geocercas:this.res,mantenimiento:this.res,gasolina:this.res}
+  protected validar: boolean[]=[false,false,false,false,false,false,false,false,false,false]; // valida la visibilidad de cada selector
   protected rangeDates!: Date[];
 
   private user:User={"id":1,"email":"a@l"}; // debe llamarse por variable computada desde el componente de login pero sin hacer publica la variable por encapsulacion
@@ -71,6 +71,33 @@ export class VistaDynamicReporteComponent implements OnInit {
       { name: 'Hoy', icon: 'pi-clock', value: 1 },
       { name: 'Ayer', icon: 'pi-clock ', value: 2  },
       { name: 'Personalizado', icon: 'pi-clock', value: 3  },
+    ]
+
+    this.opciones.repgerencial = [
+      { name: 'Reporte general', icon: 'pi-flag', value: 1 },
+      { name: 'Reporte horas trabajadas', icon: 'pi-globe ', value: 2  },
+      { name: 'Reporte kilometros recorridos', icon: 'pi-map', value: 3  },
+      { name: 'Reporte de velocidad promedio', icon: 'pi-compass', value: 4  },
+      { name: 'Reporte geocercas', icon: 'pi-map-marker', value: 5  },
+      { name: 'Reporte de mantenimiento', icon: 'pi-flag-fill', value: 6  },
+      { name: 'Reporte horas reposo', icon: 'pi-flag-fill', value: 7  },
+      { name: 'Reporte preoperacional', icon: 'pi-globe', value: 8  },
+      { name: 'Reporte de gasolina', icon: 'pi-globe', value: 9  },
+    ];
+
+    this.opciones.mantenimiento= [
+      { name: 'Vencimiento SOAT', value: 1 },
+      { name: 'Kilometraje actual', value: 2  },
+      { name: 'KMs cambio de aceite', value: 3  },
+      { name: 'Vencimiento impuestos', value: 4  },
+      { name: 'Vencimiento Tecno Mecánica', value: 5  },
+      { name: 'Vencimiento de licencia', value: 6  },
+    ]
+
+
+    this.opciones.gasolina= [
+      { name: 'Galones consumidos', value: 1},  
+      { name: 'Rendimiento',  value: 2  },
     ]
 
     this.cabeceras.Fields = {
@@ -164,7 +191,7 @@ export class VistaDynamicReporteComponent implements OnInit {
       // 'Reporte de mantenimiento': "",
       // 'Reporte gerencial': "",
       // 'Reporte de certificado': "",
-      // 'Reporte horas reposo': "",
+      // 'Reporte horas reposo': "", // ptra ruta verificar
       // 'Reporte de temperatura': "",
       // 'Reporte de conductores': "",
       'Reporte preoperacional': "Preoperacional",
@@ -305,29 +332,99 @@ export class VistaDynamicReporteComponent implements OnInit {
   protected async consultas(entidad:string,datos?:any) : Promise<void> {
     switch (entidad){
       case 'reportes':
-        if(datos)
+        if(datos){
           this.result.reportes= datos['name'];
-        if(this.result.reportes=="Reporte general"){        
-          this.validar[5]=true;
-          await this.consultaback('EventTypes',"simple","name","id",{"name":'ASC'}).toPromise();
-          this.opciones.eventos=this.datos;           
-        }
-        else
-          this.validar[5]=false;
-        if(this.condicions.idCustomer==1){
-          await this.consultaback('Customers',"simple","fullName").toPromise();
-          this.opciones.clientes=this.datos; 
-          this.validar[0]=true;
-          this.validar[2]=true;
-        }
-        else{
-          await this.validagrupos();
+          switch(datos['value']){
+            case 1:      
+            this.validar=[this.validar[0],this.validar[1],this.validar[2],this.validar[3],this.validar[4],true,false,false,false,false]
+              await this.consultaback('EventTypes',"simple","name","id",{"name":'ASC'}).toPromise();
+              this.opciones.eventos=this.datos; 
+            break;
+            case 7:
+              this.validar=[this.validar[0],this.validar[1],this.validar[2],this.validar[3],this.validar[4],false,true,false,false,false]
+            break;
+
+            default:
+              this.validar=[this.validar[0],this.validar[1],this.validar[2],this.validar[3],this.validar[4],false,false,false,false,false]
+            break;
+          }
+          
+          if(this.condicions.idCustomer==1){
+            if(this.opciones.clientes.length==0){
+              await this.consultaback('Customers',"simple","fullName").toPromise();
+              this.opciones.clientes=this.datos; 
+            }
+            this.validar[0]=true;
+            this.validar[2]=true;
+          }
+          else{
+            await this.validagrupos();
+          }
         }
       break;
 
+      case 'repgerencial':
+        let resul: any[]=[];
+        this.validar[10]=false;
+        if(datos){
+          this.res=[];
+          await Promise.all(this.datos.map(async (rep)=>{
+            console.log("rep", datos);
+            
+            switch(rep.value){
+              case 1:      
+                this.validar[5]=true;
+                await this.consultaback('EventTypes',"simple","name","id",{"name":'ASC'}).toPromise();
+                this.opciones.eventos=this.datos; 
+                resul=[...resul,rep.name];
+              break;
+
+              case 5:
+                this.validar[7]=true;
+              break;
+
+              case 6:
+                this.validar[8]=true;
+              break;
+
+              case 9:
+                this.validar[9]=true;
+              break;
+              default:
+                resul=[...resul,rep.name];
+              break;
+            }
+          }));
+          this.result.repgerencial= resul;
+          console.log("repgerencial", this.result.repgerencial);
+        }
+      break;
+
+      // aux por tipod de reporte
       case'EventTypes':
         if(datos)
           this.result.eventos= datos['id'];
+      break;
+
+      case'Geocercas':
+        if(datos){
+          await this.obtenervalor(datos,"name");
+          this.result.geocercas= this.res;
+        }
+      break;
+
+      case'Mantenimiento':
+        if(datos){
+          await this.obtenervalor(datos,"name");
+          this.result.mantenimiento= this.res;
+        }
+      break;
+
+      case'Gasolina':
+        if(datos){
+          await this.obtenervalor(datos,"name");
+          this.result.gasolina= this.res;
+        }
       break;
 
       case 'Customers':        
@@ -338,11 +435,12 @@ export class VistaDynamicReporteComponent implements OnInit {
           await this.validagrupos();
          }
       break;
+      
       case 'MobileUnityGroups':
         if(datos)
         {
           this.validar=[true,true,true,false,false];
-          await this.obtenervalor(datos); //obtiene el array de las condiciones
+          await this.obtenervalor(datos,"id"); //obtiene el array de las condiciones
           await this.validaractivos(this.res);
         }
       break;
@@ -350,10 +448,10 @@ export class VistaDynamicReporteComponent implements OnInit {
       case 'Devices':
         if(datos){
         this.validar[3]=true;
-        console.log("datos para array activos", datos);
-        await this.obtenervalor(datos); //obtiene el array de las condiciones
+        //console.log("datos para array activos", datos);
+        await this.obtenervalor(datos,"id"); //obtiene el array de las condiciones
         this.result.activos=this.res;
-        console.log("resultado de array activos", this.res);
+        //console.log("resultado de array activos", this.res);
         }
       break;
 
@@ -361,16 +459,18 @@ export class VistaDynamicReporteComponent implements OnInit {
         if(datos){
           switch(datos.value){
             case 1:
-              this.result.rangos=[this.fecha.toISOString().split('T')[0],this.fecha.toISOString().split('T')[0]]
-              console.log("fechas a consultar        ", this.result.rangos);
+              this.result.rangos=[this.fecha.toISOString().split('T')[0],this.fecha.toISOString().split('T')[0]];
+              //console.log("fechas a consultar        ", this.result.rangos);
+              this.validar[10]=true;
             break;
             case 2:
               this.fecha.setDate(this.fecha.getDate() - 1);
-              this.result.rangos=[this.fecha.toISOString().split('T')[0],this.fecha.toISOString().split('T')[0]]
-              console.log("fechas a consultar        ", this.result.rangos);
+              this.result.rangos=[this.fecha.toISOString().split('T')[0],this.fecha.toISOString().split('T')[0]];
+              this.validar[10]=true;
+              //console.log("fechas a consultar        ", this.result.rangos);
             break;
             case 3:
-              console.log("cambia estado", datos.value);
+              //console.log("cambia estado", datos.value);
               this.validar[4] = true;
             break;
           }
@@ -378,22 +478,24 @@ export class VistaDynamicReporteComponent implements OnInit {
       break;
 
       case 'calendario':
-        console.log("rangos        ", this.rangeDates);
+        //console.log("rangos        ", this.rangeDates);
+        this.validar[10]=true;
+        this.result.rangos=[this.fecha.toISOString().split('T')[0],this.fecha.toISOString().split('T')[0]];
         if(this.rangeDates[1]==null){
           this.result.rangos=[this.rangeDates[0].toISOString().split('T')[0],this.rangeDates[0].toISOString().split('T')[0]];
-          console.log("fechas a consultar        ", this.result.rangos);
+          //console.log("fechas a consultar        ", this.result.rangos);
         }
         else{
           this.result.rangos=[this.rangeDates[0].toISOString().split('T')[0],this.rangeDates[1].toISOString().split('T')[0]];
-          console.log("fechas a consultar        ", this.result.rangos);
+          //console.log("fechas a consultar        ", this.result.rangos);
         }
       break;
     }
   }
  
   private consultaback(entidad: string,tipo: string, cabecera?: string,identif?:string, ordenar?: any): Observable<any> {
-    console.log("servicio", this.cabeceras.Servicios);
-    console.log("entidad", entidad);
+    //console.log("servicio", this.cabeceras.Servicios);
+    //console.log("entidad", entidad);
     let id="";
     if(identif)
       id=identif;
@@ -437,7 +539,7 @@ export class VistaDynamicReporteComponent implements OnInit {
     await this.consultaback('MobileUnityGroups',"multi","name").toPromise();
     this.opciones.grupos=this.datos;        
     if(this.opciones.grupos.length==0){
-      console.log("grupos", this.opciones.grupos.length);
+      //console.log("grupos", this.opciones.grupos.length);
       await this.validaractivos(this.result.clientes);
       this.validar[2]=true;
       this.validar[1]=false;
@@ -451,10 +553,10 @@ export class VistaDynamicReporteComponent implements OnInit {
     }
   }
 
-  private async obtenervalor(datos: any[]): Promise<any>{
+  private async obtenervalor(datos: any[], cab: string): Promise<any>{
     this.res=[]; 
     datos.forEach(item => {
-      this.res = [...this.res,item.id];
+      this.res = [...this.res,item[`${cab}`]];
     });
   }
 
@@ -468,7 +570,7 @@ export class VistaDynamicReporteComponent implements OnInit {
       await this.consultaback('MobileUnityGroupunity',"multi","unityplate","unityid").toPromise();
     }
     this.opciones.activos=this.datos;
-    console.log("resultado activos", this.datos);
+    //console.log("resultado activos", this.datos);
     
   }
 
@@ -477,6 +579,7 @@ export class VistaDynamicReporteComponent implements OnInit {
     try{
       this.cabeceras.Multiconditions[this.result.reportes][0]['valor']=this.result.activos;
       this.cabeceras.Multiconditions[this.result.reportes][1]['valor']=this.result.rangos;
+      if(this.result.reportes=='Reporte general')
       this.cabeceras.Multiconditions[this.result.reportes][2]['valor']=this.result.eventos;
     }
     catch{}
