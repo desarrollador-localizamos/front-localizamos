@@ -1,0 +1,183 @@
+<div class="p-grid" style="padding: 40px;">
+    <div class="p-col-12" style="display: flex;justify-content: space-between;align-content: center;align-items: center; flex-wrap: wrap;">    
+        
+            <div>
+                <h1 style="margin-left: 15px;">Notificaciones</h1>  
+            </div>
+            <div>
+                <p-calendar 
+                [(ngModel)]="date2"
+                [iconDisplay]="'input'"
+                [showIcon]="true"
+                inputId="icondisplay"
+                (onSelect)="FechaSeleccionada($event)"
+                dateFormat="yy/mm/dd">
+              </p-calendar>
+
+              <p-dropdown class="ml-2"
+                [(ngModel)]="selectedEstadoId"
+                [options]="estados"
+                [filter]="true"
+                optionLabel="name"
+                optionValue="id"
+                placeholder="Seleccionar estado"
+                (onChange)="seleccionarEstado()">
+            </p-dropdown>
+
+            <p-dropdown class="ml-2"
+            [options]="activoOptions" 
+            [filter]="true"
+            optionLabel="name" 
+            placeholder="Seleccionar Activo móvil" 
+            [(ngModel)]="selectedActivo"
+            (onChange)="onActivoSelectionChange($event)"
+            (click)="consultarActivo()"/>
+
+
+
+            </div>
+    </div>
+    <p-toolbar>
+         <div class="p-toolbar-group-center">
+            <span class="p-input-icon-left">
+                <i class="pi pi-search"></i>
+                <input pInputText placeholder="Buscar" [(ngModel)]="searchTerm" (input)="onSearch()"/>
+            </span>
+        </div>
+           <div class="p-toolbar-group-end" >
+            <p-button severity="success" (click)="filtrarNotificaciones()" label="Filtrar" icon="pi pi-filter" />   
+            <p-button severity="secondary" (click)="limpiarFiltros()" label="Limpiar " icon="pi pi-filter" />   
+            <p-splitButton label="Acciones"  [model]="items"  />
+        </div>
+        
+      
+       
+     
+    </p-toolbar>
+
+    <div class="card">
+        <p-dataView #dv [value]="notifications" [rows]="5" [paginator]="true">
+            <ng-template pTemplate="list"  let-notifications>
+                <div class="grid grid-nogutter">
+                    <div class="col-12" *ngFor="let item of notifications; let first = first" class="col-12">
+                        <div class="flex flex-column sm:flex-row sm:align-items-center p-4 gap-3" [ngClass]="{ 'border-top-1 surface-border': !first }">
+
+                            <div class="mr-3 relative">
+                                <p-tag 
+                                [severity]="item.status === 1 ? 'success' : 'danger'" 
+                                [value]="item.status === 1 ? 'Leído' : 'No leído'">
+                            </p-tag>
+                            
+                              
+                              </div>
+
+                            <div class="flex flex-column md:flex-row justify-content-between md:align-items-center flex-1 gap-4">
+                                <div class="flex flex-row md:flex-column justify-content-between align-items-start gap-2">
+                                    <div>
+                                      
+                                        <span class="font-medium text-secondary text-lg">Placa :</span>
+                                        <div class="text-lg font-medium text-900 mt-2">{{item.plates}}</div>
+                                      
+                                    </div>
+                                </div>
+                                <div class="flex flex-row md:flex-column justify-content-between align-items-start gap-2">
+                                    <div>
+                                        <span class="font-medium text-secondary text-lg">Asunto :</span>
+                                        <div class="text-lg font-medium text-900 mt-2">{{item.title}}</div>
+                                      
+                                    </div>
+                                </div>
+                                <div class="flex flex-row md:flex-column justify-content-between align-items-start gap-2">
+                                    <div>
+                                        <span class="font-medium text-secondary text-lg">Estado novedad :</span>
+                                        <div class="text-lg font-medium text-900 mt-2">
+                                            {{item.status === 0 ? 'No cerrado' : 'Cerrado'}}
+                                        </div>
+                                      
+                                    </div>
+
+                                    
+                                </div>
+                                <div class="flex flex-row md:flex-column justify-content-between align-items-start gap-2">
+                                    <div>
+                                        <span class="font-medium text-secondary text-lg">Fecha :</span>
+                                        <div class="text-lg font-medium text-900 mt-2">{{item.createdAt}}
+                                        </div>
+                                      
+                                    </div>
+                                </div>
+
+                                <div class="flex flex-column md:align-items-end gap-5">
+                                    <span class="text-m font-semibold text-900">{{item.totalTiempo}} </span>
+                                    <div class="flex flex-row-reverse md:flex-row gap-2">
+                                        <p-button icon="pi pi-eye" severity="success"(click)="EstadoMensaje(item.id,item.status)" (onClick)="showDialog(item.id)"  />
+                                        <p-button icon="pi pi-trash" severity="danger" (onClick)="eliminar($event, item.id)"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
+        </p-dataView>
+    </div>
+   
+  </div>
+
+
+    <p-dialog header="Notificacíon novedad" [modal]="true" [(visible)]="visible" [style]="{ width: '30rem' }">
+        <div class="mb-3" style="display: flex; justify-content: space-between;">
+            <label style="display: contents;"  class="font-semibold w-6rem">Activo móvil: {{notificationsModal?.plates}}</label>
+            <span class="p-text-secondary block mb-3" style="color: #fff; background-color: #3b82f6;  padding: 2px; font-weight: 500; border-radius: 5px;
+            font-size: 15px;"> {{notificationsModal?.totalTiempo}}</span> 
+        </div>
+        
+        <span style="padding: 8px; background-color: #bfdbfe40; text-align: justify;  border-radius: 5px;  color: #666b75;  font-weight: 600;" 
+        class="p-text-secondary block mb-3">"hace {{notificationsModal?.totalTiempo}}  {{notificationsModal?.message}}"</span>
+
+        <div class="mb-4" style="padding-left: 10px;">
+          
+            <div class="flex align-items-center gap-3 mb-2">
+                <label class="font-semibold ">Activo Movil:</label>
+                <span> {{notificationsModal?.plates}}</span>
+            </div>
+            <div class="flex align-items-center gap-3 mb-2">
+                <label class="font-semibold ">Clase:</label>
+                <span>{{notificationsModal?.MobileUnitiesclassname}}</span>
+            </div>
+            <div class="flex align-items-center gap-3 mb-2">
+                <label class="font-semibold ">Marca:</label>
+                <span> {{notificationsModal?.MobileUnitiesbrand}}</span>
+            </div>
+            <div class="flex align-items-center gap-3 mb-2">
+                <label class="font-semibold ">Modelo:</label>
+                <span> {{notificationsModal?.MobileUnitiesmodel}}</span>
+            </div>
+            <div class="flex align-items-center gap-3 mb-2">
+                <label class="font-semibold "> Estado de la novedad:</label>
+                <span style="background: #22c55e;
+                color: white;
+                border-radius: 5px;
+                padding: 2px;
+                font-weight: 600;
+                font-size: 15px;">{{notificationsModal?.MobileUnitiesmodel}}</span>
+            </div>
+            <div class="flex  gap-3 mb-2">
+                <label class="font-semibold ">Observaciones:</label>
+                <span>No se encontro el campo del dato</span>
+            </div> 
+        </div>
+        
+        
+
+        <div class="flex justify-content-end gap-2">
+            <p-button label="Leido" class="espaciado"  severity="success" (onClick)="visible = false" />
+        </div>
+    </p-dialog>
+
+
+    <div class="card flex justify-content-center gap-2">
+        <p-toast />
+        <p-confirmDialog />
+      
+    </div>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output } from '@angular/core';
 import { CardModule } from 'primeng/card';
 import { ButtonTooltiComponent } from "../../../../shared/components/buttons/button-toolti/button-toolti.component";
 import { TagModule } from 'primeng/tag';
@@ -18,19 +18,31 @@ import { DataService } from '../../../../core/services/data.service';
 export class VentanaInfoAccionComponent {
     items: MenuItem[] | undefined;
     responseData: any;
-
+    unityId: number;
     @Output() refresh = new EventEmitter<void>();
+    @Output() reporteRutas = new EventEmitter<void>();
+
+    @Input() VisibilidadCapaVentana: boolean = false ;
+ 
+
+  
 
     constructor(
-        private dataService: DataService
-      ) {}
+        private dataService: DataService,
+        private el: ElementRef
+      ) {
+
+        this.unityId = 0;
+      }
     
     ngOnInit() {
         this.dataService.getResponse().subscribe((data) => {
             if (data && data.body && data.body.length > 0) {
-                this.responseData = data.body[0][0]; // Asegúrate de que `body` no esté vacío
-                console.log("hello",this.responseData); // Agrega un console.log para depurar
+                this.responseData = data.body[0][0];
+                console.log("hello",this.responseData);
+                this.unityId = this.responseData["id"];
             }
+            
         });
 
         this.items = [
@@ -61,22 +73,22 @@ export class VentanaInfoAccionComponent {
                     }
                 ]
             },
-            {
-                label: 'Ubicación en tiempo real',
-                icon: 'pi pi-map-marker',
-                items: [
-                    {
-                        label: 'Encender',
-                        icon: 'pi pi-power-off',
-                        styleClass: 'icon-green'
-                    },
-                    {
-                        label: 'Apagar',
-                        icon: 'pi pi pi-power-off',
-                        styleClass: 'icon-red'
-                    }
-                ]
-            },
+            // {
+            //     label: 'Ubicación en tiempo real',
+            //     icon: 'pi pi-map-marker',
+            //     items: [
+            //         {
+            //             label: 'Encender',
+            //             icon: 'pi pi-power-off',
+            //             styleClass: 'icon-green'
+            //         },
+            //         {
+            //             label: 'Apagar',
+            //             icon: 'pi pi pi-power-off',
+            //             styleClass: 'icon-red'
+            //         }
+            //     ]
+            // },
             {
                 label: 'Compartir seguimiento',
                 icon: 'pi pi-share-alt'
@@ -87,17 +99,52 @@ export class VentanaInfoAccionComponent {
             },
             {
                 label: 'Reporte de ruta',
-                icon: 'pi pi-file'
+                icon: 'pi pi-file',
+                command: () => this.onreporteRuta()
             },
             {
                 label: 'Reporte de viaje',
-                icon: 'pi pi-envelope'
+                icon: 'pi pi-envelope',
+                command: () => this.onreporteViaje()
             },
            
         ]
+        
     }
 
     onRefresh() {
         this.refresh.emit();
-      }
+    }
+
+
+    ngOnChanges() {
+        const containerCard = this.el.nativeElement.querySelector('.container-card');
+        if (this.VisibilidadCapaVentana) {
+            containerCard.style.display = '';
+        } else {
+            containerCard.style.display = 'none';
+        }
+
+    }
+
+    onreporteRuta() {
+        const unityIds = this.unityId;
+        try {
+            this.dataService.emitReporteRuta(unityIds);
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+
+    onreporteViaje() {
+        const unityIds = this.unityId;
+        try {
+            this.dataService.emitReporteViaje(unityIds);
+            console.log("Emitiendo evento de reporte viaje", this.unityId);
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
 }

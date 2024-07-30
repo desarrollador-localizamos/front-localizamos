@@ -11,10 +11,10 @@
     align-items: center;
     height: 65px;
     box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
-    z-index: 1000; 
+    z-index: 1000;
 }
 
-.icono-notificacion{
+.icono-notificacion {
     font-size: 1.4rem !important;
     margin-top: 10px;
 }
@@ -23,14 +23,13 @@
     display: flex;
     align-items: center;
     margin-top: 3px;
-    
 }
 
- img.img-logo1{
+img.img-logo1 {
     width: 45px;
 }
 
-img.img-logo2{
+img.img-logo2 {
     width: 145px;
     height: 100px;
 }
@@ -49,22 +48,18 @@ img.img-logo2{
     margin-right: 0;
 }
 
-
 .nav-links-header .profile-details {
-    bottom: 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
-
 }
 
-.nav-links-header .profile-details .profile-content{
+.nav-links-header .profile-details .profile-content {
     display: flex;
     align-items: center;
-    
 }
 
-.nav-links-header .profile-details img{
+.nav-links-header .profile-details img {
     height: 62px;
     width: 62px;
     object-fit: cover;
@@ -74,21 +69,18 @@ img.img-logo2{
 }
 
 .nav-links-header .profile-details .profile-name,
-.nav-links-header .profile-details .job{
-
+.nav-links-header .profile-details .job {
     color: #333;
     font-size: 17px;
     font-weight: 500;
-    margin-right: 14px ;
+    margin-right: 14px;
 }
 
-.nav-links-header .profile-details .job{
+.nav-links-header .profile-details .job {
     font-size: 10px;
 }
 
-
-
-.nav-links-header .profile-details .arrow2:hover{
+.nav-links-header .profile-details .arrow-profile:hover {
     transform: rotate(-180deg);
 }
 
@@ -101,36 +93,7 @@ img.img-logo2{
     text-decoration: underline;
 }
 
-
-
-::ng-deep .p-overlaypanel {
-    margin-top: 8px;
-    margin-right: 20px;
-    min-width: 200px !important;
-    right: 10px;
-    left: auto !important;
-
-}
-
-::ng-deep .p-overlaypanel:after, .p-overlaypanel:before{
-    left: calc(var(--overlayArrowLeft, 0) + 3rem) !important;
-}
-
-::ng-deep  .p-overlaypanel:before {
-    border-width: 10px;
-    margin-left: 18px;
-}
-
-
-
-.popover-profile{
-
-    list-style: none;
-    padding: 15px;
-}
-
-
-form{
+form {
     position: relative;
     width: 200px;
     height: 35px;
@@ -141,7 +104,7 @@ form{
     padding: 5px;
 }
 
-.buscador{
+.buscador {
     position: absolute;
     top: 0;
     left: 0;
@@ -154,10 +117,9 @@ form{
     font-size: 1em;
     border-radius: 20px;
     padding: 0 0px 0px 35px;
-    
 }
 
-.icono-buscador{
+.icono-buscador {
     box-sizing: border-box;
     padding: 5px;
     width: 28px;
@@ -170,63 +132,77 @@ form{
     text-align: center;
     font-size: 0.9em;
     transition: all 1s;
-   
 }
 
-
 form .buscador,
-form:valid .buscador{
+form:valid .buscador {
     display: block;
     background-color: #E5E7EB;
 }
 
 form:hover .icono-buscador,
-form:valid .icono-buscador{
+form:valid .icono-buscador {
     background: #5a5a5a;
     color: white;
 }
 
+::ng-deep .p-overlaypanel {
+    margin-top: 22px;
+    min-width: 200px !important;
+}
 
-// responsividad
 
+::ng-deep .p-overlaypanel .p-overlaypanel-content {
+    padding: 1rem;
+}
+
+::ng-deep  .p-divider.p-divider-horizontal {
+    margin: 1rem 0;
+    padding: 0 1rem;
+}
+
+.notification-list {
+    padding: 10px;
+}
+
+.notification-info {
+    margin-bottom: 10px;
+}
 
 @media screen and (max-width: 740px) {
     .name-job {
-      display: none;
+        display: none;
     }
-  }
+}
 
- @media screen and (max-width: 605px) {
+@media screen and (max-width: 605px) {
     form,
-    form:valid{
+    form:valid {
         width: 150px;
         cursor: pointer;
     }
-  }
+}
 
 @media screen and (max-width: 535px) {
-    .arrow-profile{
+    .arrow-profile {
         display: none;
     }
 
-    .nav-links-header .profile-details img{
+    .nav-links-header .profile-details img {
         margin: 0px;
     }
 }
 
 @media screen and (max-width: 500px) {
-     img.img-logo2{
-            display: none;
+    img.img-logo2 {
+        display: none;
     }
-  }
+}
 
-  @media screen and (max-width: 360px) {
+@media screen and (max-width: 360px) {
     form,
-    form:valid{
+    form:valid {
         width: 100px;
         cursor: pointer;
     }
- }
-
- 
-
+}

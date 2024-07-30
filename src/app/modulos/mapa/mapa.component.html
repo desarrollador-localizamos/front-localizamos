@@ -1,21 +1,48 @@
 <div class="container">
     <div class="fl-panel item-details">
 
-             <app-ventana-info-accion></app-ventana-info-accion>
-            <div class="container">
-                <div class="fl-panel item-details">
-                    <div class="content">
-                        <div id="map" class="map"></div>
-
-                        <app-modal-filtro></app-modal-filtro>
-                        <app-banner-inferior></app-banner-inferior>
+        @if (ubicationValues && ubicationValues.length > 0) {
+            <app-ventana-info-accion [VisibilidadCapaVentana]="VisibilidadCapaVentana"></app-ventana-info-accion>
+        }
+        <div class="container">
+            <div class="fl-panel item-details">
+                <div class="content">
+                    <div id="map" class="map"></div>
+                    <app-modal-filtro></app-modal-filtro>
+                    @if (ubicationValues && ubicationValues.length > 0) {
                         
+                        <app-banner-inferior [VisibilidadCapaBanner]="VisibilidadCapaBanner"></app-banner-inferior>
+                        <app-reporte-ruta></app-reporte-ruta>
+                        <app-reporte-viaje></app-reporte-viaje>
+
+                       
+                        
+                        @if(VisibilidadRealTime){
+                            <div class="contenedor-boton-realtime"  >
+                                <button (click)="valorRealTime()" [ngClass]="{'bg-green': !realtime, 'bg-red': realtime}">
+                                    <i class="pi pi-power-off"></i>
+                                </button>
+                            </div>
+                        }
+                        
+                        <div class="card flex justify-content-center">
+                            <p-toast [life]="4000"></p-toast>
+                        </div>
+                    }
+                    <app-recursos-geograficos-mapa></app-recursos-geograficos-mapa>
+
+                    
+                    <div class="contenedor-boton-geocercas"  style="position: fixed; bottom: 130px;z-index: 9999; margin-left: 10px;">
+                        <button (click)="onGeocercasButtonClick()">
+                            <i class="fi fi-rs-land-layer-location"></i>
+                        </button>
                     </div>
+
+                    
+
+
                 </div>
             </div>
-            
+        </div> 
     </div>
-  
 </div>
-
-

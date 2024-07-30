@@ -1,0 +1,69 @@
+<div class="card flex flex-column align-items-center gap-2">
+    <p-dialog 
+        [position]="'top'" 
+        header="Reporte de viaje" 
+        [(visible)]="visible" 
+        [modal]="true" 
+        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
+        [style]="{ width: '50vw', minHeight: '200px' }" 
+        [draggable]="false" 
+        [resizable]="false"
+        [autoZIndex]="true">
+
+        <!-- <div class="p-fluid grid">
+            <div class="field col-12 md:col-6">
+                <label for="fecha" class="block">Fecha</label>
+                <div class="p-1">
+                    <app-select-avanzado
+                        [options]="rango"
+                        placeholder="Seleccionar Rango de tiempo"
+                        styleClass="w-full"
+                        (selectionChange)="rangoTiempo($event)">
+                    </app-select-avanzado>
+                </div>
+            </div>
+            @if (MostrarCalendario) {
+                <div class="field col-12 md:col-6">
+                  <label for="dia" class="block">Día</label>
+                  <p-calendar 
+                    styleClass="w-full"
+                    [(ngModel)]="rangeDates" 
+                    selectionMode="range" 
+                    [iconDisplay]="'input'" 
+                    [showIcon]="true" 
+                    [readonlyInput]="true" />
+                </div>
+              }
+            
+        </div>
+
+        <div class="p-fluid grid">
+            <div class="field col-12 md:col-6">
+                <label for="email" class="block">Hora inicio</label>
+                <p-calendar 
+                [(ngModel)]="dateInicio" 
+                [iconDisplay]="'input'" 
+                [showIcon]="true" 
+                [timeOnly]="true" 
+                [showTime]="true"
+                inputId="timeInicio">
+                </p-calendar>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="email" class="block">Hora fin</label>
+                <p-calendar 
+                [(ngModel)]="dateFin" 
+                [iconDisplay]="'input'" 
+                [showIcon]="true" 
+                [timeOnly]="true" 
+                [showTime]="true"
+                inputId="timeFin">
+              </p-calendar>
+            </div>
+        </div> -->
+
+        <div class="flex justify-content-end gap-2">
+            <!-- <p-button label="Generar reporte" severity="success"  (onClick)="generarReporte(); visible = false" /> -->
+        </div>
+    </p-dialog> 
+</div>

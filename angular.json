@@ -34,10 +34,19 @@
               "node_modules/primeng/resources/themes/lara-light-blue/theme.css",
               "node_modules/primeng/resources/primeng.min.css",
               "node_modules/primeicons/primeicons.css",
-              "node_modules/primeflex/primeflex.css"
-              
+              "node_modules/primeflex/primeflex.css",
+              "node_modules/@flaticon/flaticon-uicons/css/all/all.css",
+              "node_modules/leaflet/dist/leaflet.css",
+              "node_modules/leaflet.markercluster/dist/MarkerCluster.css",
+              "node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css",
+              "node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.css",
+              "node_modules/leaflet-draw/dist/leaflet.draw.css"
             ],
             "scripts": [
+              "node_modules/leaflet/dist/leaflet.js",
+              "node_modules/leaflet.markercluster/dist/leaflet.markercluster.js",
+              "node_modules/leaflet-routing-machine/dist/leaflet-routing-machine.js",
+               "node_modules/leaflet-draw/dist/leaflet.draw.js"
             ]
           },
           "configurations": {

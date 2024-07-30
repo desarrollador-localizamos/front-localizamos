@@ -1,4 +1,4 @@
-import { Component, ElementRef, Renderer2, OnInit } from '@angular/core';
+import { Component, ElementRef, Renderer2, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { DataService } from '../../../../core/services/data.service';
 import { DividerModule } from 'primeng/divider';
 import { CommonModule } from '@angular/common';
@@ -12,6 +12,10 @@ import { TagModule } from 'primeng/tag';
   styleUrls: ['./banner-inferior.component.scss'],
 })
 export class BannerInferiorComponent implements OnInit {
+
+  // variables para comunicar si se muestra la capa o no 
+  @Input() VisibilidadCapaBanner: boolean = false ;
+
   isPanelVisible: boolean = true;
   responseData: any;
   responseDataEventos: any;
@@ -56,6 +60,14 @@ export class BannerInferiorComponent implements OnInit {
   }
 
 
+  ngOnChanges() {
+    const containerBanner = this.el.nativeElement.querySelector('.banner');
+    if (this.VisibilidadCapaBanner) {
+      containerBanner.style.display = '';
+    } else {
+      containerBanner.style.display = 'none';
+    }
 
+}
 
 }

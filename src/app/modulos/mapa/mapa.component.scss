@@ -24,5 +24,112 @@
 .banner {
     width: 200px;
     height: 100%;
-    background-color: red; /* O el color que prefieras */
+}
+
+.img.leaflet-marker-icon.leaflet-zoom-animated.leaflet-interactive{
+    transition: opacity 1s ease-in-out;
+}
+
+.custom-div-icon {
+    background: none;
+    border: none;
+  }
+  
+  .custom-marker {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.3);
+  }
+  
+  .custom-marker img {
+    width: 30px;
+    height: 30px;
+    object-fit: contain;
+  }
+  
+ 
+
+::ng-deep .leaflet-routing-container.leaflet-bar.leaflet-control{
+
+    display: none;
+
+}
+
+.contenedor-boton-realtime{
+    position: fixed;
+    bottom: 80px;
+    margin-left: 10px;
+    z-index: 999;
+}
+
+.contenedor-boton-realtime button{
+    width: 40px;
+    height: 40px;
+    border-radius: 5px;
+    border: 0px;
+    background-color: #22e55c;
+    color: white;
+}
+.contenedor-boton-geocercas button{
+    width: 40px;
+    border: 0px;
+    font-size: 20px;
+    border-radius: 5px;
+    height: 40px;
+    background-color: #3b82f6;
+    color: white;
+}
+
+::ng-deep  .p-toast .p-toast-message.p-toast-message-success {
+    background: rgba(228, 248, 240, 0.7);
+    border: solid #1ea97c;
+    border-width: 0 0 0 6px;
+    color: #2d8c6d;
+    font-weight: 600;
+    
+}
+
+.bg-green {
+    background-color: #22c55e; /* verde */
+}
+
+.bg-red {
+    background-color: #EF4444 !important; /* rojo */
+}
+
+:host ::ng-deep .leaflet-control-zoom {
+    background: rgba(255, 255, 255, 0.8); /* Fondo semitransparente */
+    border-radius: 5px; /* Bordes redondeados */
+    border: 2px solid #ccc; /* Borde gris claro */
+}
+
+:host ::ng-deep .leaflet-control-zoom a {
+    width: 36px !important;
+  
+    font-size: 18px; /* Ajusta el tamaño del ícono según sea necesario */
+    text-align: center; /* Alineación del ícono */
+}
+
+
+:host ::ng-deep  .leaflet-control-zoom .leaflet-control-zoom-in {
+    background: url('../../../assets/icon/acercarse.png') no-repeat center center;
+    background-size: 18px 18px; /* Tamaño del ícono */
+   
+}
+:host ::ng-deep .leaflet-control-zoom .leaflet-control-zoom-in span {
+    visibility: hidden; /* Oculta el ícono predeterminado */
+}
+
+:host ::ng-deep .leaflet-control-zoom .leaflet-control-zoom-out {
+    background: url('../../../assets/icon/disminuir.png') no-repeat center center;
+    background-size: 18px 18px; /* Tamaño del ícono */
+   
+}
+
+:host ::ng-deep .leaflet-control-zoom .leaflet-control-zoom-out span {
+    visibility: hidden; /* Oculta el ícono predeterminado */
 }

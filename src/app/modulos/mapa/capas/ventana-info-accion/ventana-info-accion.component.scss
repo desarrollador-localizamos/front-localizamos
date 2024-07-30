@@ -29,7 +29,7 @@
     position: fixed;
     z-index: 500;
     margin: 8px 15px;
-    max-width: 300px !important;
+    max-width: 330px !important;
     
 }
 
@@ -85,3 +85,15 @@ p.nombre{
 ::ng-deep .icon-green .pi {
     color: rgb(34, 197, 94);
 }
+
+img.imagen-lateral.ng-star-inserted{
+    width: 3.5rem; 
+    height: 3.5rem;
+    object-fit: contain;
+    border: 3px solid;
+    border-radius: 30px;
+}
+
+.hidden {
+    display: none;
+  }

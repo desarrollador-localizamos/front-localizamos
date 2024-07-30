@@ -48,7 +48,7 @@
             <span class="title">{{ responseData?.endreportofftime }}</span>
           </div>
           <p-divider />
-          <p>Vía Ferroviaria Albania - Puerto Bolívar Albania, La Guajira</p>
+          <p>{{responseData?.endreportaddress}}</p>
           <p style=" display: flex; flex-wrap: wrap; align-items: flex-end;">
            <span class="title">Orientación: </span>  <span style=" padding:0px 5px;"> {{ responseData?.endreportcourse}} </span> <i class="fi fi-ss-compass-north" 
             [ngStyle]="{
@@ -56,10 +56,11 @@
         'transform-origin': 'center center'
             }"></i></p>
           <div class="info-row">
-            <p><span class="title">Coordenadas: </span>  {{ responseData?.endreportlocation}}</p> 
+            <p><span class="title">Latitud: </span>  {{ responseData?.endreportlat}}</p> 
+            <p><span class="title">Longitud: </span>  {{ responseData?.endreportlong}}</p> 
             
           </div>
-          <p><span class="title">Batería: </span> {{ responseData?.endreportbattery}}%  <i class="fi fi-sr-battery-bolt"
+          <p><span class="title">Batería Gps: </span> {{ responseData?.endreportbattery}}%  <i class="fi fi-sr-battery-bolt"
             [ngClass]="{
               'battery-low': responseData?.endreportbattery === 0,
               'battery-medium': responseData?.endreportbattery > 0 && responseData?.endreportbattery <= 20,

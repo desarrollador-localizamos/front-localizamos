@@ -82,7 +82,6 @@ export class VistaDynamicReporteComponent implements OnInit {
         {campo:"id", texto: "id" },
         {campo:"fullName", texto: "campo" },
       ],
-  
       Devices: [
         {campo:"mobileUnities.id", texto: "id" },
         {campo:"mobileUnities.plate", texto: "campo" },
@@ -97,6 +96,7 @@ export class VistaDynamicReporteComponent implements OnInit {
         {campo:"unity.id", texto: "id" },
         {campo:"unity.plate", texto: "campo" },
       ],
+      
       'Reporte general': [
         {"campo":"MobileUnities.plate","texto":"Placa","sortable":true,"filter":true},
         {"campo":"cantidad","texto":"", "id": "Cantidad","sortable":true,"filter":true},

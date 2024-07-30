@@ -10,13 +10,14 @@ import { BadgeModule } from 'primeng/badge';
 import { AuthService } from '../../../../core/services/auth.service';
 import { FiltroComponent } from "../../filtro/filtro.component";
 import { Router } from '@angular/router';
+import { DividerModule } from 'primeng/divider';
 
 @Component({
     selector: 'app-header-component',
     standalone: true,
     templateUrl: './header-component.component.html',
     styleUrl: './header-component.component.scss',
-    imports: [ButtonModule, BadgeModule, InputTextModule,
+    imports: [DividerModule,ButtonModule, BadgeModule, InputTextModule,
         AvatarModule, OverlayPanelModule, CustomersComponent, FiltroComponent]
 })
 export class HeaderComponentComponent {

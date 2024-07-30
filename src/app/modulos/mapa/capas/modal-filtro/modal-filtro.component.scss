@@ -110,3 +110,13 @@
  ::ng-deep span.p-tag{
    width: auto !important;
  }
+
+ .hidden-important {
+   display: none !important;
+ }
+
+ ::ng-deep .p-divider.p-divider-horizontal {
+   margin: 1rem 0;
+   padding: 0 1rem;
+}
+ 

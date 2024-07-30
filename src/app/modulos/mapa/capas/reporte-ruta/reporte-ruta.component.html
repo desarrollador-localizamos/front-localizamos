@@ -1,0 +1,131 @@
+<div class="card flex flex-column align-items-center gap-2">
+    <p-dialog 
+        [position]="'top'" 
+        header="Reporte de ruta" 
+        [(visible)]="visible" 
+        [modal]="true" 
+        [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
+        [style]="{ width: '50vw', minHeight: '200px' }" 
+        [draggable]="false" 
+        [resizable]="false"
+        [autoZIndex]="true">
+
+        <div class="p-fluid grid">
+            <div class="field col-12 md:col-6">
+                <label for="fecha" class="block">Fecha</label>
+                <div class="p-1">
+                    <app-select-avanzado
+                        [options]="rango"
+                        placeholder="Seleccionar Rango de tiempo"
+                        styleClass="w-full"
+                        (selectionChange)="rangoTiempo($event)">
+                    </app-select-avanzado>
+                </div>
+            </div>
+            @if (MostrarCalendario) {
+                <div class="field col-12 md:col-6">
+                  <label for="dia" class="block">Día</label>
+                  <p-calendar 
+                    styleClass="w-full"
+                    [(ngModel)]="rangeDates" 
+                    selectionMode="range" 
+                    [iconDisplay]="'input'" 
+                    [showIcon]="true" 
+                    [readonlyInput]="true" />
+                </div>
+              }
+            
+        </div>
+
+        <div class="p-fluid grid">
+            <div class="field col-12 md:col-6">
+                <label for="email" class="block">Hora inicio</label>
+                <p-calendar 
+                [(ngModel)]="dateInicio" 
+                [iconDisplay]="'input'" 
+                [showIcon]="true" 
+                [timeOnly]="true" 
+                [showTime]="true"
+                inputId="timeInicio">
+                </p-calendar>
+            </div>
+            <div class="field col-12 md:col-6">
+                <label for="email" class="block">Hora fin</label>
+                <p-calendar 
+                [(ngModel)]="dateFin" 
+                [iconDisplay]="'input'" 
+                [showIcon]="true" 
+                [timeOnly]="true" 
+                [showTime]="true"
+                inputId="timeFin">
+              </p-calendar>
+            </div>
+        </div>
+
+        <div class="flex justify-content-end gap-2">
+            <p-button label="Generar reporte" severity="success"  (onClick)="generarReporte(); visible = false" />
+        </div>
+    </p-dialog> 
+</div>
+
+@if (bannerVisible) {
+    <div class="banner">
+        <div class="panel-container">
+            <div class="side-panel">
+                <div class="panel-header">
+                    <div class="panel-header-title">
+                        <h2 class="panel-header-h2"  >Detalle de ruta</h2>
+                    </div>
+                    <div class="panel-header-button">
+                        <button class="panel-header-button2" (click)="accionBanner()"><i class="pi pi-arrow-right"></i></button>
+                    </div>
+                </div>
+                <div class="panel-section">
+                    <p class="p-contenedor" style="font-size: 14px;">
+                        <span class="span-titulo">Ruta realizada del: </span> {{rutaDetalleInfo?.ruta}}
+                    </p>
+                    
+                    <div class="contenedor-general">
+                        <div class="contenedor-title">
+                            <span class="span-titulo">Total horas <br> trabajadas:</span> {{rutaDetalleInfo?.horasTotales}}
+                        </div>
+                        <div style="display: flex; justify-content: space-around;">
+                            <div>Encendido <br> {{rutaDetalleInfo?.horasEncendido}}</div>
+                            <div>Apagado <br> {{rutaDetalleInfo?.horasApagado}}</div>
+                        </div>
+                    </div>
+    
+                    @for (detalle of rutaDetalle; track detalle) {
+                        <div style="margin-top: 15px;">
+                            <div>
+                                <div>
+                                    <button class="button-accion" [ngClass]="{ 'bg-green': detalle.status === 'Encendido',
+                                        'bg-red': detalle.status === 'Apagado',
+                                        'bg-yellow': detalle.status === 'En movimiento',
+                                     
+                                      }">
+                                        <i class="pi pi-power-off"></i>
+                                      </button>
+                                    <span class="span-titulo" style="font-size: 17px; margin-left: 8px;">{{ detalle.status }}</span>
+                                </div>
+                                <p class="p-contenedor" style="font-weight: 500; margin-bottom: 5px;">{{ detalle.address }}</p>
+                                <div class="div-contendor">
+                                    <span class="span-titulo" style="margin-right: 10px;">Velocidad:</span>
+                                    <span class="span-velocity" [ngClass]="{'bg-gray': detalle.velocity == 0, 'bg-green': detalle.velocity>= 1 && detalle.velocity <= 60,
+                                        'bg-yellow': detalle.velocity >= 61 && detalle.velocity <= 89, 'bg-red': detalle.velocity > 90}"  >{{ detalle.velocity }} km/h</span>
+                                
+                                </div>
+                        
+                                <p class="p-contenedor">
+                                    De <span class="span-titulo">{{ detalle.deviceDateHour.split(' a ')[0] }}</span>
+                                    hasta <span class="span-titulo">{{ detalle.deviceDateHour.split(' a ')[1] }} {{ detalle.eventTypeId }}</span>
+                                </p>
+                            </div>
+                            <p-divider></p-divider>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+}

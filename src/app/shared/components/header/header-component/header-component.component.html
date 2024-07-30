@@ -8,111 +8,123 @@
         </div>
         @if (isExactMapRoute) {
             <app-filtro></app-filtro>
-          }
-
+        }
     </div>
- 
-
 
     <nav class="navbar">
-      
         <ul class="nav-links-header">
-           
             <li>
                 <form action="">
                     <input class="buscador" type="search" required placeholder="Buscar">
                     <i class="pi pi-search icono-buscador"></i>
                 </form>
             </li>
-            <li><i class="pi pi-bell text-4xl icono-notificacion" pBadge value="2" (click)="op2.toggle($event)" ></i>
-                <p-overlayPanel #op2  >
-                    <ng-template pTemplate="content" >
-
-                        <div>
-                            <span >
-                                <p>Tienes 0 notificaciones</p> <button>Ver más</button>  
+            <li>
+                <i class="pi pi-bell text-4xl icono-notificacion" pBadge value="2" (click)="op2.toggle($event)"></i>
+                <p-overlayPanel #op2 appendTo="body" class="notificationMenu">
+                    <ng-template pTemplate="content">
+                        <div style="margin-bottom: 12px;">
+                            <span style="display: flex; justify-content: space-between;">
+                                <p style="margin: 0px;
+                                font-size: 14px;
+                                display: flex;
+                                align-items: center;
+                                margin-right: 8px;">Tienes 0 notificaciones</p> 
+                                <a href="notificaciones" style="padding: 3px; text-decoration: none;   border: 0px;
+                                border-radius: 5px;
+                                font-size: 10px;
+                                height: 20px;
+                                color: white;
+                                background-color: #3b82f6;">Ver todas</a>  
                             </span>
                         </div>
                         <div class="notification-list">
-                            <div class="notification-info">
-                              <h4>Administrador</h4>
-                              <p>Mensaje nuevo</p>
-                              <span>hace 7 meses</span>
-                          </div>
-                      </div>  
+                            <div class="notification-info" style="display: flex;">
+                                <div style="margin-right: 12px;">
+                                    <img style="width: 45px;"
+                                    src="../../../../../assets/imagenes/logo_icono.png" alt="">
+                                </div>
+                                <div>
+                                    <div> <h4 style="margin: 0px;">Administrador</h4></div>
+                                    <div style="width: 150px;"><p style="margin: 5px; font-size: 13px;">Novedad Activo móvil SRO533</p></div>
+                                    <div><span style="font-size: 13px;
+                                        margin: 5px;
+                                        color: #8e9297; font-weight: 600;">hace 1 semana</span></div>
+                                </div>
+                            </div>
+
+                            <p-divider />
+                            <div class="notification-info" style="display: flex;">
+                                <div style="margin-right: 12px;">
+                                    <img style="width: 45px;"
+                                    src="../../../../../assets/imagenes/logo_icono.png" alt="">
+                                </div>
+                                <div>
+                                    <div> <h4 style="margin: 0px;">Administrador</h4></div>
+                                    <div style="width: 150px;"><p style="margin: 5px; font-size: 13px;">Novedad Activo móvil SRO533</p></div>
+                                    <div><span style="font-size: 13px;
+                                        margin: 5px;
+                                        color: #8e9297; font-weight: 600;">hace 1 semana</span></div>
+                                </div>
+                            </div>
+
+                            <p-divider />
+
+                            <div>
+                                <span style="width: 100%;
+                                display: flow;
+                                text-align: center;
+                                font-size: 13px;
+                                color: #3b82f6;
+                                font-weight: 600;"> Ver más notificaciones<i style="font-size: 13px; margin-left: 5px;" class="pi pi-chevron-down"></i></span>
+                            </div>
+
+                        </div>  
                     </ng-template>
                 </p-overlayPanel>
             </li>
-            
             <li>
                 <div class="profile-details" (click)="op.toggle($event)" (click)="toggleRotation()">
                     <div class="profile-content">
                         <img src="https://primefaces.org/cdn/primeng/images/demo/avatar/onyamalimba.png" alt="">
                     </div>
-                        <div class="name-job">
-                            <div class="profile-name" >
-                                Santiago 
-                            </div>
-                            <div class="job">
-                                Último Inicio de Sesión <br> <span style="font-weight: 600;">19/03/2024 1:52 PM</span>
-                            </div>
-                         
+                    <div class="name-job">
+                        <div class="profile-name">Santiago</div>
+                        <div class="job">
+                            Último Inicio de Sesión <br> <span style="font-weight: 600;">19/03/2024 1:52 PM</span>
                         </div>
-                       <i  class="pi pi-angle-down arrow-profile" [style.transform]="arrowTransform"></i>     
+                    </div>
+                    <i class="pi pi-angle-down arrow-profile" [style.transform]="arrowTransform"></i>
                 </div>
-                <style>
 
-                .info {
-                padding: 3px;
-                text-align: center;
-                border-bottom: #f7f7f7;
-                }
-
-                .info span {
-                display: block;
-                font-size: 16 px;
-                font-weight: bold;
-                color: #333;
-                }
-
-                .info p {
-                font-size: 12px;
-                color: #777;
-                margin: 0;
-                }
-
-                .opciones p {
-                font-size: 15px;
-                color: #333;
-                cursor: pointer;
-                margin: 0;
-                padding: 1px 15px;
-                transition: background-color 0.3s ease;
-                }
-
-                .opciones p:hover {
-                background-color: #f0f0f0;
-                }
-   
-                </style>
-                <p-overlayPanel #op  >
-                    <ng-template pTemplate="content" >
-                        <div class="container">
-                            <div class="perfil">
-                                <div class="info">
-                                    <span>Administrador</span>
-                                    <p>Desarrollador</p>
-                                </div>
-                                <div class="opciones">
-                                    <p><i class="fas fa-user"></i>Perfil</p>
-                                    <p><i class="fa-solid fa-circle-info"></i> ¿Necesitas ayuda?</p>
-                                    <p><i class="fa-solid fa-right-from-bracket"></i>Cerrar sesión</p>
-                                </div>
+                <li>
+                    <p-overlayPanel #op appendTo="body" [style]="{ 'margin-top': '4px' }">
+                        <ng-template pTemplate="content">
+                            <div>
+                                <span style="display: flex;">
+                                    <p style="margin: 0px;
+                                    font-size: 13px;
+                                    display: flex;
+                                    align-items: center;
+                                    margin-right: 8px;">Tienes 0 notificaciones nuevas</p> 
+                                    <button style="    border: 0px;
+                                    border-radius: 5px;
+                                    font-size: 10px;
+                                    height: 20px;
+                                    color: white;
+                                    background-color: #3b82f6;">Ver más</button>  
+                                </span>
                             </div>
-                        </div>
-                    </ng-template>
-                </p-overlayPanel>
-              
+                            <div class="notification-list">
+                                <div class="notification-info">
+                                    <h4>Administrador</h4>
+                                    <p>Mensaje nuevo</p>
+                                    <span>hace 7 meses</span>
+                                </div>
+                            </div>  
+                        </ng-template>
+                    </p-overlayPanel>
+
             </li>
         </ul>
     </nav>

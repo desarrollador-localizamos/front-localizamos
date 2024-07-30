@@ -34,11 +34,11 @@ export const routes: Routes = [
             {   path: ':page/3', component: VistaDynamicReporteComponent
 
             },
-            { path: 'mapa', component: MapaComponent },
-            {
-                path: '',
-                loadChildren: () => import('./modulos/modulo.routes').then(m => m.routes)
-              }
+            { path: 'mapa', component: MapaComponent
+
+            },
+            
+            {path: '', loadChildren: () => import('./modulos/modulo.routes').then(m => m.routes)}
            
         ]
     },

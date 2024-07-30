@@ -1,32 +1,31 @@
-<div class="container-card">
+<div class="container-card" >
                  
     <p-card>
         <div class="contenedor1">
             <div style="display: flex;">
                 <div>
-                    @if (responseData.classid == 1) {
-                        <img src="../../../assets/images/mobile_unity_types_lateral/vehiculo_de_transporte/{{responseData.typeimage}}"
-                             alt="{{responseData.classname}}"
-                             title="{{responseData.classname}}" class="">
-                      } @else if (responseData.classid == 2) {
-                        <img src="../../../assets/images/mobile_unity_types_lateral/mascota/{{responseData.typeimage}}"
-                             alt="{{responseData.classname}}"
-                             title="{{responseData.classname}}">
-                      } @else if (responseData.classid == 3) {
-                        <img src="../../../assets/images/mobile_unity_types_lateral/persona/{{responseData.typeimage}}"
-                             alt="{{responseData.classname}}"
-                             title="{{responseData.classname}}">
-                      } @else if (responseData.classid == 4) {
-                        <img src="../../../assets/images/mobile_unity_types_lateral/moto/{{responseData.typeimage}}"
-                             alt="{{responseData.classname}}"
-                             title="{{responseData.classname}}">
-                      } @else if (responseData.classid == 5) {
-                        <img src="../../../assets/images/mobile_unity_types_lateral/maquina_amarilla/{{responseData.typeimage}}"
-                             alt="{{responseData.classname}}"
-                             title="{{responseData.classname}}">
+                    @if (responseData?.classid == 1) {
+                        <img src="../../../assets/images/mobile_unity_types_lateral/vehiculo_de_transporte/{{responseData?.typeimage}}"
+                             alt="{{responseData?.classname}}"
+                             title="{{responseData?.classname}}" class="imagen-lateral">
+                      } @else if (responseData?.classid == 2) {
+                        <img src="../../../assets/images/mobile_unity_types_lateral/mascota/{{responseData?.typeimage}}"
+                             alt="{{responseData?.classname}}"
+                             title="{{responseData?.classname}}" class="imagen-lateral">
+                      } @else if (responseData?.classid == 3) {
+                        <img src="../../../assets/images/mobile_unity_types_lateral/persona/{{responseData?.typeimage}}"
+                             alt="{{responseData?.classname}}"
+                             title="{{responseData?.classname}}" class="imagen-lateral">
+                      } @else if (responseData?.classid == 4) {
+                        <img src="../../../assets/images/mobile_unity_types_lateral/moto/{{responseData?.typeimage}}"
+                             alt="{{responseData?.classname}}"
+                             title="{{responseData?.classname}}" class="imagen-lateral">
+                      } @else if (responseData?.classid == 5) {
+                        <img src="../../../assets/images/mobile_unity_types_lateral/maquina_amarilla/{{responseData?.typeimage}}"
+                             alt="{{responseData?.classname}}"
+                             title="{{responseData?.classname}}" class="imagen-lateral" style="border-color: #808080">
                       }
-                    <img src="../../../assets/images/mobile_unity_types_lateral/maquina_amarilla/{{responseData.typeimage}}" alt="" style="width: 3.5rem;
-                    height: 3.5rem;object-fit: contain; border: 3px solid;border-radius: 30px;border-color: #808080">
+                   
                 </div>
                 <div class="contenedor-info">
                     <div>
@@ -42,15 +41,29 @@
             </div>
             <p-divider />
             <div style="display: flex;">
-                <div>
-                    <p-tag severity="success" value="10 km / h"/>
-                </div>
-                <div>
-                    @if( responseData?.endreporttemperature != null){
-                        <p-tag severity="danger" value="{{ responseData?.endreporttemperature }} °"/>
+            <div>
+                @if (responseData?.endreportvelocity !== undefined) {
+                @switch (true) {
+                    @case (responseData?.endreportvelocity == 0) {
+                    <p-tag severity="secondary" value="{{ responseData?.endreportvelocity }} km/h"/>
                     }
-                   
-                </div>
+                    @case (responseData?.endreportvelocity >= 1 && responseData?.endreportvelocity <= 60) {
+                    <p-tag severity="success" value="{{ responseData?.endreportvelocity }} km/h"/>
+                    }
+                    @case (responseData?.endreportvelocity >= 61 && responseData?.endreportvelocity <= 89) {
+                    <p-tag severity="warning" value="{{ responseData?.endreportvelocity }} km/h"/>
+                    }
+                    @case (responseData?.endreportvelocity >= 90) {
+                    <p-tag severity="danger" value="{{ responseData?.endreportvelocity }} km/h"/>
+                    }
+                    @default {
+                    <p-tag severity="info" value="{{ responseData?.endreportvelocity }} km/h"/>
+                    }
+                }
+                } @else {
+                <p-tag severity="info" value="Velocidad no disponible"/>
+                }
+            </div>
             </div>
         </div>
 
