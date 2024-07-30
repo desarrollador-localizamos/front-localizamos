@@ -5,22 +5,62 @@
         <div class="col-12 md:col-4 p-0 h-screen md:h-auto border border-red-500">
             <div class="box h-auto" style="padding: 20px;">
                 <p-panel header="Seleccionar reporte:" [toggleable]="true">
+                    <!--menu tipos de reportes-->
                     <div class="p-1">
                         <app-select-avanzado
-                            [options]="opciones['reportes']"
-                            placeholder="Seleccionar"
+                            [options]="opciones.reportes"
+                            placeholder="Seleccionar tipo de reporte"
                             styleClass="w-full"
                             (selectionChange)="consultas('reportes',$event)">
                         </app-select-avanzado>
                     </div>
+                    <!--menu reportes del gerencial-->
+                    @if (validar[6]) {
+                        <div class="p-1">
+                            <app-multi-select 
+                                [options]="opciones.repgerencial"
+                                placeholder="Seleccionar reportes a generar"
+                                (selectionChange)="consultas('repgerencial',$event)"
+                            ></app-multi-select>
+                        </div>
+                        }
+                    <!--menu eventos-->
                     @if (validar[5]) { 
                         <div class="p-1">
                             <app-select-avanzado
                               [options]="opciones.eventos"
-                              placeholder="Seleccionar Evento"
+                              placeholder="Seleccionar evento"
                               styleClass="w-full"
                               (selectionChange)="consultas('EventTypes',$event)"
                             ></app-select-avanzado>
+                        </div>
+                        }
+                    <!--menu geocercas-->
+                    @if (validar[7]) {
+                    <div class="p-1">
+                        <app-multi-select 
+                            [options]="opciones.geocercas"
+                            placeholder="Seleccionar geocercas"
+                            (selectionChange)="consultas('Geocercas',$event)"
+                        ></app-multi-select>
+                    </div>
+                    }
+                    @if (validar[8]) {
+                        <div class="p-1">
+                            <app-multi-select 
+                                [options]="opciones.mantenimiento"
+                                placeholder="Seleccionar opc mantenimiento"
+                                (selectionChange)="consultas('Mantenimiento',$event)"
+                            ></app-multi-select>
+                        </div>
+                        }
+                    @if (validar[9]) {
+                        <div class="p-1">
+                            <app-multi-select 
+                                [options]="opciones.gasolina"
+                                placeholder="Seleccionar opcs gasolina"
+                                (selectionChange)="consultas('Gasolina',$event)"
+                            ></app-multi-select>
                         </div>
                         }
                     @if (validar[0]) {
@@ -79,10 +119,13 @@
                     <p-divider />
 
                     <div class=" flex justify-content-center p-1">
+                        @if (validar[10]) {
                         <p-button icon="pi pi-table" [rounded]="true" class="mx-2" (click)="seleccionarGrafico('table')"/>
                         <p-button icon="pi pi-chart-bar" [rounded]="true" severity="secondary" class="mx-2" (click)="seleccionarGrafico('bar')"/>
                         <p-button icon="pi pi-chart-pie" [rounded]="true" severity="success" class="mx-2" (click)="seleccionarGrafico('pie')"/>
+                        }
                     </div>
+                
                    
                 </p-panel>
             </div>
