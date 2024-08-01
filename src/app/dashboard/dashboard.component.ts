@@ -15,7 +15,7 @@ import { BadgeModule } from 'primeng/badge';
 import { ToastModule } from 'primeng/toast'
 import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { MessageService } from 'primeng/api';
-import { TableCustomersComponent } from "../shared/components/tables/table-customers/table-customers.component";
+import { TableCustomersComponent } from "../shared/components/tables/table-customer/table-customers.component";
 import { CustomersComponent } from "../customers/customers.component";
 import { HeaderComponentComponent } from "../shared/components/header/header-component/header-component.component";
 import { SidebarComponentComponent } from "../shared/components/sidebar/sidebar-component/sidebar-component.component";
@@ -42,6 +42,7 @@ import { SidebarRegistrosComponent } from "../shared/components/sidebar/sidebar-
 import { TableSencillaComponent } from "../shared/components/tables/table-sencilla/table-sencilla.component";
 import { TableAvanzadaComponent } from "../shared/components/tables/table-avanzada/table-avanzada.component";
 import { TablePruebaComponent } from "../shared/components/tables/table-prueba/table-prueba.component";
+import { CarouselModule } from 'primeng/carousel';
 
 import { TagModule } from 'primeng/tag';
 import { ButtonTooltiComponent } from "../shared/components/buttons/button-toolti/button-toolti.component";
@@ -53,7 +54,7 @@ import { DataService } from '../core/services/data.service';
     templateUrl: './dashboard.component.html',
     providers: [MessageService],
     styleUrl: './dashboard.component.scss',
-    imports: [EditorComponent, TagModule, FormsModule, ToastModule, ButtonModule, CardModule, TableModule, MenubarModule, InputTextModule, SidebarModule, CommonModule,
+    imports: [CarouselModule,EditorComponent, TagModule, FormsModule, ToastModule, ButtonModule, CardModule, TableModule, MenubarModule, InputTextModule, SidebarModule, CommonModule,
         InputFileSencilloComponent, InputMaskComponent, InputPasswordMsgSeguridadComponent, InputPasswordSencilloComponent, InputCalendarTemplateComponent, InputTextareaComponent,
         InputCalendarSencilloComponent, InputSwitchComponent, InputRadioComponent, InputCheckAvanzadoComponent, InputCheckComponent, InputFileVisualizacionComponent,
         InputFileSencilloAlertaComponent, AvatarModule, BadgeModule, OverlayPanelModule, TableCustomersComponent, CustomersComponent, HeaderComponentComponent, SidebarComponentComponent, MultiInputComponent,
@@ -63,132 +64,18 @@ import { DataService } from '../core/services/data.service';
 
 export class DashboardComponent {
 
+  images = [
+    {url: 'https://www.deltatracking.com/wp-content/uploads/2022/02/03-migrar-unidades-de-GPS-1024x576.jpg', alt: 'Image 1'},
+    {url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnyW_4iKsjfwWVgqYMCmkiEpySsYLCh2icmQ&s', alt: 'Image 2'},
+    {url: 'https://www.deltatracking.com/wp-content/uploads/2022/02/03-migrar-unidades-de-GPS-1024x576.jpg', alt: 'Image 3'},
+  ];
+
     //Funcion para comprobar el metodo post
     
     private authService = inject( AuthService);
-    
-
-    //public user = computed(() => this.authService.currentUser());
+  
 
     public user = computed(() => this.authService.currentUser() );
-
-    tableData = {  // Ejemplo de estructura de datos que se pasa al componente de tabla reutilizable
-    header: [
-      {
-        texto:"id",
-        sortable: true,
-        filter: true
-      },
-      {
-        texto:"name",
-        sortable: false,
-        filter: true
-      },
-      {
-        texto:"country",
-        sortable: true,
-        filter: true
-      },
-      {
-        texto:"company",
-        sortable: false,
-        filter: true
-      },
-      {
-        texto:"date",
-        sortable: false,
-        filter: false
-      },
-      {
-        texto:"status",
-        sortable: true,
-        filter: true
-      },
-      {
-        texto:"verified",
-        sortable: false,
-        filter: false
-      },
-      {
-        texto:"activity",
-        sortable: false,
-        filter: true
-      },
-      {
-        texto:"balance",
-        sortable: false,
-        filter: false
-      },
-      {
-        texto:"status",
-        sortable: true,
-        filter: true
-      },
-      {
-        texto:"acciones",
-        sortable: false,
-        filter: false
-      }
-
-    ],
-    body: [
-      {
-        id: 1000,
-        name: 'James Butt',
-        country: 'Algeria',
-        company: 'Benton, John B Jr',
-        date: '2015-09-13',
-        status: 'unqualified',
-        verified: true,
-        activity: 17,
-        balance: 70663,
-        representative: 'Ioni Bowcher'
-      },
-      {
-        id: 1001,
-        name: 'Josephine Darakjy',
-       
-        company: 'Chanay, Jeffrey A Esq',
-        date: '2019-02-09',
-        status: 'proposal',
-        verified: true,
-        activity: 0,
-        balance: 82429,
-        representative: [{ name: 'Anna Bowcher' }]
-      },
-      {
-        id: 1002,
-        name: 'Art Venere',
-        country: { name: 'France' },
-        company: 'Chemel, James L Cpa',
-        date: '2017-05-13',
-        status: 'qualified',
-        verified: false,
-        activity: 63,
-        balance: 28334,
-        representative: { name: 'Peter Bowcher' }
-      }
-    ],
-    footer: null
-    };
-
-    items: MenuItem[] | undefined;
-
-    sidebarVisible: boolean = false;
-  
-    showMenu: boolean = false;
-
-    userTypes: any[] = [] ;
-    selectedUser: string = "";
-
-    countries: any[] = [];
-    selectedCountry: string = '';
-
-    loading: boolean = false;
-
-
-    public list = [];
-    public mobileUnits = [];
   
     constructor(
       public service: ApirestService, private renderer: Renderer2, private elementRef: ElementRef,private messageService: MessageService,
@@ -202,118 +89,17 @@ export class DashboardComponent {
         } else {
           console.log('No user data available');
         }
-      
-         this.userTypes  = [
-            { name: 'Persona natural' },
-            { name: 'Persona jurídica' },
-            { name: 'Revendedor' },
-           
-          ];
-         
-          console.log(this.tableData);
-        this.countries = [
-          { name: 'Australia', code: 'AU', flagUrl: 'https://www.countryflags.io/AU/flat/32.png' },
-          { name: 'Brazil', code: 'BR', flagUrl: 'https://www.countryflags.io/BR/flat/32.png' },
-          { name: 'China', code: 'CN', flagUrl: 'https://www.countryflags.io/CN/flat/32.png' },
-          { name: 'Egypt', code: 'EG', flagUrl: 'https://www.countryflags.io/EG/flat/32.png' },
-          { name: 'France', code: 'FR', flagUrl: 'https://www.countryflags.io/FR/flat/32.png' },
-          { name: 'Germany', code: 'DE', flagUrl: 'https://www.countryflags.io/DE/flat/32.png' },
-          { name: 'India', code: 'IN', flagUrl: 'https://cdn.countryflags.com/thumbs/india/flag-square-250.png' },
-          { name: 'Japan', code: 'JP', flagUrl: 'https://www.countryflags.io/JP/flat/32.png' },
-          { name: 'Spain', code: 'ES', flagUrl: 'https://www.countryflags.io/ES/flat/32.png' },
-          { name: 'United States', code: 'US', flagUrl: 'https://www.countryflags.io/US/flat/32.png' }
-        ];
+  
+   
         }
       
-      
-    
-      handleValueChange(value: any, id: any): void {
-        console.log('Valor del input:', id, value);
-      }
-
-      load(){
-        console.log("button");
-        this.loading = true;
-        setTimeout(() => {
-          this.loading = false;
-        }, 2000);
-      }
+ 
+     
       onLogout() {
         this.authService.logout();
         
       }
-      
-      
-  openSidebar() {
-    this.sidebarVisible = true;
-  }
-
-  closeSidebar() {
-    this.sidebarVisible = false;
-  }
-
-  saveUser() {
-    console.log('User saved!');
-  }
-
-  updateUser() {
-    console.log('User updated!');
-  }
   
-      arrowTransform: string = 'rotate(0deg)'; // Inicialmente, la flecha no está rotada
-  
-      toggleRotation() {
-        this.arrowTransform = this.arrowTransform === 'rotate(-180deg)' ? 'rotate(0deg)' : 'rotate(-180deg)';
-      }
-    
-      toggleSidebar() {
-        const sidebar = this.elementRef.nativeElement.querySelector('.sidebar');
-        const logo1 = this.elementRef.nativeElement.querySelector('.logo2');
-    
-    
-        if (sidebar.classList.contains('icon-only')) {
-          this.renderer.removeClass(sidebar, 'icon-only');
-        
-        } else {
-          this.renderer.addClass(sidebar, 'icon-only');
-        }
-    
-    
-        if (logo1.classList.contains('cerrar')) {
-          this.renderer.removeClass(logo1, 'cerrar');
-        
-        } else {
-          this.renderer.addClass(logo1, 'cerrar');
-        }     
-      }
-  
-      //Funcion para comprobar el metodo post
-  
-      obtenerLlaves()
-      {
-          
-          let url = 'obtener-llaves';
-          let driver_id = "3";
-        
-          let body = new FormData();
-          body.append('Driver_id', driver_id);
-            this.service.queryPost(url, body).subscribe(
-              response=>
-              {
-                  let result = response;
-               
-                  console.log(result)
-              },
-              err => 
-              {
-                  console.log(err);
-              }
-          );
-      }
-
-      //funcion upload
-
-     
 // 5499
 
 

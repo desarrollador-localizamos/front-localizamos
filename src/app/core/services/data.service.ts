@@ -8,9 +8,10 @@ import { HttpClient } from '@angular/common/http';
 })
 export class DataService {
 
+  constructor(private http: HttpClient ) {}
+
   private ubicationSubject = new BehaviorSubject<number[]>([]);
   ubication$ = this.ubicationSubject.asObservable();
-  constructor(private http: HttpClient ) {}
 
   private reporteRutaSubject = new Subject<number>();
   reporteRuta$ = this.reporteRutaSubject.asObservable();
@@ -31,6 +32,14 @@ export class DataService {
   itemsSelected = this.itemsSelectedSubject.asObservable();
 
 
+  private colorSubject = new BehaviorSubject<string>('#5686d3'); // Color por defecto
+  color$ = this.colorSubject.asObservable();
+
+  private geofenceCoordinatesSubject = new BehaviorSubject<string[]>([]);
+  geofenceCoordinates$ = this.geofenceCoordinatesSubject.asObservable();
+
+  private mapCleanupSource = new Subject<void>();
+  mapCleanup$ = this.mapCleanupSource.asObservable();
 
   private readonly baseUrl: string = environments.baseUrl;
 
@@ -63,49 +72,7 @@ export class DataService {
       console.log("joins2",joins);
     }
    
-    const url = `${this.baseUrl}visor`;
-    const body = {
-      entityName : selectedLink,
-      fields : data,
-      conditions: condition,
-      relations: relations,
-      joins: joins,
-      multiconditions: multiconditions,
-      orders:orders,
-      takes:take,
-      funtion:funcion
-    } ;
-    console.log('Formato del cuerpo:', JSON.stringify(body)); // Verifica el formato en consola
-    
-    return this.http.post(url, body);
-  }
-
-  fetchDataFiltroFunciones(fieldMappings: any, selectedLink: string, fieldRelations : any, condition?: any, fieldJoins?: any, multiconditions?: any, orders?:any, take?: number, funcion?: string): Observable<any> {
-
-    const data = fieldMappings[selectedLink] || [];
-    let dataCompleta : any;
-
-    let relations : any;
-    let joins: any[] = [];
-
-    if(fieldRelations.length = 0){
-      relations= [];
-    }
-    else{
-      relations = fieldRelations[selectedLink] || []
-      
-    }
-    console.log("joins",fieldJoins);
-    if(fieldJoins.length = 0){
-      joins= [];
-    
-    }
-    else{
-      joins = fieldJoins[selectedLink] || []
-      console.log("joins2",joins);
-    }
-   
-    const url = `${this.baseUrl}filtrar-evento`;
+    const url = `${this.baseUrl}Database/visor`;
     const body = {
       entityName : selectedLink,
       fields : data,
@@ -147,7 +114,7 @@ export class DataService {
       console.log("joins2",joins);
     }
    
-    const url = `${this.baseUrl}report-ruta`;
+    const url = `${this.baseUrl}mobileUnities/report-ruta`;
     const body = {
       entityName : selectedLink,
       fields : data,
@@ -188,7 +155,7 @@ export class DataService {
       console.log("joins2",joins);
     }
    
-    const url = `${this.baseUrl}edit`;
+    const url = `${this.baseUrl}Database/edit`;
     const body = {
       entityName : selectedLink,
       fields : data,
@@ -226,7 +193,7 @@ export class DataService {
       joins = fieldJoins[selectedLink] || []
     }
    
-    const url = `${this.baseUrl}delete`;
+    const url = `${this.baseUrl}Database/delete`;
     const body = {
       entityName : selectedLink,
       fields : data,
@@ -250,6 +217,12 @@ export class DataService {
     }
   }
 
+  // Método para actualizar todos los valores
+  setUbicationValues(values: number[]) {
+    this.ubicationSubject.next(values);
+  }
+
+  // Método para obtener los valores
   getUbicationValue(): Observable<number[]> {
     return this.ubication$;
   }
@@ -296,7 +269,16 @@ export class DataService {
     this.reporteViajeSubject.next(unityId);
   }
 
- 
+  setColor(color: string) {
+    this.colorSubject.next(color);
+  }
 
+  setGeofenceCoordinates(coordinates: string[]) {
+    this.geofenceCoordinatesSubject.next(coordinates);
+  }
+
+  triggerMapCleanup() {
+    this.mapCleanupSource.next();
+  }
 
 }

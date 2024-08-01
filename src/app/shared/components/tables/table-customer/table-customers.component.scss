@@ -1,0 +1,46 @@
+::ng-deep .p-component {
+    font-size: 0.9rem;
+    
+}
+
+
+::ng-deep .p-datatable .p-datatable-tbody > tr > td {
+    text-align: left;
+    border: 1px solid #e5e7eb;
+    border-width: 0 0 1px 0;
+    padding: 0.6rem 0.6rem;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  @media screen and (max-width: 600px) {
+    .container {
+      flex-direction: column;
+    }
+  }
+
+
+  ::ng-deep  .p-datatable .p-datatable-header {
+    background: #ffffff;
+    border: 0;
+}
+
+::ng-deep  .p-datatable .p-datatable-thead > tr > th {
+    text-align: left;
+    padding: 1rem 1rem;
+    /* border: 1px solid #e5e7eb; */
+    border-width: 0 0 1px 0;
+    font-weight: 700;
+    color: #374151;
+    background: #ebecee;
+    transition: box-shadow 0.2s;
+}
+
+::ng-deep input.p-inputtext.p-component.p-element.ng-untouched.ng-pristine.ng-valid{
+    border: 0;
+    background-color: #e5e7eb;
+}

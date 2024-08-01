@@ -1,0 +1,47 @@
+<div class="card">
+    <p-table 
+        [value]="data"
+        [paginator]="paginator"
+        [rows]="rows"
+        [dataKey]="dataKey"
+        [rowsPerPageOptions]="rowsPerPageOptions"
+        [globalFilterFields]="globalFilterFields"
+        [scrollable]="true" 
+        scrollHeight="400px" 
+        rowGroupMode="subheader" 
+        [tableStyle]="{'min-width': '60rem'}">
+            
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Email</th>
+                    <th>ID</th>
+                    <th>Fecha Inicio</th>
+                    <th>Fecha Fin</th>
+                    <th>Acciones</th>
+                </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="groupheader" let-groupKey let-groupValue="groupValue">
+                <tr pRowGroupHeader>
+                    <td colspan="5">
+                        <span class="font-bold ml-2">{{ groupKey }}</span>
+                        <span class="font-bold ml-2">Total correos: {{ calculateCustomerTotal(groupKey) }}</span>
+                    </td>
+                </tr>
+            </ng-template>
+            
+            <ng-template pTemplate="body" let-groupKey let-groupValue="groupValue">
+                <tr *ngFor="let item of groupedData[groupKey]">
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.scheduledStartTime }}</td>
+                    <td>{{ item.scheduledEndTime }}</td>
+                    <td>
+                        <!-- Aquí puedes agregar botones u otras acciones -->
+                        Acciones
+                    </td>
+                </tr>
+            </ng-template>
+    </p-table>
+  </div>
+  

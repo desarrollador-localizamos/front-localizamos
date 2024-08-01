@@ -1,0 +1,194 @@
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    box-sizing: border-box;
+  }
+  
+  
+  .container-child {
+    position: relative;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: calc(100vh - 65px);
+    overflow: hidden;
+  }
+  
+  /* Estilos para el carrusel de fondo */
+  .background-carousel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: calc(100vh - 65px);
+    z-index: 1;
+    object-fit: contain;
+    align-content: center;
+  }
+  
+  .carousel-image {
+    width: 100%;
+    height: calc(100vh - 65px);
+    object-fit: cover;
+  }
+  
+  /* Estilos para el contenido superpuesto */
+  .content-overlay {
+    position: relative;
+    z-index: 2;
+    padding: 15px;
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+  }
+  
+  /* Estilos para las tarjetas de información superior */
+  .card-top-info {
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+      rgba(0, 0, 0, 0.22) 0px 15px 12px;
+      margin: 15px;
+    border-radius:2rem;
+    gap: 2rem;
+    text-align: center;
+    background-color: white;
+    min-height: 130px;
+  }
+
+  
+
+  .contenedor-icono-card i{
+    width: 50px;
+    height: 50px;
+    font-size: 30px;
+    display: flex;
+    text-align: center;
+    justify-content: center;
+    background: #3b82f6;
+    color: white;
+    border-radius: 50%;
+     align-items: center;
+  }
+
+  span.span-valor{
+    font-size: 25px;
+     font-weight: 600;
+     color: #6b7280;
+  }
+
+  p.texto-valor{
+    margin: 0px;
+    font-size: 14px;
+    line-height: 13px;
+    font-weight: 500;
+    color: #6b7280;
+  }
+  
+//   .card-top-info img {
+//     margin-top: 20px;
+//     margin-bottom: 10px;
+//     height: 50px;
+//   }
+  
+//   .card-top-info .info {
+//     font-size: 0.7rem;
+//     width: 5rem;
+//   }
+  
+//   .card-top-info .info span {
+//     font-size: 1rem;
+//   }
+  
+//   /* Estilos para las tarjetas PrimeNG */
+//   :host ::ng-deep .p-card .p-card-title {
+//     font-size: 1rem;
+//   }
+  
+//   :host ::ng-deep .p-card .p-card-subtitle {
+//     font-size: 0.7rem;
+//     padding-bottom: 0;
+//   }
+  
+//   :host ::ng-deep .p-card .p-card-content {
+//     padding-bottom: 0;
+//   }
+  
+//   .p-card-body {
+//     padding: 0;
+//   }
+  
+//   /* Estilos para el contenido de las tarjetas */
+//   .card-content {
+//     display: flex;
+//     align-items: center;
+//     justify-content: space-between;
+//     padding: 5px;
+//   }
+  
+//   .card-content a {
+//     display: flex;
+//     align-items: center;
+//   }
+  
+//   .card-content p {
+//     font-size: 0.7rem;
+//     margin: 0;
+//   }
+  
+//   .card-content .link {
+//     display: flex;
+//     align-items: center;
+//   }
+  
+//   .card-content .km {
+//     font-size: 0.7rem;
+//     background-color: green;
+//     color: white;
+//     padding: 4px;
+//     border-radius: 15px;
+//   }
+  
+//   .estado {
+//     background-color: green;
+//     height: 7px;
+//     width: 7px;
+//     border-radius: 50%;
+//     margin-right: 10px;
+//   }
+  
+//   .pi.pi-car {
+//     font-size: 0.7rem;
+//     margin-right: 10px;
+//   }
+  
+//   /* Estilos para el enlace "Ver más" */
+//   .vermas {
+//     display: flex;
+//     justify-content: flex-end;
+//   }
+  
+//   .vermas p {
+//     margin-top: 10px;
+//     margin-bottom: 0;
+//     color: green;
+//     font-size: 0.7rem;
+//   }
+  
+  /* Estilos para ocultar elementos del carrusel PrimeNG */
+  :host ::ng-deep .p-carousel .p-carousel-indicators,
+  :host ::ng-deep .p-carousel .p-carousel-prev,
+  :host ::ng-deep .p-carousel .p-carousel-next {
+    display: none !important;
+  }
+  
+  @media (max-width: 768px) {
+    .background-carousel,
+    .carousel-image {
+      width: 100vw; /* Usa el ancho total de la ventana */
+      height: 100vh; /* Usa la altura total de la ventana */
+      max-width: none;
+      max-height: none;
+    }
+  }

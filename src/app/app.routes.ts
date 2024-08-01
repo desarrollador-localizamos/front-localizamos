@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { CustomersComponent } from './customers/customers.component';
-import { TableCustomersComponent } from './shared/components/tables/table-customers/table-customers.component';
+import { TableCustomersComponent } from './shared/components/tables/table-customer/table-customers.component';
 import { LayoutComponent } from './shared/components/layout/layout.component';
 //import { isAuthenticatedGuard } from './core/guards';
 import { VistaDynamicComponent } from './vistas/vista-dynamic/vista-dynamic.component';

@@ -67,19 +67,19 @@
 }
 
 .contenedor-boton-realtime button{
-    width: 40px;
-    height: 40px;
+    width: 32px;
+    height: 32px;
     border-radius: 5px;
     border: 0px;
     background-color: #22e55c;
     color: white;
 }
 .contenedor-boton-geocercas button{
-    width: 40px;
+    width: 32px;
+    height: 32px;
     border: 0px;
-    font-size: 20px;
+    font-size: 18px;
     border-radius: 5px;
-    height: 40px;
     background-color: #3b82f6;
     color: white;
 }
@@ -108,8 +108,6 @@
 }
 
 :host ::ng-deep .leaflet-control-zoom a {
-    width: 36px !important;
-  
     font-size: 18px; /* Ajusta el tamaño del ícono según sea necesario */
     text-align: center; /* Alineación del ícono */
 }
@@ -133,3 +131,12 @@
 :host ::ng-deep .leaflet-control-zoom .leaflet-control-zoom-out span {
     visibility: hidden; /* Oculta el ícono predeterminado */
 }
+
+:host ::ng-deep .leaflet-touch .leaflet-bar a {
+    width: 30px !important;
+    height: 30px !important;
+    line-height: 36px !important;
+    font-size: 18px !important;
+   
+}
+

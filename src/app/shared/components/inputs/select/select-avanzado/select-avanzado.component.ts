@@ -5,7 +5,7 @@ import { DropdownModule } from 'primeng/dropdown';
 export interface data {
   name: string;
   icon?: string;
-  value: any;
+  value: any | null;
 }
 
 @Component({
@@ -16,9 +16,11 @@ export interface data {
   styleUrl: './select-avanzado.component.scss'
 })
 export class SelectAvanzadoComponent {
+  [x: string]: any;
   @Input() options: data[] = [];
   @Input() placeholder: string = 'Select an option';
   @Input() styleClass: string = 'w-20rem';
+  @Input() reset: boolean = false;
   @Output() selectionChange = new EventEmitter<data>();
 
   selectedOption: data | undefined;
@@ -27,4 +29,11 @@ export class SelectAvanzadoComponent {
   onSelectionChange() {
     this.selectionChange.emit(this.selectedOption);
   }
+
+  public clear() {
+    this.selectedOption = undefined;
+    this.filterValue = '';
+    this.selectionChange.emit({ name: '', value: null });
+  }
+  
 }

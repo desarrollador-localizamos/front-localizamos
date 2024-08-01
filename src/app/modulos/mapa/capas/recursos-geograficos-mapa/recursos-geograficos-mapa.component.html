@@ -19,15 +19,17 @@
                     @if (validar) {
                     <div class="p-field">
                         <label for="cliente">Cliente</label>
-                        <app-select-avanzado [style]="{'width':'200px !important;'}"
+                        <app-select-avanzado
+                        #clienteSelect
+                        [style]="{'width':'200px !important;'}"
                         [options]="opciones.clientes"
                         placeholder="Seleccionar cliente"
                         styleClass="w-full"
-                        (selectionChange)="consultas('Customers',$event)"
                         (click)="consultas('Customers')"
+                        (selectionChange)="onClienteSeleccionadoChange($event)"
                       ></app-select-avanzado>
                     </div>
-                }
+                    }
                     <div class="p-field">
                         <label for="tipo">Tipo</label>
                         <p-dropdown id="tipo" [(ngModel)]="tipoSeleccionado" [options]="tipos" optionLabel="name" placeholder="Seleccione un tipo" [style]="{ width: '100%' }" ></p-dropdown>
@@ -38,29 +40,34 @@
                     </div>
                     <div class="p-field">
                         <label for="color">Color</label>
-                        <p-colorPicker id="color" [(ngModel)]="colorSeleccionado"></p-colorPicker>
+                        <p-colorPicker [(ngModel)]="colorSeleccionado" (onChange)="onColorChange($event)"></p-colorPicker>
+
                     </div>
                     <div class="p-field" style="display: flex; justify-content: space-between;">
                         <label for="color">Es privado</label>
-                        <p-inputSwitch [(ngModel)]="checkedPrivado" />
+                        <p-inputSwitch [(ngModel)]="checkedPrivado" [trueValue]="1" [falseValue]="0"></p-inputSwitch>
                     </div>
                     <div class="p-field" style="display: flex; justify-content: space-between;">
                         <label for="color">Aplica dirección</label>
-                        <p-inputSwitch [(ngModel)]="checkedDireccion" />
+                        <p-inputSwitch [(ngModel)]="checkedDireccion" [trueValue]="1" [falseValue]="0"></p-inputSwitch>
                     </div>
                     <div class="p-field" style="display: flex; justify-content: space-between;">
                         <label for="color">Estado</label>
-                        <p-inputSwitch [(ngModel)]="checkedEstado" />
+                        <p-inputSwitch [(ngModel)]="checkedEstado" [trueValue]="1" [falseValue]="0"></p-inputSwitch>
                     </div>
 
                     <div class="opciones">
-                        <p-button severity="success" label="Guardar" icon="pi pi-plus" (click)="consultas('GeographicalResources');"/>
-                        <p-button severity="secondary" label="Cancelar" icon="pi pi-times" />
+                        <p-button severity="success" label="Guardar" icon="pi pi-plus" (click)="consultas('GeographicalResources');" 
+                            [disabled]="!isFormValid()" />
+                        <p-button severity="secondary" label="Limpiar" icon="pi pi-times" (click)="limpiar()" />
                     </div>
                 </div>
               
             </div>
         </div>
     </div>
+
+    <p-toast [breakpoints]="{ '920px': { width: '100%', right: '0', left: '0' } }"></p-toast>
+
 </div>
 }

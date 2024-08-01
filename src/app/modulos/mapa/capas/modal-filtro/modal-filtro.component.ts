@@ -27,13 +27,15 @@ import { DataView } from 'primeng/dataview';
 export class ModalFiltroComponent implements OnInit {
 
   @ViewChild('dv') dataView!: DataView;
-  checkedStates: { [key: string]: boolean } = {};
-  searchTerm: string = '';
-  filteredResults: any[] = [];
-  visible: boolean = false;
-  disminuir: boolean = false;
+  protected checkedStates: { [key: string]: boolean } = {};
+  protected searchTerm: string = '';
+  protected filteredResults: any[] = [];
+  protected visible: boolean = false;
+  protected disminuir: boolean = false;
   protected result: any = {};
-  allResults: any[] = []; // Nueva propiedad para almacenar todos los resultados
+  protected allResults: any[] = []; 
+  protected selectedIds: number[] = []; // Array para almacenar los IDs seleccionados
+
 
 
   public list: { [key: string]: any[] } = {   
@@ -47,18 +49,6 @@ export class ModalFiltroComponent implements OnInit {
       {"campo":"mobileUnities.endreport.mobilestatus","texto":"Estado"},
       {"campo":"mobileUnities.id","texto":"id"},
       {"campo":"customerId","texto":"Customer"}
-    ], 
-
-    Devices_:  [
-      {"campo":"mobileUnities.plate","texto":"placa"},
-      {"campo":"mobileUnities.id","texto":"Id de la unidad"},
-      {"campo":"mobileUnities.endreport.device_date_hour","texto":"hora"},
-      {"campo":"mobileUnities.endreport.velocity","texto":"Velocidad"},
-      {"campo":"mobileUnities.endreport.customer_name","texto":"nombre"},
-      {"campo":"mobileUnities.endreport.mobilestatus","texto":"Estado"},
-      {"campo":"mobileUnities.id","texto":"id"},
-      {"campo":"customerId","texto":"Customer"},
-      {"campo":"Apagado","texto":""}
     ], 
 
   };
@@ -90,18 +80,43 @@ export class ModalFiltroComponent implements OnInit {
   }
 
 
-  consultarActivos() {
-    this.dataService.fetchData(this.list, "Devices", this.fieldRelations, {"customerId":1655}, {}, undefined)
+  protected consultarActivos() {
+    this.dataService.fetchData(this.list, "Devices", this.fieldRelations, {"customerId":1655}, {}, undefined, "", 0, "filtro")
       .subscribe(response => {
         this.result = response;
-        this.allResults = this.result.body || []; // Guarda todos los resultados
+        this.allResults = this.result.body[0] || []; // Guarda todos los resultados
         this.filteredResults = this.allResults; // Inicialmente, muestra todos los resultados
         console.log("holi2", this.result);
         this.dataService.setResponseFiltro(response);
       });
   }
 
-  filterResults() {
+  protected functionMovimiento() {
+    console.log('Movimiento');
+    this.filteredResults = this.result.body[2] || []; 
+  }
+  
+  protected functionDetenido() {
+    console.log('Detenido');
+    this.filteredResults = this.result.body[4] || []; 
+  }
+  
+  protected functionApagado() {
+    console.log('Apagado');
+    this.filteredResults = this.result.body[1] || []; 
+  }
+  
+  protected functionSinReportar() {
+    console.log('Sin reportar');
+    this.filteredResults = this.result.body[3] || [];
+  }
+  
+  protected functionTotal() {
+    console.log('Total');
+    this.filteredResults = this.result.body[0] || [];
+  }
+
+  protected filterResults() {
     if (!this.searchTerm) {
       this.filteredResults = this.allResults;
     } else {
@@ -115,64 +130,71 @@ export class ModalFiltroComponent implements OnInit {
     }
   }
 
-  onSearch(event: any) {
+  protected onSearch(event: any) {
     this.searchTerm = event.target.value;
     this.filterResults();
   }
 
-  handleFilterClick(state: boolean) {
+  protected handleFilterClick(state: boolean) {
     this.visible = state;
     if (state) {
       this.consultarActivos();
     }
   }
 
-  toggleDisminuir(): void {
+  protected toggleDisminuir(): void {
     this.disminuir = !this.disminuir;
     console.log('Cambio el valor a', this.disminuir);
   }
 
   seleccionar() {
+    // Marcar todos los elementos como seleccionados
     this.filteredResults.forEach(item => {
       this.checkedStates[item.mobileUnitiesid] = true;
     });
-    console.log('Selected items:', this.getSelectedItems());
+    
+    // Actualizar la lista de IDs seleccionados
+    this.updateSelectedIds();
   }
-
+  
   limpiar() {
+    // Desmarcar todos los elementos
     this.filteredResults.forEach(item => {
       this.checkedStates[item.mobileUnitiesid] = false;
     });
+    
+    // Limpiar la lista de IDs seleccionados
+    this.selectedIds = [];
+    this.updateSelectedIds();
     console.log('Cleared selection');
   }
-
-  getSelectedItems() {
-    return this.filteredResults.filter(item => this.checkedStates[item.mobileUnitiesid]);
-  }
-
   
-  functionMovimiento() {
-    console.log('Movimiento');
+  protected getSelectedItems() {
+    this.selectedIds = this.filteredResults
+      .filter(item => this.checkedStates[item.mobileUnitiesid])
+      .map(item => item.mobileUnitiesid);
+  
+    this.updateSelectedIds();
+    return this.selectedIds;
   }
-
-  functionDetenido() {
-    console.log('Detenido');
-  }
-
-  functionApagado() {
-    console.log('Apagado');
-    this.dataService.fetchDataFiltroFunciones(this.list, "Devices_", this.fieldRelations, {"customerId":1655}, {}, {},{}, 0,"filtro")
-      .subscribe(response => {
-        this.result = response;
-        this.allResults = this.result.body || []; // Guarda todos los resultados
-        this.filteredResults = this.allResults; // Inicialmente, muestra todos los resultados
-        console.log("holi2", this.result);
-        this.dataService.setResponseFiltro(response);
-      });
-  }
-
-  functionSinReportar() {
-    console.log('Sin reportar');
+  
+  updateSelectedIds() {
+    // Obtener la lista de IDs seleccionados sin duplicados
+    const newSelectedIds = this.filteredResults
+      .filter(item => this.checkedStates[item.mobileUnitiesid])
+      .map(item => item.mobileUnitiesid);
+    
+    // Actualizar `selectedIds` con los nuevos IDs únicos
+    this.selectedIds = newSelectedIds;
+  
+    // Actualizar el servicio con los IDs seleccionados o vacíos
+    if (this.selectedIds.length === 0) {
+      this.dataService.setUbicationValues([]);
+    } else {
+      this.dataService.setUbicationValues(this.selectedIds);
+    }
+  
+    console.log('Selected IDs:', this.selectedIds);
   }
 
 

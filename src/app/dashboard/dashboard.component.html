@@ -1,193 +1,211 @@
-<!--<div style="text-align: center;">
-  <Label>
-    <h3>
-      Componentes reutilizables
-    </h3>
-  </Label>
-</div>
-<div style="padding: 30px; ">
-  <h5>input number sencillo</h5>
-  <app-multi-input  type="number" id="input1" name="input1" label="Input 1" 
-    (valueChange)="handleValueChange($event.value, $event.id)">
-  </app-multi-input>
-</div>
+<div class="container">
+  <div class="container-child">
+    <div class="background-carousel">
+      <p-carousel
+        [value]="images"
+        [circular]="true"
+        [autoplayInterval]="5000"
+        [showIndicators]="false"
+      >
+        <ng-template pTemplate="item" let-image>
+          <img [src]="image.url" [alt]="image.alt" class="carousel-image" />
+        </ng-template>
+      </p-carousel>
+    </div>
+    <div class="content-overlay">
+      <div class="grid">
+        <div class="col-12 lg:col-8">
+          <div >
+            <div class="card-top flex flex-wrap">
 
-<div style="padding: 30px;">
-  <h5>input text sencillo</h5>
-  <app-multi-input  type="text" id="input2" name="input2" label="Input 2" 
-    (valueChange)="handleValueChange($event.value, $event.id)">
-  </app-multi-input>
-</div>
+              <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center " style="height: 100%;align-content: flex-start;">
+                    <div class="contenedor-icono-card">
+                      <i class="fi fi-rr-cars"></i>
+                    </div>
+                
+                  </div>
 
-<div style="padding: 30px; text-align: center;">
-  <h5>input range</h5>
-    <app-input-range></app-input-range>
-</div>
+                  <div class="ps-3 components">
+                    <div>
+                      <span class="span-valor">5270</span>
+                      <p class="texto-valor" > Unidades en Plataforma</p>
+                    </div>
 
-<div style="padding: 30px; text-align: center;">
-  <h5>input select</h5>
-  <app-input-select 
-    [options]="countries" 
-    [(ngModel)]="selectedCountry"
-    placeholder="Selecciona una ciudad"
-    label="Departamento"
-    id="countrySelect"
-    (valueChange)="handleValueChange($event.value, $event.id)">
-  </app-input-select>
-</div>
+                  
+                  </div>
 
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="height: 100%;align-content: flex-end;">
+                    <div  class="contenedor-icono-card">
+                      <i class="fi fi-rr-arrow-small-right"></i>
+                    </div>
+                
+                  </div>
+              </div>
 
-<div style="padding: 30px; text-align: center;">
-  <h5>input color</h5>
-  <input type="color">
-</div>
+              <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center " style="height: 100%;align-content: flex-start;">
+                    <div class="contenedor-icono-card">
+                      <i class="fi fi-br-signal-stream"></i>
+                    </div>
+                
+                  </div>
 
-<div style="padding: 30px; text-align: center;">
-  <h5>input file sencillo</h5>
-  <app-input-file-sencillo>
+                  <div class="ps-3 components">
+                    <div>
+                      <span class="span-valor">2233/5270</span>
+                      <p class="texto-valor" > Unidades Reportando</p>
+                    </div>
 
-  </app-input-file-sencillo>
-</div>
+                  
+                  </div>
 
+                  <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="height: 100%;align-content: flex-end;">
+                    <div  class="contenedor-icono-card">
+                      <i class="fi fi-rr-arrow-small-right"></i>
+                    </div>
+                
+                  </div>
+              </div>
 
-<div style="padding: 30px; text-align: center;">
-  <h5>input file sencillo con alerta</h5>
-<app-input-file-sencillo-alerta>
-    
-</app-input-file-sencillo-alerta>
-</div>
+              <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center " style="height: 100%;align-content: flex-start;">
+                  <div class="contenedor-icono-card">
+                    <i class="fi fi-bs-bell-notification-social-media"></i>
+                  </div>
+              
+                </div>
 
+                <div class="ps-3 components">
+                  <div>
+                    <span class="span-valor">0</span>
+                    <p class="texto-valor" > Notificaciones Pendientes</p>
+                  </div>
 
-<div style="padding: 30px; text-align: center;">
-  <h5>input file avanzado con alerta</h5>
-  <app-input-file-visualizacion></app-input-file-visualizacion>
-</div>
+                
+                </div>
 
-<div style="padding: 30px; text-align: center;">
-  <h5>input check sencillo</h5>
-  <app-input-check></app-input-check>
-</div>
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="height: 100%;align-content: flex-end;">
+                  <div  class="contenedor-icono-card">
+                    <i class="fi fi-rr-arrow-small-right"></i>
+                  </div>
+              
+                </div>
+              </div>
 
-<div style="padding: 30px; text-align: center;">
-  <h5>input check doble</h5>
-  <app-input-check-avanzado></app-input-check-avanzado>
-</div>
- 
-<div style="padding: 30px; text-align: center;">
-  <h5>input radio</h5>
-  <app-input-radio></app-input-radio>
-</div>
+            
+            </div>
+
+          </div>
+
+          <div>
+            <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
+
+             <div>
+              <span>Ubicación</span>
+              <p>Conozca el estado y ubicación de sus activos móviles</p>
+             </div>
+             <div>
+              <i class="fi fi-rr-motorcycle" style="width: 30px; height: 30px;"></i>
+              <i class="fi fi-bs-truck-side" style="width: 30px; height: 30px;"></i>
+              <i class="fi fi-rr-car-side" style="width: 30px; height: 30px;"></i>
+              <i class="fi fi-rs-excavator" style="width: 30px; height: 30px;"></i>
+
+             </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col-12 lg:col-4">
+        
+          <div>
+            <div class="col-12">
+              <div class="card-top-info " >
+                <div > 
+                  <img src="http://aplicacion.localizamos.co/assets/images/dashboard/box2.jpg" alt="" style="width: 100%; height: 120px; border-radius: 2rem 2rem 0rem 0rem;">
+
+                </div>
+
+                <div>
+                  <span style="display: flex;
+                  font-weight: 600;
+                  font-size: 15px;
+                  padding: 0px 8px 0px 8px;
+                  color: #6b7280;">Reporte y Analiticas</span>
+                  <p style="margin: 0px;
+                  font-size: 13px;
+                  display: flex;
+                  text-align: left;
+                  padding: 0px 8px 0px 8px;
+                  font-weight: 400;
+                  color: #3b82f6;">Obtenga los reportes y datos acerca de su información</p>
+                  <div >
+                   <a href="#" style="text-decoration: none"><h3 style="display: flex;
+                    padding: 10px;
+                    margin: 0px;
+                    color: #818791;
+                    font-weight: 600;">Generar certificado <i style="display: flex;
+    align-items: center;
+    margin-left: 5px;" class="fi fi-rs-features-alt"></i></h3> </a> 
+                  </div>
+
+                  <div>
+                    <span>Reportes programados</span>
+                  </div>
+                  <div>
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-12">
+              <div class="card-top-info " >
+                <div > 
+                  <img src="http://aplicacion.localizamos.co/assets/images/dashboard/box2.jpg" alt="" style="width: 100%; height: 100px; border-radius: 2rem 2rem 0rem 0rem;">
+
+                </div>
+
+                <div>
+                  <span>Reporte y Analiticas</span>
+                  <p>Obtenga los reportes y datos acerca de su información</p>
+                  <div>
+                    <h3>Generar certificado</h3>
+                  </div>
+                  <div>
+
+                  </div>
+                  <div>
+                    <span>Reportes programados</span>
+                  </div>
+                  <div>
+
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+          
+
+          </div>
+
+        </div>
+      </div>
       
-<div style="padding: 30px; text-align: center;">
-  <h5>input switch</h5>
-  <app-input-switch></app-input-switch>
+    
+    </div>
+  </div>
 </div>
 
-<div style="padding: 30px; text-align: center;">
-  <h5>input calendar sencillo con variables</h5>
-  <app-input-calendar-sencillo></app-input-calendar-sencillo>
-</div>
-
-<div style="padding: 30px; text-align: center;">
-  <h5>input calendar template</h5>
-  <app-input-calendar-template></app-input-calendar-template>
-</div>
-
-<div style="padding: 30px; text-align: center;">
-  <h5>input textarea</h5>
-  <app-input-textarea></app-input-textarea>
-</div>
-
-<div style="padding: 30px; text-align: center;">
-  <h5>input password sencillo</h5>
-  <app-input-password-sencillo></app-input-password-sencillo>
-</div>
-
-<div style="padding: 30px; text-align: center;">
-  <h5>input password mensaje</h5>
-  <app-input-password-msg-seguridad></app-input-password-msg-seguridad>
-</div>
-
-<div style="padding: 30px; text-align: center;">
-  <h5>input number especificos</h5>
-  <app-input-mask></app-input-mask>
-</div>
-
-
-<div style="padding: 30px; text-align: center;">
-  <h5>input number con comas, temp etc..</h5>
-  <app-input-multi-number></app-input-multi-number>
-</div>
-
-
-<div style="padding: 30px; text-align: center;">
-  <h5> button sencillo</h5>
-    <app-button-sencillo 
-    label="Search" 
-    icon="pi pi-check" 
-    color="danger" 
-    size="md" 
-    [loading]="loading" 
-    (onClick)="load()">
-  </app-button-sencillo>
-
-</div>
-
-
-<div style="padding: 30px; text-align: center;">
-  <h5>button sencillo que abre modal</h5>
-  
-<app-button-sencillo 
-icon="pi pi-arrow-right"
-color="primary" 
-size="md" 
-(onClick)="openSidebar()">
-</app-button-sencillo>
-</div>
-
-
-<div style="padding: 30px; text-align: center;">
-  <h5>button sencillo que ejecuta funcion save user</h5>
-  
-<app-button-sencillo 
-label="Save"
-icon="pi pi-save"
-color="success" 
-size="md" 
-(onClick)="saveUser()">
-</app-button-sencillo>
-</div>
-
-
-<div style="padding: 30px; text-align: center;">
-  <h5>button sencillo que ejecuta funcion save user</h5>
-  <app-button-sencillo 
-  label="Update"
-  icon="pi pi-refresh"
-  color="warning" 
-  size="md" 
-  (onClick)="updateUser()">
-</app-button-sencillo>
-</div>
-
--->
+<!-- 
 <button (click)="onLogout()">
   Cerrar Sesión
 </button>
 
-<app-sidebar-registros [(visible)]="sidebarVisible" [position]="'right'">
-  <h3>Left Sidebar</h3>
-  <button (click)="sidebarVisible = false">Close Sidebar</button>
-  
-</app-sidebar-registros>
-
-<!-- <div style="padding: 30px;">
-  <app-table-sencilla></app-table-sencilla>
-</div> -->
-
-<!--<div style="padding: 30px;">
-  <app-table-avanzada></app-table-avanzada>
-</div>-->
 
 <div *ngIf="user() as userData">
   <p>ID: {{ userData.id }}</p>
@@ -199,7 +217,7 @@ size="md"
 <div style="padding: 30px;">
   <h1>dashboard ejemplo variables computadas</h1>
 
-  <pre>{{user() | json}}</pre>
+  <pre>{{user() | json}}</pre> 
 </div>
 
 
@@ -208,7 +226,7 @@ size="md"
   unidad movil TSJ840
 </a>
 <br>
-<a style="color: #666666;" (click)="ubication([4523])" routerLink="/mapa">
+<a style="color: #666666;" (click)="ubication([5228])" routerLink="/mapa">
   unidad movil TSJ840
 </a>
 <br>
@@ -221,69 +239,5 @@ size="md"
 </a><a style="color: #666666;" (click)="ubication([467])" routerLink="/mapa">
   <br>
   unidad movil TSJ840
-</a>
-
-<!-- <div style="padding: 30px;">
-  <app-table-prueba [data]="tableData"
-        [paginator]="true"
-        [rows]="10"
-        [rowsPerPageOptions]="[10, 25, 50]"
-        [loading]="true"
-        [tableId]="'idTabladevice'"
-        [dataKey]="'tablaCustomer'"
-       [bodyTemplate]="bodyTemplate">
-  </app-table-prueba>
-
-
-
-
-  <ng-template #bodyTemplate let-rowData >
-    <tr>
-      <td>{{rowData.id}}</td>
-      <td>{{rowData.name}}</td>
-      <td>{{rowData.country}}</td>
-      <td>{{rowData.company}}</td>
-      <td>{{rowData.date}}</td>
-      <td>{{rowData.status}}</td>
-      <td>
-        <p-tag [severity]="rowData.verified ? 'success' : 'danger'">
-          {{ rowData.verified ? 'cumplio' : 'no cumplio' }}
-        </p-tag>
-      </td>
-      <td>{{rowData.activity}}</td>
-      <td>{{rowData.representative}}</td>
-      <td>{{rowData.balance}}</td>
-  
-      <td>
-        <app-button-toolti (onClick)="updateUser()" [icon]="'pi pi-user'" [tooltipPosition]="'bottom'"[tooltipText]="'Usuarios'" [rounded]="true" [text]="true" [severity]="'info'"></app-button-toolti>
-        <app-button-toolti (onClick)="saveUser()" [icon]="'pi pi-book'" [tooltipPosition]="'bottom'"[tooltipText]="'Contactos'" [rounded]="true" [text]="true" [severity]="'secondary'"></app-button-toolti>
-        <app-button-toolti (onClick)="openSidebar()" [icon]="'pi pi-th-large'" [tooltipPosition]="'bottom'"[tooltipText]="'Grupos'" [rounded]="true" [text]="true" [severity]="'success'"></app-button-toolti>
-        <app-button-toolti [icon]="'pi pi-pencil'" [tooltipPosition]="'bottom'"[tooltipText]="'Editar'" [rounded]="true" [text]="true" [severity]="'warning'"></app-button-toolti>
-        <app-button-toolti [icon]="'pi pi-trash'" [tooltipPosition]="'bottom'"[tooltipText]="'Eliminar'" [rounded]="true" [text]="true" [severity]="'danger'"></app-button-toolti>
-     
-      </td>
- 
-    </tr>
-  </ng-template>
-</div> -->
-<!-- 
-
-<div style="padding: 30px;">
-  <app-table-sencilla></app-table-sencilla>
-</div>
-
-
-<div style="padding: 30px;">
-  <app-table-avanzada></app-table-avanzada>
-</div> -->
-
-
-
-
-<!--
-<div style="padding: 30px;">
-  <app-editor></app-editor>
-</div>
--->
-
+</a> -->
 

@@ -10,6 +10,23 @@
         [resizable]="false"
         [autoZIndex]="true">
 
+        <div style="display: flex; justify-content: flex-end;">
+            <p-button label="Agregar" severity="success"  (click)="consultas('UserScheduledEmails')"/>
+        </div>
+
+        <p-table [value]="resultData.body" [paginator]="true" [rows]="10" [responsive]="true">
+            <ng-template pTemplate="header">
+              <tr>
+                <th *ngFor="let header of resultData.header">{{ header.texto }}</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row>
+              <tr>
+                <td *ngFor="let header of data.header">{{ row[header.campo] }}</td>
+              </tr>
+            </ng-template>
+          </p-table>
+
         <!-- <div class="p-fluid grid">
             <div class="field col-12 md:col-6">
                 <label for="fecha" class="block">Fecha</label>

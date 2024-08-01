@@ -1,0 +1,20 @@
+npm instal charts.js
+npm install --save-dev @types/chart.js @types/leaflet
+
+
+npm install @capacitor/geolocation@^6.0.0
+npm install @types/leaflet@^1.9.12
+npm install leaflet@^1.9.4
+npm install leaflet-rotatedmarker@^0.2.0
+npm install leaflet.gridlayer.googlemutant@^0.14.1
+npm install leaflet.markercluster@^1.5.3
+npm install quill@^2.0.2
+npm install leaflet-draw
+npm install leaflet-routing-machine @types/leaflet
+
+npm install --save-dev @types/leaflet.markercluster@^1.5.4
+npm install --save-dev @types/slick-carousel@^1.6.40
+
+npm install primeng
+npm install primeflex
+npm install primeicons

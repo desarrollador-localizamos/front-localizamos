@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { TableCustomersComponent } from '../shared/components/tables/table-customers/table-customers.component';
+import { TableCustomersComponent } from '../shared/components/tables/table-customer/table-customers.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule } from '@angular/forms';
 import { ButtonModule } from 'primeng/button';

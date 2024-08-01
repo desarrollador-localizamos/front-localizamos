@@ -19,7 +19,6 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ToastModule } from 'primeng/toast';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
-import { event } from 'jquery';
 
 
 interface Estados {

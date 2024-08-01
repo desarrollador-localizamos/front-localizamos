@@ -33,7 +33,7 @@
               <br> 
               <span class="etiqueta">Sin reportar</span>
           </div>
-          <div class="p-tag-items v5">
+          <div class="p-tag-items v5" (click)="functionTotal()">
               <span class="valor">5150</span>
               <br> 
               <span class="etiqueta">Total</span>
@@ -46,8 +46,8 @@
                 <p-inputIcon styleClass="pi pi-search" />
                 <input type="text" pInputText placeholder="Search" [(ngModel)]="searchTerm" (input)="onSearch($event)" />
             </p-iconField>
-            <p-button  (click)="seleccionar()" icon="fi fi-rr-list-check"/>
-            <p-button  (click)="limpiar()" icon="fi fi-rs-clean" severity="secondary" />
+            <p-button [style]="{'margin-left':'5px !important;'}"  (click)="seleccionar()" icon="fi fi-rr-list-check"/>
+            <p-button [style]="{'margin-left':'5px !important;'}"  (click)="limpiar()" icon="fi fi-rs-clean" severity="secondary" />
         </div>
       
       </div>
@@ -59,10 +59,27 @@
                 <div class="col-12">
                   <div class="flex align-items-center justify-content-between">
                     <div class="contenedor-check">
-                      <p-checkbox [(ngModel)]="checkedStates[item.mobileUnitiesid]" [binary]="true" inputId="{{item.mobileUnitiesid}}"></p-checkbox>
+                      <p-checkbox 
+                      [(ngModel)]="checkedStates[item.mobileUnitiesid]" 
+                      [binary]="true" 
+                      (ngModelChange)="updateSelectedIds()" 
+                      inputId="{{item.mobileUnitiesid}}">
+                    </p-checkbox>
                     </div>
                     <div class="contenedor-status">
-                      <div><i class="fi fi-sr-bullet" style="font-size: 20px;"></i></div>
+                      <div>
+                        <i 
+                          class="fi fi-sr-bullet" 
+                          [ngStyle]="{
+                            'font-size': '20px',
+                            'color': item.mobileUnitiesendreportmobilestatus === 'Sin reportar' ? 'grey' :
+                                     item.mobileUnitiesendreportmobilestatus === 'Movimiento' ? 'green' :
+                                     item.mobileUnitiesendreportmobilestatus === 'Detenido' ? 'red' :
+                                     item.mobileUnitiesendreportmobilestatus === 'Apagado' ? 'yellow' :
+                                     'black'
+                          }">
+                        </i>
+                      </div>
                     </div>
                     <div class="info-text">
                        <div *ngIf="item.mobileUnitiesplate">

@@ -1,4 +1,4 @@
-import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef, Renderer2 } from '@angular/core';
 import * as L from 'leaflet';
 import 'leaflet.markercluster';
 import 'leaflet-rotatedmarker';
@@ -23,6 +23,113 @@ import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { DataSimpleService } from '../../core/services/datasimple.service';
+
+const drawLocalSpanish = {
+  draw: {
+    toolbar: {
+      actions: {
+        title: 'Cancelar dibujo',
+        text: 'Cancelar'
+      },
+      finish: {
+        title: 'Terminar dibujo',
+        text: 'Terminar'
+      },
+      undo: {
+        title: 'Eliminar último punto dibujado',
+        text: 'Eliminar último punto'
+      },
+      buttons: {
+        polyline: 'Dibujar una polilínea',
+        polygon: 'Dibujar un polígono',
+        rectangle: 'Dibujar un rectángulo',
+        circle: 'Dibujar un círculo',
+        marker: 'Dibujar un marcador',
+        circlemarker: 'Dibujar un marcador circular'
+      }
+    },
+    handlers: {
+      circle: {
+        tooltip: {
+          start: 'Haz clic y arrastra para dibujar un círculo.'
+        },
+        radius: 'Radio'
+      },
+      circlemarker: {
+        tooltip: {
+          start: 'Haz clic en el mapa para colocar el marcador circular.'
+        }
+      },
+      marker: {
+        tooltip: {
+          start: 'Haz clic en el mapa para colocar el marcador.'
+        }
+      },
+      polygon: {
+        tooltip: {
+          start: 'Haz clic para comenzar a dibujar la forma.',
+          cont: 'Haz clic para continuar dibujando la forma.',
+          end: 'Haz clic en el primer punto para cerrar esta forma.'
+        }
+      },
+      polyline: {
+        error: '<strong>Error:</strong> los bordes de la forma no pueden cruzarse!',
+        tooltip: {
+          start: 'Haz clic para comenzar a dibujar la línea.',
+          cont: 'Haz clic para continuar dibujando la línea.',
+          end: 'Haz clic en el último punto para terminar la línea.'
+        }
+      },
+      rectangle: {
+        tooltip: {
+          start: 'Haz clic y arrastra para dibujar un rectángulo.'
+        }
+      },
+      simpleshape: {
+        tooltip: {
+          end: 'Suelta el mouse para terminar de dibujar.'
+        }
+      }
+    }
+  },
+  edit: {
+    toolbar: {
+      actions: {
+        save: {
+          title: 'Guardar cambios',
+          text: 'Guardar'
+        },
+        cancel: {
+          title: 'Cancelar edición, descartar todos los cambios',
+          text: 'Cancelar'
+        },
+        clearAll: {
+          title: 'Limpiar todas las capas',
+          text: 'Limpiar todo'
+        }
+      },
+      buttons: {
+        edit: 'Editar capas',
+        editDisabled: 'No hay capas para editar',
+        remove: 'Eliminar capas',
+        removeDisabled: 'No hay capas para eliminar'
+      }
+    },
+    handlers: {
+      edit: {
+        tooltip: {
+          text: 'Arrastra los manipuladores o marcadores para editar la función.',
+          subtext: 'Haz clic en cancelar para deshacer los cambios.'
+        }
+      },
+      remove: {
+        tooltip: {
+          text: 'Haz clic en una característica para eliminarla'
+        }
+      }
+    }
+  }
+};
 
 @Component({
     selector: 'app-mapa',
@@ -62,22 +169,24 @@ protected mobileUnit = null;
 protected urlImage!: string;
 protected urlImage2!: string;
 private map!: L.Map;
-private carIcon!: L.Icon;
-private carMarker!: L.Marker;
 protected zoom!: number;
 protected openZoom: number;
 protected classIds: number;
 protected latitud: any;
 protected longitud: any;
 private markers: L.Marker[] = [];
+private markerClusterGroup: L.MarkerClusterGroup | null = null;
 private updateInterval: any;
 private drawnFeatures!: L.FeatureGroup;
+private drawControl: L.Control.Draw | undefined;
+private geofenceCoordinates: string[] = [];; 
+private colorSeleccionado: string = '';
+
 
 @ViewChild(VentanaInfoAccionComponent) ventanaInfoAccion!: VentanaInfoAccionComponent;
-
-
 @ViewChild('popupContainer', { static: true }) popupContainer!: ElementRef;
-    public list: { [key: string]: any[] } = {   
+
+  public list: { [key: string]: any[] } = {   
    
      MobileUnities:  [
       {campo:"id", texto: "Id de la unidad"},
@@ -130,16 +239,16 @@ private drawnFeatures!: L.FeatureGroup;
       {campo:"EventTypes.name", texto: "hora"},
      ] 
      
-    };
+  };
 
-    private fieldRelations: { [key: string]: any[] } = {
+  private fieldRelations: { [key: string]: any[] } = {
       MobileUnities: [
        "device","device.simcard","device.simcard.simcardPlan", "type", "subclass", "class",
        "device.deviceType","device.deviceType.brand","subclass", 
       ],
-    };
+  };
 
-    private fieldRelationsJoins: { [key: string]: any[] } = {
+  private fieldRelationsJoins: { [key: string]: any[] } = {
   
      MobileUnities: [
       {"mainkey":"id", "join":"MobileUnityDrivers","joinkey":"mobileUnityId"},
@@ -148,42 +257,67 @@ private drawnFeatures!: L.FeatureGroup;
      MobileUnityEvents: [
       {"mainkey":"evenTypeId", "join":"EventTypes","joinkey":"id"},
      ],
-    };
+  };
 
-    constructor(private dataService: DataService,private dataSimpleService: DataSimpleService,private messageService: MessageService) {
+  constructor(private dataService: DataService,private dataSimpleService: DataSimpleService,private messageService: MessageService
+    ,private renderer: Renderer2, private el: ElementRef,
+  ) {
 
       // ======= VARIABLES INICIALES DEL MAPA  ========//
       this.zoom = 6; // Nivel de zoom inicial
       this.openZoom = 17; // Nivel de zoom al que se quiere llegar
       this.classIds = 0;
-    }
+  }
 
-    ngOnInit() {
-      this.ubicationSubscription = this.dataService.getUbicationValue().subscribe(
-        values => {
-          this.ubicationValues = values;
-        }
-      );
-      this.initMap();
-      if (this.ubicationValues && this.ubicationValues.length > 0) {
-        this.refreshMap();
-      }
-    
-    }
+  ngOnInit() {
 
-    ngAfterViewInit() {
-      if (this.ubicationValues && this.ubicationValues.length > 0) {
-
-        this.ventanaInfoAccion.refresh.subscribe(() => this.refreshMap());
-        this.reporteRutaDataSubscription = this.dataService.reporteRutaData$.subscribe(data => {
-          if (data) {
-            this.reporteRuta(data);
-          }
-        });
-      }
-    }
+    // Inicializar el mapa
+    this.initMap();
   
-    visudata() {
+    // Suscribirse al evento de limpieza de mapa
+    this.dataService.mapCleanup$.subscribe(() => {
+      this.limpiarMapa();
+    });
+  }
+
+  ngAfterViewInit() {
+    this.ubicationSubscription = this.dataService.getUbicationValue().subscribe(
+      values => {
+        this.ubicationValues = values;
+        console.log("valores para el mapa", this.ubicationValues);
+        
+        // Verificar si hay valores y actuar en consecuencia
+        if (this.ubicationValues && this.ubicationValues.length > 0) {
+          this.refreshMap();
+          console.log("Actualizando mapa con valores:", this.ubicationValues);
+        } else {
+         this.limpiarMapa(); // Limpia el mapa si no hay valores
+          console.log("No hay valores, limpiando el mapa.");
+        }
+      }
+    );
+  
+    // Suscripciones adicionales si es necesario
+  // this.ventanaInfoAccion.refresh.subscribe(() => this.refreshMap());
+    this.reporteRutaDataSubscription = this.dataService.reporteRutaData$.subscribe(data => {
+      if (data) {
+        this.reporteRuta(data);
+      }
+    });
+  }
+
+  ngOnDestroy() {
+    this.stopRealTime();
+   
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    if (this.ubicationSubscription) {
+      this.ubicationSubscription.unsubscribe();
+    }
+  }
+  
+  visudata() {
       this.dataService.getResponse().subscribe(response => {
         this.result2 = response;
   
@@ -192,9 +326,9 @@ private drawnFeatures!: L.FeatureGroup;
         }
         this.addLayers();
       });
-    }
+  }
   
-    private initMap(): void {
+  private initMap(): void {
       this.map = L.map('map', {
         center: [4.5709, -74.2973], // Coordenadas iniciales del centro
         zoom: this.zoom, // Nivel de zoom inicial
@@ -208,64 +342,102 @@ private drawnFeatures!: L.FeatureGroup;
       L.control.zoom({
         position: 'bottomleft' // Ubica el control de zoom en la esquina inferior izquierda
       }).addTo(this.map);
-  
-      if (this.ubicationValues.length === 1) {
-           // Transición suave al zoom 16
-            setTimeout(() => {
-              this.map.flyTo([this.latitud!, this.longitud!], this.openZoom, {
-              duration: 3 
-            });
-          }, 1000);   
-      }else{
-        this.map.flyTo([4.5709, -74.2973], 6)
-      }
-    }
 
-    private initDrawControl(): void {
-      this.drawnFeatures = new L.FeatureGroup();
-      this.map.addLayer(this.drawnFeatures);
-    
-      const drawControl = new L.Control.Draw({
-        edit: {
-          featureGroup: this.drawnFeatures,
-          remove: false
-        },
-        draw: {
-          polygon: {
-            shapeOptions: {
-              color: 'purple'
-            },
-          },
-          polyline: {
-            shapeOptions: {
-              color: 'red'
-            },
-          },
-          rectangle: {
-            shapeOptions: {
-              color: 'blue',
-            },
-          
-            metric: false
-          },
-          circle: {
-            shapeOptions: {
-              color: 'steelblue'
-            },
-          },
-        },
-      });
-    
-      this.map.addControl(drawControl);
-    
-      this.map.on(L.Draw.Event.CREATED, (e: any) => {
-        const layer = e.layer;
-        console.log(layer.toGeoJSON());
-        layer.bindPopup(`Area: ${JSON.stringify(layer.toGeoJSON())}`);
-        this.drawnFeatures.addLayer(layer);
-      });
+      
+  
+  }
+
+  private addLayers() {
+   
+  }
+
+  private transitionMap(){
+    if (this.ubicationValues.length === 1) {
+      // Transición suave al zoom 16
+      setTimeout(() => {
+          this.map.flyTo([this.latitud!, this.longitud!], this.openZoom, {
+          duration: 3 
+        });
+      }, 1000);   
+    }else{
+      this.map.flyTo([4.5709, -74.2973], 6)
     }
-    refreshMap() {
+  }
+
+  //===== FUNCIONES PARA DIBUJAR EN EL MAPA =====//
+  private initDrawControl(): void {
+    this.drawnFeatures = new L.FeatureGroup();
+    this.map.addLayer(this.drawnFeatures);
+  
+    Object.assign(L.drawLocal, drawLocalSpanish);
+  
+    this.drawControl = new L.Control.Draw({
+      position: 'bottomleft',
+      
+      edit: {
+        featureGroup: this.drawnFeatures,
+        remove: false
+      },
+      draw: {
+        polygon: {
+          shapeOptions: {
+            color: this.colorSeleccionado,
+          
+          },
+        },
+        polyline: {
+          shapeOptions: {
+            color: this.colorSeleccionado,
+            
+          },
+        },
+        rectangle: {
+          shapeOptions: {
+            color: this.colorSeleccionado,
+          },
+          metric: false
+        },
+        circle: false,
+        marker: false
+      },
+    });
+  
+    this.map.addControl(this.drawControl);
+  
+    // Eliminar listeners anteriores para evitar duplicación
+    this.map.off(L.Draw.Event.CREATED);
+  
+    this.map.on(L.Draw.Event.CREATED, (e: any) => {
+      const layer = e.layer;
+      const geoJson = layer.toGeoJSON();
+      const coordinates = geoJson.geometry.coordinates[0]; // Assuming it's a polygon
+  
+      const formattedCoordinates = coordinates.map((coord: number[]) => `${coord[0]} ${coord[1]}`).join(',');
+  
+      if (!this.geofenceCoordinates.includes(formattedCoordinates)) {
+        this.geofenceCoordinates.push(formattedCoordinates);
+      }
+  
+      // Actualiza el servicio con las coordenadas
+      this.dataService.setGeofenceCoordinates(this.geofenceCoordinates);
+  
+      console.log("coordenadas2", this.geofenceCoordinates[0]);
+  
+      layer.bindPopup(`Área: ${JSON.stringify(geoJson)}`);
+      this.drawnFeatures.addLayer(layer);
+    });
+  }
+
+  private updateDrawControl(): void {
+    if (this.drawControl) {
+      this.map.removeControl(this.drawControl);
+    }
+    this.initDrawControl();
+  }
+  //===== FIN FUNCIONES PARA DIBUJAR EN EL MAPA =====//
+
+  //===== FUNCIONES PARA GRAFICAR EL CARRO =====//
+  refreshMap() {
       console.log(this.ubicationValues);
   
       if (this.ubicationValues && this.ubicationValues.length > 0) {
@@ -318,9 +490,10 @@ private drawnFeatures!: L.FeatureGroup;
                 this.VisibilidadCapaVentana = true;
                 this.VisibilidadCapaBanner = true;
                 this.VisibilidadRealTime = true;
-                
-
+              
                this.UltimosEvents();
+               this.transitionMap();
+               this.limpiarMapa();
                this.addMarker(resultado);
               }
             
@@ -333,69 +506,71 @@ private drawnFeatures!: L.FeatureGroup;
             const resultado = response["body"];
 
             if(0 < resultado.length){
+              this.limpiarMapa();
               this.addMultiMarker(resultado);
           
             }
-            
-            
           }
         });
 
-      } else {
-        console.log("No hay valores");
       }
-    }
+  }
   
-    UltimosEvents(){
-      const ubicationIds = this.ubicationValues;
-      this.dataService.fetchData(this.list, "MobileUnityEvents", {}, {},this.fieldRelationsJoins, [{ "ref": "unityId", "valor": ubicationIds,}], {"id":"DESC"} , 5)
-      .subscribe(response => {
-        this.dataService.setResponseUltimosEventos(response);
-      });
+    // cuando se marca una sola unidad en el mapa
+  protected addMarker(resultado: any[]): void {
+    console.log("addMarker" , resultado);
+    
+    let OrientacionCourse = resultado[0][0]['endreportdegree'];
+    
+    if (24 < resultado[0][0].endreportdevice_date_hour) {
+      this.urlImage = '../../../assets/images/mapa/icono-sin-reportar-mapa_40x40.png';
     }
     
-    // cuando se marca una sola unidad en el mapa
-    addMarker(resultado: any[]): void {
-      let OrientacionCourse = resultado[0][0]['endreportdegree'];
+    setTimeout(() => {
+     const carIcon = L.icon({
+      iconUrl: this.urlImage,
+      iconSize: [32, 42],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32]
+    });
     
-      if (24 < resultado[0][0].endreportdevice_date_hour) {
-        this.urlImage = '../../../assets/images/mapa/icono-sin-reportar-mapa_40x40.png';
-      }
+   // Crear el componente popup y establecer los datos
+    const popup = new PopupCarroComponent();
+      popup.img = this.urlImage2;
+      popup.additionalInfo = 'Reporte periodico';
+      popup.reportDate = '17-07-2024';
+      popup.reportHour = '08:25:46 Hace 7 seg';
     
-      setTimeout(() => {
-        const carIcon = L.icon({
-          iconUrl: this.urlImage,
-          iconSize: [32, 42],
-          iconAnchor: [16, 32],
-          popupAnchor: [0, -32]
-        });
-    
-        // Crear el componente popup y establecer los datos
-        const popup = new PopupCarroComponent();
-        popup.img = this.urlImage2;
-        popup.additionalInfo = 'Reporte periodico';
-        popup.reportDate = '17-07-2024';
-        popup.reportHour = '08:25:46 Hace 7 seg';
-    
-        const popupContent = popup.getPopupContent();
-        let markerl = L.marker([this.latitud!, this.longitud!], { icon: carIcon }).bindPopup(popupContent).addTo(this.map);
-        markerl.setRotationAngle(OrientacionCourse);
-    
+      const popupContent = popup.getPopupContent();
+      let markerl = L.marker([this.latitud!, this.longitud!], { icon: carIcon }).bindPopup(popupContent).addTo(this.map);
+      markerl.setRotationAngle(OrientacionCourse);
         // Añadir el marcador a la lista de marcadores
         this.markers.push(markerl);
       }, 1500);
-    }
+  }
 
     // cuando se marca mas de una sola unidad en el mapa
     addMultiMarker(resultado: any): void {
       console.log("resultado multi", resultado);
+
+        // Eliminar todos los marcadores individuales
+        this.markers.forEach(marker => {
+          this.map.removeLayer(marker);
+        });
+        this.markers = [];
+        
     
-      // Crear un MarkerClusterGroup en lugar de un FeatureGroup
-      const markerClusterGroup = L.markerClusterGroup({
+      // Si ya existe un MarkerClusterGroup, elimínalo primero
+      if (this.markerClusterGroup) {
+        this.map.removeLayer(this.markerClusterGroup);
+      }
+    
+      // Crear un nuevo MarkerClusterGroup
+      this.markerClusterGroup = L.markerClusterGroup({
         spiderfyOnMaxZoom: false,
         showCoverageOnHover: false,
         zoomToBoundsOnClick: true,
-        maxClusterRadius: 100, // Ajusta este valor para controlar cuándo se agrupan los marcadores
+        maxClusterRadius: 100,
         iconCreateFunction: function(cluster) {
           return L.divIcon({
             html: '<div><span>' + cluster.getChildCount() + '</span></div>',
@@ -411,26 +586,24 @@ private drawnFeatures!: L.FeatureGroup;
         if (item.length > 0) {
           const data = item[0];
           const popupContent = this.createPopupContent(data);
-          
+    
           if (data.endreportlat && data.endreportlong) {
             const position: L.LatLngExpression = [data.endreportlat, data.endreportlong];
             const customIcon = this.createCustomIcon(data.classid, data.typeimage, data.endreportdevice_date_hour);
             const m = L.marker(position, { icon: customIcon })
               .bindPopup(popupContent);
-            
-            // Añadir el marcador al MarkerClusterGroup en lugar de al mapa directamente
-            markerClusterGroup.addLayer(m);
+    
+            this.markerClusterGroup?.addLayer(m);
             validMarkers++;
           }
         }
       });
     
       // Añadir el MarkerClusterGroup al mapa
-      this.map.addLayer(markerClusterGroup);
-    
+      this.map.addLayer(this.markerClusterGroup);
     }
 
-    createPopupContent(data: any): string {
+  createPopupContent(data: any): string {
       const transformStyle = `rotate(${data.endreportdegree}deg)`;
       return `
         <div style="display: flex; align-items: center;">
@@ -457,22 +630,36 @@ private drawnFeatures!: L.FeatureGroup;
           <div>Estado: ${data.status}</div>
         </div>
       `;
-    }
+  }
 
-    limpiarMapa(): void {
+  limpiarMapa(): void {
+    if (this.markerClusterGroup) {
+      this.map.removeLayer(this.markerClusterGroup);
+      this.markerClusterGroup.clearLayers();
+      this.markerClusterGroup = null;
+    }
       // Eliminar todos los marcadores individuales
       this.markers.forEach(marker => {
         this.map.removeLayer(marker);
       });
       this.markers = [];
-    
-    }
-  
-    private addLayers() {
-      // Implementar la lógica para agregar capas si es necesario
-    }
+      
 
-    private createCustomIcon(classId: number, typeImage: string, lastReportTime: number): L.DivIcon {
+      if (this.drawnFeatures) {
+        this.drawnFeatures.clearLayers();
+      }
+    
+      // Reiniciar el control de dibujo
+      if (this.drawControl) {
+        this.map.removeControl(this.drawControl);
+        this.initDrawControl();
+      }
+      this.map.setZoom(6);
+      
+      
+  }
+
+  private createCustomIcon(classId: number, typeImage: string, lastReportTime: number): L.DivIcon {
       let iconUrl = '';
       let backgroundColor = "red";
       
@@ -526,13 +713,15 @@ private drawnFeatures!: L.FeatureGroup;
         iconAnchor: [20, 40],
         popupAnchor: [0, -40]
       });
-    }
+  }
+  //===== FIN FUNCIONES PARA DIBUJAR EN EL MAPA =====//
 
-    reporteRuta(data: any[]): void {
+  //===== FUNCIONES REPORTE DE RUTA  =====//
+  reporteRuta(data: any[]): void {
       console.log('Datos de la ruta recibidos:', data);
     
       // Limpiar el mapa antes de agregar nuevos marcadores
-      this.limpiarMapa();
+     this.limpiarMapa();
     
       // Imagen fija para todos los marcadores
       const iconUrls = {
@@ -560,7 +749,7 @@ private drawnFeatures!: L.FeatureGroup;
       const waypoints: L.LatLng[] = [];
     
       // Iterar sobre los datos recibidos
-      data.forEach((item: any, index: number) => {
+      data.slice(0, 250).forEach((item: any, index: number) => {
         if (item.velocity !== undefined && item.address) {
           const position: L.LatLngExpression = [item.latitud, item.longitud];
     
@@ -631,18 +820,21 @@ private drawnFeatures!: L.FeatureGroup;
       // Ajustar la vista del mapa para mostrar todos los marcadores
       const group = new L.FeatureGroup(data.map((item: any) => L.marker([item.latitud, item.longitud])));
       this.map.fitBounds(group.getBounds());
-    }
+  }
 
-    createPopupContentForRoute(data: any): string {
+  createPopupContentForRoute(data: any): string {
       return `
         <div style="font-weight: bold;">${data.address}</div>
         <div>Velocidad: ${data.velocity} km/h</div>
         <div>Fecha y hora: ${data.deviceDateHour}</div>
         <div>Estado: ${data.status}</div>
       `;
-    }
+  }
+  //===== FIN FUNCIONES REPORTE DE RUTA  =====//
 
-    valorRealTime(){
+
+  //===== FUNCIONES PARA REAL TIME =====//
+  valorRealTime(){
      
      this.realTime();
 
@@ -650,8 +842,7 @@ private drawnFeatures!: L.FeatureGroup;
       severity: 'success',
       detail: 'La ubicación se actualizará cada 30 segundos por 30 minutos'
     });
-    }
-
+  }
 
   realTime() {
 
@@ -673,7 +864,7 @@ private drawnFeatures!: L.FeatureGroup;
     }
   }
     
-    private stopRealTime() {
+  private stopRealTime() {
       if (this.updateInterval) {
         clearInterval(this.updateInterval);
         this.updateInterval = null;
@@ -684,25 +875,38 @@ private drawnFeatures!: L.FeatureGroup;
         severity: 'info',
         detail: 'La ubicación en tiempo real se detuvo'
       });
-    }
-    
-  ngOnDestroy() {
-    this.stopRealTime();
-     
   }
+  //===== FIN FUNCIONES  REAL TIME  =====//
 
-   
-  onGeocercasButtonClick( ) {
+  //===== FUNCIONES EVENTO GEOCERCAS =====// 
+  onGeocercasButtonClick(): void {
     this.dataSimpleService.setBannerVisible(true);
+    this.limpiarMapa();
+
+    this.VisibilidadCapaVentana = false;
+    this.VisibilidadCapaBanner = false;
+    this.VisibilidadRealTime = false;
     this.initDrawControl();
+
+    this.dataService.color$.subscribe(color => {
+      this.colorSeleccionado = color;
+      this.updateDrawControl();
+    });
+
+    const botonGeocercas = this.el.nativeElement.querySelector('.contenedor-boton-geocercas');
+    if (botonGeocercas) {
+      this.renderer.setStyle(botonGeocercas, 'bottom', '260px');
+    }
+
   }
+   //===== FIN FUNCIONES  EVENTO GEOCERCAS  =====//
+
+  UltimosEvents(){
+    const ubicationIds = this.ubicationValues;
+    this.dataService.fetchData(this.list, "MobileUnityEvents", {}, {},this.fieldRelationsJoins, [{ "ref": "unityId", "valor": ubicationIds,}], {"id":"DESC"} , 5)
+    .subscribe(response => {
+      this.dataService.setResponseUltimosEventos(response);
+    });
+}
     
 }
-
-
-
-
-//   //     "geocercas": infoLayer,  
-//   //     "filtro": infoLayer,
-//   //     "modal_crud": infoLayer,
-
