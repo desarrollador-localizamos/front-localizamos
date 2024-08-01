@@ -1,4 +1,4 @@
-npm instal charts.js
+npm instal charts
 npm install --save-dev @types/chart.js @types/leaflet
 
 
@@ -14,7 +14,30 @@ npm install leaflet-routing-machine @types/leaflet
 
 npm install --save-dev @types/leaflet.markercluster@^1.5.4
 npm install --save-dev @types/slick-carousel@^1.6.40
+npm install @types/leaflet-routing-machine --save-dev
+npm install --save-dev @types/leaflet @types/leaflet-draw
 
 npm install primeng
 npm install primeflex
 npm install primeicons
+npm i @flaticon/flaticon-uicons
+
+Vulnerabilidades 
+
+npm audit
+npm audit fix
+npm audit fix force
+npm install
+npm cache clean --force
+
+
+si no funciona 
+
+rm -rf node_modules
+rm package-lock.json
+npm install
+npm audit
+npm audit fix
+npm audit fix force
+
+
