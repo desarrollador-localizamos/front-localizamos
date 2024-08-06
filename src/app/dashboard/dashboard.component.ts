@@ -1,112 +1,262 @@
-import { Component, ElementRef, Renderer2, computed, inject } from '@angular/core';
+import { AfterViewInit, Component, computed, inject } from '@angular/core';
 import { ApirestService } from '../apirest.service';
 import { FormsModule } from '@angular/forms';
-import { ButtonModule } from 'primeng/button';
-import { CardModule } from 'primeng/card';
-import { TableModule } from 'primeng/table';
-import { MenubarModule } from 'primeng/menubar';
-import { MenuItem } from 'primeng/api';
-import { InputTextModule } from 'primeng/inputtext';
-import { SidebarModule } from 'primeng/sidebar';
-import { CommonModule } from '@angular/common';
-import { AvatarModule } from 'primeng/avatar';
-import { BadgeModule } from 'primeng/badge';
-
-import { ToastModule } from 'primeng/toast'
-import { OverlayPanelModule } from 'primeng/overlaypanel';
-import { MessageService } from 'primeng/api';
-import { TableCustomersComponent } from "../shared/components/tables/table-customer/table-customers.component";
-import { CustomersComponent } from "../customers/customers.component";
-import { HeaderComponentComponent } from "../shared/components/header/header-component/header-component.component";
-import { SidebarComponentComponent } from "../shared/components/sidebar/sidebar-component/sidebar-component.component";
-import { MultiInputComponent } from "../shared/components/inputs/multi-input/multi-input.component";
-import { InputSelectComponent } from '../shared/components/inputs/input-select/input-select.component';
-import { InputRangeComponent } from '../shared/components/inputs/input-range/input-range.component';
-import { InputFileSencilloComponent } from '../shared/components/inputs/input-files/input-file-sencillo/input-file-sencillo.component';
-import { InputFileSencilloAlertaComponent } from '../shared/components/inputs/input-files/input-file-sencillo-alerta/input-file-sencillo-alerta.component';
-import { InputFileVisualizacionComponent } from '../shared/components/inputs/input-files/input-file-visualizacion/input-file-visualizacion.component';
-import { InputCheckComponent } from '../shared/components/inputs/inputs-checks/input-check/input-check.component';
-import { InputCheckAvanzadoComponent } from '../shared/components/inputs/inputs-checks/input-check-avanzado/input-check-avanzado.component';
-import { InputRadioComponent } from '../shared/components/inputs/inputs-checks/input-radio/input-radio.component';
-import { InputSwitchComponent } from '../shared/components/inputs/inputs-checks/input-switch/input-switch.component';
-import { InputCalendarSencilloComponent } from '../shared/components/inputs/inputs-calendar/input-calendar-sencillo/input-calendar-sencillo.component';
-import { InputCalendarTemplateComponent } from '../shared/components/inputs/inputs-calendar/input-calendar-template/input-calendar-template.component';
-import { InputTextareaComponent } from '../shared/components/inputs/input-textarea/input-textarea.component';
-import { EditorComponent } from '../shared/components/editor/editor.component';
-import { InputPasswordSencilloComponent } from '../shared/components/inputs/input-password/input-password-sencillo/input-password-sencillo.component';
-import { InputPasswordMsgSeguridadComponent } from '../shared/components/inputs/input-password/input-password-msg-seguridad/input-password-msg-seguridad.component';
-import { InputMaskComponent } from '../shared/components/inputs/inputs-number/input-mask/input-mask.component';
-import { InputMultiNumberComponent } from '../shared/components/inputs/inputs-number/input-multi-number/input-multi-number.component';
-import { ButtonSencilloComponent } from "../shared/components/buttons/button-sencillo/button-sencillo.component";
-import { SidebarRegistrosComponent } from "../shared/components/sidebar/sidebar-registros/sidebar-registros.component";
-import { TableSencillaComponent } from "../shared/components/tables/table-sencilla/table-sencilla.component";
-import { TableAvanzadaComponent } from "../shared/components/tables/table-avanzada/table-avanzada.component";
-import { TablePruebaComponent } from "../shared/components/tables/table-prueba/table-prueba.component";
 import { CarouselModule } from 'primeng/carousel';
-
+import { DividerModule } from 'primeng/divider';
 import { TagModule } from 'primeng/tag';
-import { ButtonTooltiComponent } from "../shared/components/buttons/button-toolti/button-toolti.component";
 import { AuthService } from '../core/services/auth.service';
 import { DataService } from '../core/services/data.service';
+import { Router } from '@angular/router';
+import { BurgerMenuService } from '../burger-menu.service'; 
+import { data } from '../shared/components/inputs/select/select-avanzado/select-avanzado.component';
+import { Observable, tap, catchError, throwError } from 'rxjs';
+import { DataSimpleService } from '../core/services/datasimple.service';
 @Component({
     selector: 'app-dashboard',
     standalone: true,
     templateUrl: './dashboard.component.html',
-    providers: [MessageService],
     styleUrl: './dashboard.component.scss',
-    imports: [CarouselModule,EditorComponent, TagModule, FormsModule, ToastModule, ButtonModule, CardModule, TableModule, MenubarModule, InputTextModule, SidebarModule, CommonModule,
-        InputFileSencilloComponent, InputMaskComponent, InputPasswordMsgSeguridadComponent, InputPasswordSencilloComponent, InputCalendarTemplateComponent, InputTextareaComponent,
-        InputCalendarSencilloComponent, InputSwitchComponent, InputRadioComponent, InputCheckAvanzadoComponent, InputCheckComponent, InputFileVisualizacionComponent,
-        InputFileSencilloAlertaComponent, AvatarModule, BadgeModule, OverlayPanelModule, TableCustomersComponent, CustomersComponent, HeaderComponentComponent, SidebarComponentComponent, MultiInputComponent,
-        InputSelectComponent, InputRangeComponent, InputMultiNumberComponent, ButtonSencilloComponent, SidebarRegistrosComponent, TableSencillaComponent, TableAvanzadaComponent, TablePruebaComponent, ButtonTooltiComponent]
+    imports: [DividerModule,CarouselModule,TagModule, FormsModule]
 })
 
 
-export class DashboardComponent {
+export class DashboardComponent implements AfterViewInit{
 
   images = [
-    {url: 'https://www.deltatracking.com/wp-content/uploads/2022/02/03-migrar-unidades-de-GPS-1024x576.jpg', alt: 'Image 1'},
-    {url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSnyW_4iKsjfwWVgqYMCmkiEpySsYLCh2icmQ&s', alt: 'Image 2'},
-    {url: 'https://www.deltatracking.com/wp-content/uploads/2022/02/03-migrar-unidades-de-GPS-1024x576.jpg', alt: 'Image 3'},
+    {url: 'http://aplicacion.localizamos.co/fondo.jpg', alt: 'Image 1'},
+    {url: 'https://www.deltatracking.com/wp-content/uploads/2022/02/03-migrar-unidades-de-GPS-1024x576.jpg', alt: 'Image 2'},
+    {url: 'https://briznner.com.uy/wp-content/uploads/2022/11/RASTREO-SATELITAL-768x384.png', alt: 'Image 3'},
   ];
 
     //Funcion para comprobar el metodo post
     
-    private authService = inject( AuthService);
+  private authService = inject( AuthService);
+  public user = computed(() => this.authService.currentUser() );
+
+  protected datos: data[]=[];
+  private res:any[]=[];
+  protected resultMobile: any;
+  protected resultMobile2: any;
+  protected resultadoTotalActivos: any;
+  protected resultadoTotalVehiculosActivos: any;
+  protected resultCountNotificaciones: any;
+  protected opciones= {MobileUnities: this.datos}
+  protected result = {MobileUnities: this.res}
+  private cabeceras:any={Entities: {},Fields: {}, Relations: {},Joins: {},Multiconditions:{},Servicios:{}};
+  protected idCliente: number = 0;
+
+
+  private condicions: any = { "idCustomer": 779 }; // valor del customer almacenar por medio de la variable computada
   
 
-    public user = computed(() => this.authService.currentUser() );
-  
-    constructor(
-      public service: ApirestService, private renderer: Renderer2, private elementRef: ElementRef,private messageService: MessageService,
-      private dataService: DataService) { }
+  constructor(
+    private burgerMenuService: BurgerMenuService,private router: Router,
+    protected service: ApirestService,
+    private dataService: DataService,private dataSimpleService: DataSimpleService) { }
 
       
-      ngOnInit(){
-        const userData = this.user();
-        if (userData) {
-          console.log('User ID:', userData.id);
-        } else {
-          console.log('No user data available');
-        }
-  
-   
-        }
+  ngOnInit(){
+    const userData = this.user();
+    if (userData) {
+      console.log('User ID:', userData.id);
+    } else {
+      console.log('No user data available');
+    }
+
+    if(this.condicions["idCustomer"] == 1){
+      this.idCliente = 1;
+    }else{
+      this.idCliente = this.condicions["idCustomer"];
+
+    }
+    
+
+     this.cabeceras.Fields = { 
+      MobileUnities:  [
+        {campo:"id", texto: "value" },
+        {campo:"plate", texto: "campo" },
+        {campo:"endreport.velocity", texto: "velocidad"},
+        {campo:"endreport.temperature", texto: "temperatura"},
+        {campo:"endreport.mobilestatus", texto: "status"},
+        {campo:"endreport.battery", texto: "bateria"},
+        {campo:"endreport.course", texto: "Curso"},
+        {campo:"endreport.degree", texto: "Grados"},
+        {campo:"device.deviceType.brand.name", texto: "Tipo de dispositivo"},
+        {campo:"device.deviceType.code", texto: "Referencia del dispositivo"},
+       ],
+
+       MobileUnities_:  [
+        {campo:"id", texto: "value" },
+        {campo:"updatedAt", texto: "value" },
+       ],
+
+       UserNotifications:  [
+        {campo:"id", texto: "value" },
+        {campo:"status", texto: "value" },
+       ],
+    }; 
+
+    
+    this.cabeceras.Entities= {
+      'MobileUnities':'MobileUnities',
+      'MobileUnities_':'MobileUnities',
+      'UserNotifications':'UserNotifications',
+    };
+
+    this.cabeceras.Relations= {
+      MobileUnities: [
+        "device","type", "subclass", "class",
+        "device.deviceType","device.deviceType.brand","subclass", 
+       ],
+    }
+
+    this.cabeceras.Joins= {
+      'MobileUnities':[],
+    }
+
+    this.cabeceras.Multiconditions= {
+      'MobileUnities':[{'ref':'endreport',  valor: '"customer_id":' + this.idCliente,'tipo':'like'}],
+      'MobileUnities_':[{'ref':'endreport',  valor: '"customer_id":' + this.idCliente,'tipo':'like'}],
+      'UserNotifications':[{'ref':'status',  valor: '0'}],
+    }
+
+    this.cabeceras.Servicios= {
+      'MobileUnities':'Database/visor',
+      'MobileUnities_':'Database/visor',
+      'UserNotifications':'Database/visor',
+    }
+
+
+  }
+  ngAfterViewInit() {
+    this.consultMobileUnities();
+    
+  }
       
- 
+  onLogout() {
+    this.authService.logout();
+  }
+  
+  onLinkClick(linkName: string, viewNumber: number) {
+    this.burgerMenuService.setSelectedLink(linkName);
+    this.router.navigate([linkName, viewNumber]);
+  }
+
+  ubication(id: number) {
+    this.dataService.setUbicationValue(id);
+    this.router.navigate(['/mapa']);
+  }
+
+  private consultMobileUnities(){
+    
+    this.consultas('MobileUnities');
+    this.consultas('MobileUnities_');
+    this.consultas('UserNotifications');
+  }
+
+
+  protected async consultas(entidad: string, datos?: any): Promise<void> {
+  switch (entidad) {
+    case 'MobileUnities':
+
+      await this.consultaback(entidad, "obtencion","","", {'updatedAt':'DESC'}, 5).toPromise();
+        this.resultMobile = this.datos;
+        console.log();
      
-      onLogout() {
-        this.authService.logout();
-        
-      }
-  
-// 5499
+      break;
+
+    case 'MobileUnities_':
+
+      await this.consultaback(entidad, "obtencion","","",{}).toPromise();
+        this.resultMobile2 = this.datos;
+        this.TotalActivos()
+     
+      break;
 
 
-ubication(values: number[]) {
-  values.forEach(value => {
-    this.dataService.setUbicationValue(value);
-  });
+    case 'UserNotifications':
+
+      await this.consultaback(entidad, "obtencion","","",{}).toPromise();
+        this.resultCountNotificaciones = this.datos;
+        const count = this.resultCountNotificaciones.body.length;
+        this.resultCountNotificaciones = count;
+     
+      break;
+  }
 }
+
+  private consultaback(entidad: string, tipo: string, cabecera?: string, identif?:string, ordenar?: any, takes?: number): Observable<any> {
+    console.log("fields", this.cabeceras);
+    console.log("fields", this.cabeceras.Servicios);
+    console.log("entidad", entidad);
+    let id = "";
+    
+    return this.dataSimpleService.fetchData(this.cabeceras.Servicios[entidad], this.cabeceras.Entities[entidad], 
+      this.cabeceras.Fields[entidad], this.cabeceras.Relations[entidad], {}, 
+      this.cabeceras.Joins[entidad], this.cabeceras.Multiconditions[entidad],ordenar,takes
+ 
+    
+    ).pipe(
+      tap(response => {
+        console.log("Response:", response);
+        if (response && response.body) {
+          switch(tipo) {
+            case "simple":
+              this.datos = response.body.map((item: any) => ({
+                id: item[id],
+                name: item[cabecera || 'name'], // Asegúrate de que 'cabecera' es el campo correcto
+              }));
+              break;
+            case "multi":
+              this.datos = response.body.map((item: any) => ({
+                id: item[0][id],
+                name: item[0][cabecera || 'name'], // Asegúrate de que 'cabecera' es el campo correcto
+              }));
+              break;
+            case "obtencion":
+              this.datos = response;
+              break;
+          }
+        } else {
+          console.log('No data found in the response.');
+        }
+      }),
+      catchError(error => {
+        console.log('Error en la solicitud:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+
+
+  TotalActivos() {
+
+    this.resultadoTotalActivos =  this.resultMobile2.body.length;
+  
+    const now = new Date().getTime(); // Tiempo actual en milisegundos
+    const oneDayInMs = 24 * 60 * 60 * 1000; // 24 horas en milisegundos
+    let count = 0;
+  
+    this.resultMobile2.body.forEach((itemArray: { updatedAt: string }[]) => {
+      if (itemArray.length > 0) {
+        const item = itemArray[0];
+        if (item.updatedAt) {
+          const updatedAtTime = new Date(item.updatedAt).getTime(); // Tiempo de updatedAt en milisegundos
+          const timeDifference = now - updatedAtTime;
+  
+          if (timeDifference <= oneDayInMs) {
+            count++;
+          }
+        }
+      }
+    });
+
+    this.resultadoTotalVehiculosActivos = count;
+  
+    console.log("Total activos en las últimas 24 horas:", count);
+  }
+
+
     
 }

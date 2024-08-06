@@ -41,6 +41,9 @@ export class DataService {
   private mapCleanupSource = new Subject<void>();
   mapCleanup$ = this.mapCleanupSource.asObservable();
 
+  private showModalSource = new Subject<boolean>();
+  showModal$ = this.showModalSource.asObservable();
+
   private readonly baseUrl: string = environments.baseUrl;
 
 
@@ -210,13 +213,19 @@ export class DataService {
 
   // FUNCIONES ENVIO DE INFORMACÓN ENTRE COMPONENTES
 
-  setUbicationValue(value: number) {
-    const currentValues = this.ubicationSubject.getValue();
-    if (!currentValues.includes(value)) {
-      this.ubicationSubject.next([...currentValues, value]);
+  setUbicationValue(value: number, isModalFilter: boolean = false) {
+    if (isModalFilter) {
+      // Si es el modal de filtro, limpia los valores existentes y agrega solo el nuevo
+      this.ubicationSubject.next([value]);
+    } else {
+      // Para otros componentes, mantén el comportamiento actual
+      const currentValues = this.ubicationSubject.getValue();
+      if (!currentValues.includes(value)) {
+        this.ubicationSubject.next([...currentValues, value]);
+      }
     }
   }
-
+ 
   // Método para actualizar todos los valores
   setUbicationValues(values: number[]) {
     this.ubicationSubject.next(values);
@@ -279,6 +288,10 @@ export class DataService {
 
   triggerMapCleanup() {
     this.mapCleanupSource.next();
+  }
+
+  showModal() {
+    this.showModalSource.next(true);
   }
 
 }

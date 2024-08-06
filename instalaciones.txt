@@ -22,6 +22,8 @@ npm install primeflex
 npm install primeicons
 npm i @flaticon/flaticon-uicons
 
+npm i ngx-image-cropper
+
 Vulnerabilidades 
 
 npm audit

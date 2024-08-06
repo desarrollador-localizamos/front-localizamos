@@ -23,11 +23,11 @@ body {
     width: 100%;
     height: calc(100vh - 65px);
     z-index: 1;
-    object-fit: contain;
+    object-fit: cover;
     align-content: center;
   }
   
-  .carousel-image {
+ ::ng-deep .carousel-image {
     width: 100%;
     height: calc(100vh - 65px);
     object-fit: cover;
@@ -85,96 +85,160 @@ body {
     font-weight: 500;
     color: #6b7280;
   }
+
+::ng-deep .p-divider.p-divider-horizontal {
+    margin: 0.6rem 0;
+    padding: 0 1rem;
+}
+
+ ::ng-deep .p-divider-horizontal:before {
+    position: relative; 
+    display: block;
+    top: 50%;
+    left: 0;
+    width: 100%;
+    content: "";
+}
+
+img.imagen-acabecera-card{
+    width: 100%;
+    height: 120px;
+    border-radius: 2rem 2rem 0rem 0rem;
+    object-fit: cover;
+}
+
+.span-title{
+    display: flex;
+    font-weight: 600;
+    font-size: 14px;
+    padding: 0px 8px 0px 8px;
+    color: #6b7280;
+}
+
+.p-title{
+    margin: 0px;
+    font-size: 12px;
+    display: flex;
+    text-align: left;
+    padding: 0px 8px 0px 8px;
+    font-weight: 400;
+    color: #3b82f6; margin-bottom: 10px;
+}
+
+a{
+    text-decoration: none
+}
+
+.title-h3{
+    display: flex;
+    padding:0px 10px;
+    margin: 0px;
+    color: #818791;
+    font-weight: 500;
+}
+
+.title-h3 i{
+    display: flex;
+    align-items: center;
+    margin-left: 5px;
+}
+
+.text-strong{
+    display: flex;
+    padding: 0px 8px;
+}
+
+.div-button{
+    display: flex;
+    margin-right: 30px;
+    justify-content: flex-end;
+}
+
+.span-button{
+    margin-bottom: 10px;
+    background: #22c55e;
+    border-radius: 5px;
+    padding: 3px;
+    font-size: 10px;
+    font-weight: 500;
+}
+
+.span-button a{
+    color: white;
+    text-decoration: none;
+    display: flex;
+}
+
+.enlace-mapa{
+    width: 30px;
+    height: 30px;  
+    margin-right: 18px;
+}
+
+.enlace-mapa i{
+    color: white; 
+    background-color: #22c55e;
+    font-size: 15px;  padding: 5px;
+    width: 0px; 
+    height: 30px; 
+    border-radius: 50px 50px 10px 50px;
+}
+
+.div-contenedor-activo{
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.div-contenedor-activo:hover{
+    background-color: #eaeaec;
+ 
+}
+.span-placa{
+    margin-left: 5px; 
+    font-weight: 600;
+    color: #6b7280;
+}
+
+.tag-div{
+    padding: 3px;
+    border-radius: 5px;color: white;
+    height: 20px;
+    font-size: 10px;
+    margin-right: 5px;
+}
+
+
+.battery-low {
+    background-color: #EF4444; /* rojo */
+  }
   
-//   .card-top-info img {
-//     margin-top: 20px;
-//     margin-bottom: 10px;
-//     height: 50px;
-//   }
+  .battery-medium {
+    background-color: #F2B413; /* amarillo */
+  }
   
-//   .card-top-info .info {
-//     font-size: 0.7rem;
-//     width: 5rem;
-//   }
-  
-//   .card-top-info .info span {
-//     font-size: 1rem;
-//   }
-  
-//   /* Estilos para las tarjetas PrimeNG */
-//   :host ::ng-deep .p-card .p-card-title {
-//     font-size: 1rem;
-//   }
-  
-//   :host ::ng-deep .p-card .p-card-subtitle {
-//     font-size: 0.7rem;
-//     padding-bottom: 0;
-//   }
-  
-//   :host ::ng-deep .p-card .p-card-content {
-//     padding-bottom: 0;
-//   }
-  
-//   .p-card-body {
-//     padding: 0;
-//   }
-  
-//   /* Estilos para el contenido de las tarjetas */
-//   .card-content {
-//     display: flex;
-//     align-items: center;
-//     justify-content: space-between;
-//     padding: 5px;
-//   }
-  
-//   .card-content a {
-//     display: flex;
-//     align-items: center;
-//   }
-  
-//   .card-content p {
-//     font-size: 0.7rem;
-//     margin: 0;
-//   }
-  
-//   .card-content .link {
-//     display: flex;
-//     align-items: center;
-//   }
-  
-//   .card-content .km {
-//     font-size: 0.7rem;
-//     background-color: green;
-//     color: white;
-//     padding: 4px;
-//     border-radius: 15px;
-//   }
-  
-//   .estado {
-//     background-color: green;
-//     height: 7px;
-//     width: 7px;
-//     border-radius: 50%;
-//     margin-right: 10px;
-//   }
-  
-//   .pi.pi-car {
-//     font-size: 0.7rem;
-//     margin-right: 10px;
-//   }
-  
-//   /* Estilos para el enlace "Ver más" */
-//   .vermas {
-//     display: flex;
-//     justify-content: flex-end;
-//   }
-  
-//   .vermas p {
-//     margin-top: 10px;
-//     margin-bottom: 0;
-//     color: green;
-//     font-size: 0.7rem;
-//   }
+  .battery-high {
+    background-color: #22c55e; /* verde por defecto */
+  }
+
+  .velocidad {
+    background-color: #a7a7a7; /* rojo */
+  }
+
+  .velocidad-baja{
+    background-color: #22c55e; /* verde por defecto */
+  }
+
+  .velocidad-rapida{
+    background-color: #F2B413; /* amarillo */
+  }
+
+  .velocidad-muy-rapida{
+    background-color: #EF4444; /* rojo */
+  }
+
+
+
   
   /* Estilos para ocultar elementos del carrusel PrimeNG */
   :host ::ng-deep .p-carousel .p-carousel-indicators,

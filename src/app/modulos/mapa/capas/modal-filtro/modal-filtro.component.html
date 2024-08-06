@@ -41,10 +41,10 @@
       </div>
     
       <div style="margin-top: 15px;">
-        <div>
+        <div class="cabecera-filtro">
             <p-iconField iconPosition="left">
                 <p-inputIcon styleClass="pi pi-search" />
-                <input type="text" pInputText placeholder="Search" [(ngModel)]="searchTerm" (input)="onSearch($event)" />
+                <input styleclass="buscador-filtro" type="text" pInputText placeholder="Search" [(ngModel)]="searchTerm" (input)="onSearch($event)" />
             </p-iconField>
             <p-button [style]="{'margin-left':'5px !important;'}"  (click)="seleccionar()" icon="fi fi-rr-list-check"/>
             <p-button [style]="{'margin-left':'5px !important;'}"  (click)="limpiar()" icon="fi fi-rs-clean" severity="secondary" />

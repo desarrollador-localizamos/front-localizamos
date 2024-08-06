@@ -11,14 +11,18 @@ import { AuthService } from '../../../../core/services/auth.service';
 import { FiltroComponent } from "../../filtro/filtro.component";
 import { Router } from '@angular/router';
 import { DividerModule } from 'primeng/divider';
+import { ModalBuscadorComponent } from "../../modal-buscador/modal-buscador.component";
+import { RouterModule } from '@angular/router';
+import { DataService } from '../../../../core/services/data.service';
+
 
 @Component({
     selector: 'app-header-component',
     standalone: true,
     templateUrl: './header-component.component.html',
     styleUrl: './header-component.component.scss',
-    imports: [DividerModule,ButtonModule, BadgeModule, InputTextModule,
-        AvatarModule, OverlayPanelModule, CustomersComponent, FiltroComponent]
+    imports: [RouterModule,DividerModule, ButtonModule, BadgeModule, InputTextModule, ButtonModule, InputTextModule,
+    AvatarModule, OverlayPanelModule, CustomersComponent, FiltroComponent, ModalBuscadorComponent]
 })
 export class HeaderComponentComponent {
 
@@ -26,11 +30,11 @@ export class HeaderComponentComponent {
   items: MenuItem[] | undefined;
 
   sidebarVisible: boolean = false;
-
   showMenu: boolean = false;
 
+ 
   constructor(public authService: AuthService,
-  public service: ApirestService, private router: Router) { }
+  public service: ApirestService, private router: Router, private dataService: DataService) { }
 
 
     arrowTransform: string = 'rotate(0deg)'; // Inicialmente, la flecha no está rotada
@@ -41,6 +45,10 @@ export class HeaderComponentComponent {
 
     get isExactMapRoute(): boolean {
       return this.router.url === '/mapa';
+    }
+
+    showDialog() {
+      this.dataService.showModal();
     }
 
 }

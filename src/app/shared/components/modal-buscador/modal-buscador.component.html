@@ -1,0 +1,31 @@
+<p-dialog styleClass="dialog-buscador"
+    header="Buscador" 
+    [modal]="true"
+    [(visible)]="visible" 
+    [position]="'top'" 
+    [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
+    [style]="{ width: '35vw' }" 
+    >
+    <div style="margin: 8px 0px; width: 100%;">
+        <p-iconField iconPosition="left">
+            <p-inputIcon styleClass="pi pi-search" />
+            <input type="text" pInputText placeholder="Buscar" (input)="onSearch($event)" [style]="{'width':'100%;'}" />
+        </p-iconField>
+    </div>
+
+    <div>
+        <ul style="font-size: 18px;">
+            @for (item of filteredResults; track $index) {
+                @if (item[0]?.plate) {
+                    <li style="padding: 8px 4px;">
+                        <a (click)="ubication(item[0].id)" style="text-decoration: none !important; cursor: pointer;">
+                            <strong style="color: #4b5563;">Placa: </strong>
+                            <span style="color: #6b7280; font-weight: 600;">{{ item[0].plate }}</span>
+                        </a>
+                    </li>
+                    <p-divider />
+                }
+            }
+        </ul>
+    </div>
+</p-dialog>

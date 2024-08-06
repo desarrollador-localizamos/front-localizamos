@@ -1,0 +1,133 @@
+<div class="edit-profile">
+    <h1>Editar perfil</h1>
+    <div class="profile-card">
+      <form #profileForm="ngForm" (ngSubmit)="onUpdate(profileForm)">
+        <div class="profile-content">
+          <div class="profile-image-section">
+            <h2>{{ formData.name }}</h2>
+            @if (croppedImage !== null && croppedImage !== undefined) {
+              <img
+                [src]="croppedImage"
+                alt="Imagen recortada"
+                class="profile-picture-selected"
+              />
+            } @else {
+              <img
+                [src]="'assets/imagenes/' + image.url"
+                [alt]="image.alt"
+                alt="Profile Picture"
+                class="profile-picture"
+              />
+            }
+  
+            <div class="form-group">
+                <p-button label="Subir" severity="success" icon="fi fi-bs-upload" size="small" (click)="onUploadClick()"  styleClass="custom-font-size"/>
+                <p-button label="Restablecer" severity="danger" icon="fi fi-br-rotate-reverse" size="small" (click)="onDeleteClick()"
+                styleClass="custom-font-size"/>
+              <input
+                type="file"
+                #fileInput
+                style="display: none"
+                (change)="fileChangeEvent($event)"
+                accept="image/*"
+              />
+           
+            </div>
+  
+            @if (imageChangedEvent) {
+              <image-cropper
+                [imageChangedEvent]="imageChangedEvent"
+                [maintainAspectRatio]="true"
+                [aspectRatio]="1 / 1"
+                format="jpeg"
+                (imageCropped)="imageCropped($event)"
+              ></image-cropper>
+            }
+          </div>
+          
+          <p-divider layout="vertical" class="custom-vertical-divider hidden md:flex">Info</p-divider>
+          <p-divider  layout="horizontal"  class="custom-horizontal-divider hidden md:hidden">Info</p-divider>
+          
+          <div class="profile-form">
+            <div class="form-group">
+              <label for="full-name">Nombre completo</label>
+                <p-iconField iconPosition="left">
+                    <p-inputIcon styleClass="pi pi-user" />
+                    <input type="text" pInputText placeholder="Ingrese el nombre completo"  id="full-name"
+                    name="full-name"  required  [(ngModel)]="formData.name"   #name="ngModel"/>
+                </p-iconField>
+           
+            </div>
+            
+  
+            <div class="form-group">
+                <label for="full-name">Correo electrónico</label>
+                  <p-iconField iconPosition="left">
+                      <p-inputIcon styleClass="pi pi-envelope" />
+                      <input type="text" pInputText placeholder="Ingrese el correo electronico"   required  [(ngModel)]="formData.name" />
+                  </p-iconField>
+             
+            </div>
+  
+            <div class="form-row">
+              <div class="form-group">
+                <label for="password">Contraseña</label>
+                <p-password 
+                  [(ngModel)]="formData.password" #password="ngModel" name="password" 
+                  [toggleMask]="true" placeholder="Ingrese una contraseña"  minlength="8">
+                  <ng-template pTemplate="header">
+                    <h6>Elige una contraseña</h6>
+                  </ng-template>
+                  <ng-template pTemplate="footer">
+                    <p-divider />
+                    <p class="mt-2">Sugerencias</p>
+                    <ul class="pl-2 ml-2 mt-0" style="line-height: 1.5">
+                      <li>Al menos una minúscula</li>
+                      <li>Al menos una mayúscula</li>
+                      <li>Al menos un número</li>
+                      <li>Como mínimo 8 caracteres</li>
+                    </ul>
+                  </ng-template>
+                </p-password>
+
+              </div>
+              <div class="form-group">
+                <label for="confirm-password">Confirmar contraseña</label>
+                <p-password 
+                  [(ngModel)]="formData.confirmPassword"
+                  #confirmPassword="ngModel"
+                  name="confirmPassword"
+                  [feedback]="false" 
+                  [toggleMask]="true" 
+                  placeholder="Confirmar contraseña"
+                  
+                />
+           
+              </div>
+            </div>
+            <div class="form-row" >
+              <div class="form-group">
+                <label for="emailNotifications">Notificaciones email</label>
+                <p-inputSwitch [(ngModel)]="formData.emailNotifications" name="emailNotifications" [trueValue]="1" [falseValue]="0"/>
+              </div>
+              <div class="form-group">
+                <label for="pushNotifications">Notificaciones push</label>
+                <p-inputSwitch [(ngModel)]="formData.pushNotifications" name="pushNotifications" [trueValue]="1" [falseValue]="0" />
+              </div>
+            </div>
+          </div>
+        </div>
+        
+      </form>
+      <div class="form-actions">
+        <!-- Campos llenos -->
+        <button 
+            pButton 
+            pRipple 
+            label="Actualizar" 
+            class="p-button-success">
+        </button>
+    
+      </div>
+    </div>
+  </div>

@@ -22,7 +22,7 @@
 .logo {
     display: flex;
     align-items: center;
-    margin-top: 3px;
+    margin-top: 5px;
 }
 
 img.img-logo1 {
@@ -93,58 +93,126 @@ img.img-logo2 {
     text-decoration: underline;
 }
 
-form {
-    position: relative;
-    width: 200px;
-    height: 35px;
-    background: #E5E7EB;
-    box-sizing: border-box;
-    border-radius: 25px;
-    border: 4px solid #E5E7EB;
-    padding: 5px;
+// form {
+//     position: relative;
+//     width: 200px;
+//     height: 35px;
+//     background: #E5E7EB;
+//     box-sizing: border-box;
+//     border-radius: 25px;
+//     border: 4px solid #E5E7EB;
+//     padding: 5px;
+// }
+
+// .buscador {
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     width: 100%;
+//     height: 25px;
+//     line-height: 30px;
+//     outline: 0;
+//     border: 0;
+//     display: none;
+//     font-size: 1em;
+//     border-radius: 20px;
+//     padding: 0 0px 0px 35px;
+// }
+
+// .icono-buscador {
+//     box-sizing: border-box;
+//     padding: 5px;
+//     width: 28px;
+//     height: 28px;
+//     position: absolute;
+//     top: 0;
+//     left: 0;
+//     border-radius: 50%;
+//     color: #0d1a05;
+//     text-align: center;
+//     font-size: 0.9em;
+//     transition: all 1s;
+// }
+
+// form .buscador,
+// form:valid .buscador {
+//     display: block;
+//     background-color: #E5E7EB;
+// }
+
+// form:hover .icono-buscador,
+// form:valid .icono-buscador {
+//     background: #5a5a5a;
+//     color: white;
+// }
+
+::ng-deep .p-overlaypanel .p-overlaypanel-content {
+    padding: 0.7rem;
 }
 
-.buscador {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 25px;
-    line-height: 30px;
-    outline: 0;
-    border: 0;
-    display: none;
-    font-size: 1em;
-    border-radius: 20px;
-    padding: 0 0px 0px 35px;
+::ng-deep .button-buscador{
+    background-color: #f3f4f6;
+    color: #4b5563;
+    border: 0px;
+    text-align: left;
+    border-radius: 10px;
 }
 
-.icono-buscador {
-    box-sizing: border-box;
-    padding: 5px;
-    width: 28px;
-    height: 28px;
-    position: absolute;
-    top: 0;
-    left: 0;
-    border-radius: 50%;
-    color: #0d1a05;
-    text-align: center;
-    font-size: 0.9em;
-    transition: all 1s;
+::ng-deep.button-buscador i{
+    font-weight: 700;
 }
 
-form .buscador,
-form:valid .buscador {
-    display: block;
-    background-color: #E5E7EB;
+::ng-deep.button-buscador .span-button1 {
+    font-weight: 600;
+    margin-left: 8px;
+    
+}
+::ng-deep.button-buscador .span-button2{
+    font-weight: 600;
+    margin-left: 4px;
+    
 }
 
-form:hover .icono-buscador,
-form:valid .icono-buscador {
-    background: #5a5a5a;
+.contador-notificaciones{
+    margin: 0px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    margin-right: 8px;
+}
+
+.button-notificaciones{
+    padding: 3px; 
+    text-decoration: none;
+    border: 0px;
+    border-radius: 5px;
+    font-size: 10px;
+    height: 20px;
     color: white;
+    background-color: #3b82f6;
 }
+
+.span-notificacion-link{
+    width: 100%;
+    display: flow;
+    text-align: center;
+    font-size: 13px;
+    color: #3b82f6;
+    font-weight: 600;
+}
+
+.li-opciones-perfil{
+    padding: 5px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+
+.li-opciones-perfil:hover{
+    background-color: #f3f4f6;
+    border-radius: 5px;
+}
+
 
 ::ng-deep .p-overlaypanel {
     margin-top: 22px;
@@ -159,6 +227,10 @@ form:valid .icono-buscador {
 ::ng-deep  .p-divider.p-divider-horizontal {
     margin: 1rem 0;
     padding: 0 1rem;
+}
+
+::ng-deep  .p-inputtext {
+   width: 100%;
 }
 
 .notification-list {
@@ -197,7 +269,43 @@ form:valid .icono-buscador {
     img.img-logo2 {
         display: none;
     }
+    
 }
+
+@media screen and (max-width: 500px) {
+    ::ng-deep .button-buscador{
+     
+        width: 100px;
+        padding: 0.75rem 0.7rem;
+    }
+    
+
+    ::ng-deep.button-buscador .span-button2{
+        display: none;
+    }
+    
+
+  
+}
+
+@media screen and (max-width: 400px) {
+
+    ::ng-deep .button-buscador{
+     
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        padding: 0.75rem 0.7rem;
+    }
+
+    ::ng-deep.button-buscador .span-button1 {
+        display: none;    
+    }
+    ::ng-deep.button-buscador .span-button2{
+        display: none;
+    }
+}
+
 
 @media screen and (max-width: 360px) {
     form,
@@ -205,4 +313,5 @@ form:valid .icono-buscador {
         width: 100px;
         cursor: pointer;
     }
+
 }

@@ -1,11 +1,14 @@
 <header class="header">
     <div class="logo">
-        <div class="logo1">
-            <img class="img-logo1" src="../../assets/imagenes/logo_icono.png" alt="Logo">
+        <div [routerLink]="['/dashboard']" style="display: flex; align-items: center; cursor: pointer;">
+            <div class="logo1">
+                <img class="img-logo1" src="../../assets/imagenes/logo_icono.png" alt="Logo">
+            </div>
+            <div class="logo2">
+                <img class="img-logo2" src="../../assets/imagenes/logo_nombre.png" alt="Logo">
+            </div>
         </div>
-        <div class="logo2">
-            <img class="img-logo2" src="../../assets/imagenes/logo_nombre.png" alt="Logo">
-        </div>
+
         @if (isExactMapRoute) {
             <app-filtro></app-filtro>
         }
@@ -13,33 +16,33 @@
 
     <nav class="navbar">
         <ul class="nav-links-header">
-            <li>
-                <form action="">
+            <li> 
+                 <p-button  (onClick)="showDialog()" 
+                    styleClass="button-buscador" >
+                    <i class="fi fi-br-search"></i> <span class="span-button1">Buscar </span> <span class="span-button2"> activo</span>
+                </p-button>
+            </li>
+            <!-- <li  (Click)="showDialog('top')" > 
+                <form >
+                 
+                    <button (click)="showDialog('top')" style="background: none; border: none; width: 100%; text-align: left; cursor: pointer;">
                     <input class="buscador" type="search" required placeholder="Buscar">
                     <i class="pi pi-search icono-buscador"></i>
+                </button>
                 </form>
-            </li>
+            </li> -->
             <li>
                 <i class="pi pi-bell text-4xl icono-notificacion" pBadge value="2" (click)="op2.toggle($event)"></i>
                 <p-overlayPanel #op2 appendTo="body" class="notificationMenu">
                     <ng-template pTemplate="content">
                         <div style="margin-bottom: 12px;">
                             <span style="display: flex; justify-content: space-between;">
-                                <p style="margin: 0px;
-                                font-size: 14px;
-                                display: flex;
-                                align-items: center;
-                                margin-right: 8px;">Tienes 0 notificaciones</p> 
-                                <a href="notificaciones" style="padding: 3px; text-decoration: none;   border: 0px;
-                                border-radius: 5px;
-                                font-size: 10px;
-                                height: 20px;
-                                color: white;
-                                background-color: #3b82f6;">Ver todas</a>  
+                                <p class="contador-notificaciones" >Tienes 0 notificaciones</p> 
+                                <a class="button-notificaciones" href="notificaciones">Ver todas</a>  
                             </span>
                         </div>
                         <div class="notification-list">
-                            <div class="notification-info" style="display: flex;">
+                            <div class="notification-info li-opciones-perfil" style="display: flex;">
                                 <div style="margin-right: 12px;">
                                     <img style="width: 45px;"
                                     src="../../../../../assets/imagenes/logo_icono.png" alt="">
@@ -54,7 +57,7 @@
                             </div>
 
                             <p-divider />
-                            <div class="notification-info" style="display: flex;">
+                            <div class="notification-info li-opciones-perfil" style="display: flex;">
                                 <div style="margin-right: 12px;">
                                     <img style="width: 45px;"
                                     src="../../../../../assets/imagenes/logo_icono.png" alt="">
@@ -71,12 +74,7 @@
                             <p-divider />
 
                             <div>
-                                <span style="width: 100%;
-                                display: flow;
-                                text-align: center;
-                                font-size: 13px;
-                                color: #3b82f6;
-                                font-weight: 600;"> Ver más notificaciones<i style="font-size: 13px; margin-left: 5px;" class="pi pi-chevron-down"></i></span>
+                                <span class="span-notificacion-link" > Ver más notificaciones<i style="font-size: 13px; margin-left: 5px;" class="pi pi-chevron-down"></i></span>
                             </div>
 
                         </div>  
@@ -100,32 +98,38 @@
                 <li>
                     <p-overlayPanel #op appendTo="body" [style]="{ 'margin-top': '4px' }">
                         <ng-template pTemplate="content">
-                            <div>
-                                <span style="display: flex;">
-                                    <p style="margin: 0px;
-                                    font-size: 13px;
-                                    display: flex;
-                                    align-items: center;
-                                    margin-right: 8px;">Tienes 0 notificaciones nuevas</p> 
-                                    <button style="    border: 0px;
-                                    border-radius: 5px;
-                                    font-size: 10px;
-                                    height: 20px;
-                                    color: white;
-                                    background-color: #3b82f6;">Ver más</button>  
-                                </span>
+                          <div>
+                            <div style="display: flex; flex-direction: column; align-items: center;">
+                                <span style="font-weight: 700;
+                                font-size: 17px;
+                                color: #4b5563;">Aplicacion localizamos</span>
+                                    <span style="color: #6b7280; font-weight: 600;">Localizamos</span>
                             </div>
-                            <div class="notification-list">
-                                <div class="notification-info">
-                                    <h4>Administrador</h4>
-                                    <p>Mensaje nuevo</p>
-                                    <span>hace 7 meses</span>
-                                </div>
-                            </div>  
+                            <p-divider/>
+                            <div>
+                                <ul style="list-style: none; padding-left: 5px;">
+                                  <li class="li-opciones-perfil">
+                                    <a [routerLink]="['/perfil']" style="text-decoration: none; color: inherit;">
+                                      <i class="fi fi-sr-user"></i> Perfil
+                                    </a>
+                                  </li>
+                                  <li class="li-opciones-perfil">
+                                    <i class="fi fi-ss-interrogation"></i> ¿Necesitas ayuda?
+                                  </li>
+                                  <li class="li-opciones-perfil">
+                                    <i class="fi fi-br-exit"></i> Cerrar sesión
+                                  </li>
+                                </ul>
+                              </div>
+                          </div> 
                         </ng-template>
                     </p-overlayPanel>
 
             </li>
         </ul>
     </nav>
+
+
 </header>
+
+<app-modal-buscador></app-modal-buscador>

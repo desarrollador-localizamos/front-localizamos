@@ -1,0 +1,152 @@
+.edit-profile {
+    
+    padding: 30px;
+    .profile-card {
+      padding: 26px;
+      align-content: center;
+      height: auto; 
+      background-color: #fff;
+      border-radius: 8px;
+      box-shadow: rgba(0, 0, 0, 0) 0px 8px 18px, rgba(0, 0, 0, 0.06) 0px 5px 5px;
+    
+    }
+  
+    .profile-content {
+      display: flex;
+      justify-content: space-between; // Distribuye el espacio entre los elementos
+    
+      
+    }
+    
+    .profile-image-section {
+        flex: 0 0 30%;
+        text-align: center;
+        display: flex;
+        border: 1px solid #e5e7eb;
+        align-items: center;
+        flex-direction: column;
+        border-radius: 8px;
+     
+  
+      h2 {
+        margin: 0;
+        color: #333;
+        padding-bottom: 12px;
+      }
+  
+  
+      .profile-picture {
+        width: 140px;
+        height: 140px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 15px;
+      }
+
+
+        .profile-picture-selected{
+          box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+          margin-bottom: 20px;
+          width: 140px;
+          height: 140px;
+          border-radius: 50%;
+          object-fit: cover;
+          
+        }
+      
+    }
+ 
+  
+
+    .profile-form {
+        flex: 0 0 60%;
+          
+      }
+      
+      label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: bold; 
+      }
+
+    }
+  
+    .form-actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+  
+      button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+  
+
+      }
+    }
+
+    .form-group {
+        margin-bottom: 18px;
+    }
+   ::ng-deep .p-inputtext {
+        margin: 0;
+        width: 100%;
+        background: #f3f4f6;
+        border: 0px;
+    }
+
+    ::ng-deep .p-password {
+        width: 100%;
+    }
+    
+    ::ng-deep .custom-font-size {
+        font-size: 12px !important;
+        padding: 5px;
+        margin-left: 8px;
+      }
+    
+
+  
+
+  @media (max-width: 1350px) {
+
+    .profile-form{
+        flex: 0 0 0;
+    }
+  }
+
+  @media (max-width: 850px) {
+
+    .form-row{
+        flex-direction: column;   
+        gap: 0 !important;
+    }
+  }
+
+@media (max-width: 850px) {
+      .profile-content  {
+
+      flex-direction: column;
+    }
+
+    ::ng-deep .custom-vertical-divider {
+         display: none !important; /* Ocultar el divisor vertical en pantallas menores de 850px */
+      }
+    
+      ::ng-deep .custom-horizontal-divider {
+        display: flex !important; /* Mostrar el divisor horizontal en pantallas menores de 850px */
+      }
+}
+
+
+@media (max-width: 271px) {
+
+    .btn-photo {
+
+      margin-top: 5px;
+      margin-left: 0px !important;
+    }
+}

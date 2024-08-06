@@ -28,7 +28,7 @@
 
                   <div class="ps-3 components">
                     <div>
-                      <span class="span-valor">5270</span>
+                      <span class="span-valor">{{resultadoTotalActivos }}</span>
                       <p class="texto-valor" > Unidades en Plataforma</p>
                     </div>
 
@@ -53,7 +53,7 @@
 
                   <div class="ps-3 components">
                     <div>
-                      <span class="span-valor">2233/5270</span>
+                      <span class="span-valor">{{resultadoTotalVehiculosActivos}}/{{resultadoTotalActivos }}</span>
                       <p class="texto-valor" > Unidades Reportando</p>
                     </div>
 
@@ -66,6 +66,81 @@
                     </div>
                 
                   </div>
+              </div>
+
+              <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center " style="height: 100%;align-content: flex-start;">
+                  <div class="contenedor-icono-card">
+                    <i class="fi fi-bs-bell-notification-social-media"></i>
+                  </div>
+              
+                </div>
+
+                <div class="ps-3 components">
+                  <div>
+                    <span class="span-valor">{{resultCountNotificaciones}}</span>
+                    <p class="texto-valor" > Notificaciones Pendientes</p>
+                  </div>
+
+                
+                </div>
+
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="height: 100%;align-content: flex-end;">
+                  <div  class="contenedor-icono-card">
+                    <i class="fi fi-rr-arrow-small-right"></i>
+                  </div>
+              
+                </div>
+              </div>
+
+              <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center " style="height: 100%;align-content: flex-start;">
+                  <div class="contenedor-icono-card">
+                    <i class="fi fi-rr-map-location-track"></i>
+                  </div>
+              
+                </div>
+
+                <div class="ps-3 components">
+                  <div>
+                    <span class="span-valor">1887.64</span>
+                    <p class="texto-valor" >km recorridos hoy</p>
+                  </div>
+
+                
+                </div>
+
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="height: 100%;align-content: flex-end;">
+                  <div  class="contenedor-icono-card">
+                    <i class="fi fi-rr-arrow-small-right"></i>
+                  </div>
+              
+                </div>
+              </div>
+
+              <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center " style="height: 100%;align-content: flex-start;">
+                  <div class="contenedor-icono-card">
+                    <i class="fi fi-rs-time-twenty-four"></i>
+                  </div>
+              
+                </div>
+
+                <div class="ps-3 components">
+                  <div>
+                    <span class="span-valor">114h 61m</span>
+                    <p class="texto-valor" > Trabajadas hoy</p>
+                  </div>
+
+                
+                </div>
+
+                <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="height: 100%;align-content: flex-end;">
+                  <div  class="contenedor-icono-card">
+                    <i class="fi fi-rr-arrow-small-right"></i>
+                  </div>
+              
+                </div>
               </div>
 
               <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
@@ -93,25 +168,95 @@
                 </div>
               </div>
 
+
             
             </div>
 
           </div>
 
           <div>
-            <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
+            <div class="card-top-info " >
 
-             <div>
-              <span>Ubicación</span>
-              <p>Conozca el estado y ubicación de sus activos móviles</p>
-             </div>
-             <div>
-              <i class="fi fi-rr-motorcycle" style="width: 30px; height: 30px;"></i>
-              <i class="fi fi-bs-truck-side" style="width: 30px; height: 30px;"></i>
-              <i class="fi fi-rr-car-side" style="width: 30px; height: 30px;"></i>
-              <i class="fi fi-rs-excavator" style="width: 30px; height: 30px;"></i>
+              <div style="font-size: 14px; padding: 8px 5px;">
+                <span class="span-title"  style="font-size: 18px !important; ">Ubicación</span>
+                
+                <p class="p-title">Conozca el estado y ubicación de sus activos móviles</p>
+                <p-divider />
+                <div style="display: flex;justify-content: space-between;">
+                 <a (click)="onLinkClick('MobileUnityEvents' , 1)" style="cursor: pointer;" >
+                  <h3 class="title-h3">Activos móviles <i class="fi fi-br-land-layer-location"></i></h3> </a> 
+                 <a href="/mapa" class="enlace-mapa"> <i class="fi fi-rs-map-marker"></i></a>
+                
+                </div>
+              
+                <div style="height: 255px;overflow: auto; ">
+                  <p-divider type="dashed"/>
+                  <div style="font-size: 12px; " >
+                    @for (subArray of resultMobile?.body; track $index) {
+                      @for (item of subArray; track item.id) {
+                        <div class="div-contenedor-activo" (click)="ubication(item.id)">
+                          <div style="margin-left: 15px; font-size: 15px; text-align: left;">
+                            <i class="fi fi-ss-circle-small"></i>
+                            <i style="font-size: 18px; margin-left: 5px;color: #6b7280;" class="fi fi-rr-car"></i>
+                            <span class="span-placa">{{ item.plate }}</span>
+                            <span style="margin-left: 5px; margin-left: 5px; color: #6b7280; font-size: 12px;  font-weight: 500;">({{ item.devicedeviceTypebrandname }} - {{ item.devicedeviceTypecode }})</span>
+                          </div>
+                          <div style="margin-right: 10px; display: flex;">
+                            <div style="width: 60px;" class="tag-div" [ngClass]="{
+                              'velocidad': item.endreportbattery === 0,
+                              'velocidad-baja': item.endreportbattery > 1 && item.endreportbattery <= 60,
+                              'velocidad-rapida': item.endreportbattery > 61 && item.endreportbattery <= 80,
+                              'velocidad-muy-rapida': item.endreportbattery > 81
+                            }">{{ item.endreportvelocity }} km/h</div>
+                            <div class="tag-div"  [ngClass]="{
+                              'battery-low': item.endreportbattery === 0,
+                              'battery-medium': item.endreportbattery > 0 && item.endreportbattery <= 20,
+                              'battery-high': item.endreportbattery > 20
+                            }">
+                              <span class="title" ></span> {{ item.endreportbattery }}%
+                              <i class="fi fi-sr-battery-bolt">
+                              </i>
+                            </div>
+                            @if (item.endreporttemperature !== null) {
+                              <div class="tag-div" [ngClass]="{
+                                'battery-low': item.endreportbattery === 0,
+                                'battery-medium': item.endreportbattery > 0 && item.endreportbattery <= 28,
+                                'battery-high': item.endreportbattery > 29
+                              }">{{ item.endreporttemperature }} °</div>
+                            }
+                            <div class="tag-div" >
+                             
+                                <i class="fi fi-ss-compass-north"  style="color: #22c55e; font-size: 18px; display: flex;"
+                                  [ngStyle]="{
+                                    'transform': 'rotate(' + (item.endreportdegree || 0) + 'deg)',
+                                    'transform-origin': 'center center'
+                                  }">
+                                </i>
+                       
+                            </div>
+                          </div>
+                        </div>
+                        <p-divider type="dashed"/>
+                      }
+                    }
+                  </div>
 
-             </div>
+                 
+              
+                
+                </div>
+              
+                <p-divider type="dashed"/>
+
+              </div>
+
+              <div>
+                <div class="div-button">
+                  <span class="span-button"><a (click)="onLinkClick('MobileUnityEvents' , 1)" style="cursor: pointer;">Ver más <i style="font-size: 15px; display: flex;"
+                     class="fi fi-rr-arrow-small-right"></i></a></span>
+                </div>
+              </div>
+
             </div>
           </div>
 
@@ -120,43 +265,70 @@
         <div class="col-12 lg:col-4">
         
           <div>
+
             <div class="col-12">
               <div class="card-top-info " >
                 <div > 
-                  <img src="http://aplicacion.localizamos.co/assets/images/dashboard/box2.jpg" alt="" style="width: 100%; height: 120px; border-radius: 2rem 2rem 0rem 0rem;">
+                  <img src="http://aplicacion.localizamos.co/assets/images/dashboard/box2.jpg" alt="" class="imagen-acabecera-card">
 
                 </div>
 
-                <div>
-                  <span style="display: flex;
-                  font-weight: 600;
-                  font-size: 15px;
-                  padding: 0px 8px 0px 8px;
-                  color: #6b7280;">Reporte y Analiticas</span>
-                  <p style="margin: 0px;
-                  font-size: 13px;
-                  display: flex;
-                  text-align: left;
-                  padding: 0px 8px 0px 8px;
-                  font-weight: 400;
-                  color: #3b82f6;">Obtenga los reportes y datos acerca de su información</p>
+                <div style="font-size: 14px;">
+                  <span class="span-title">Reporte y Analiticas</span>
+                  <p class="p-title">Obtenga los reportes y datos acerca de su información</p>
                   <div >
-                   <a href="#" style="text-decoration: none"><h3 style="display: flex;
-                    padding: 10px;
-                    margin: 0px;
-                    color: #818791;
-                    font-weight: 600;">Generar certificado <i style="display: flex;
-    align-items: center;
-    margin-left: 5px;" class="fi fi-rs-features-alt"></i></h3> </a> 
+                   <a href="#"><h3 class="title-h3">Generar certificado <i class="fi fi-rs-features-alt"></i></h3> </a> 
                   </div>
-
+                  <p-divider type="dashed"/>
                   <div>
-                    <span>Reportes programados</span>
+                    <span class="span-title">Reportes programados <i style=" margin-left:5px;" class="fi fi-rs-ballot-check"></i></span>
+               
                   </div>
-                  <div>
-
+                  <p-divider type="dashed"/>
+                  <div style="height: 80px; overflow: auto;">
+                    <div style="font-size: 12px; ">
+                      <span class="span-title">Reporte velocidad promedio</span>
+                      <div>
+                        <strong class="text-strong" >Periocidad: semanal</strong>
+                       
+                        <strong class="text-strong" >Notifica a: santiemdgmal.com</strong>
+                      </div>
+                    
+  
+                    </div>
+                    <p-divider type="dashed"/>
+                    <div style="font-size: 12px; ">
+                      <span class="span-title">Reporte velocidad promedio</span>
+                      <div>
+                        <strong style="display: flex; padding: 0px 8px;">Periocidad: semanal</strong>
+                       
+                        <strong style="display: flex;  padding: 0px 8px;">Notifica a: santiemdgmal.com</strong>
+                      </div>
+                    
+  
+                    </div>
+                    <p-divider type="dashed"/>
+                    <div style="font-size: 12px; ">
+                      <span class="span-title">Reporte velocidad promedio</span>
+                      <div>
+                        <strong style="display: flex; padding: 0px 8px;">Periocidad: semanal</strong>
+                       
+                        <strong style="display: flex;  padding: 0px 8px;">Notifica a: santiemdgmal.com</strong>
+                      </div>
+                    
+  
+                    </div>
                   </div>
+                
+                  <p-divider type="dashed"/>
 
+                </div>
+
+                <div>
+                  <div class="div-button">
+                    <span class="span-button"><a href="#">Ver más <i style="font-size: 15px; display: flex;"
+                       class="fi fi-rr-arrow-small-right"></i></a></span>
+                  </div>
                 </div>
 
               </div>
@@ -165,30 +337,66 @@
             <div class="col-12">
               <div class="card-top-info " >
                 <div > 
-                  <img src="http://aplicacion.localizamos.co/assets/images/dashboard/box2.jpg" alt="" style="width: 100%; height: 100px; border-radius: 2rem 2rem 0rem 0rem;">
+                  <img src="http://aplicacion.localizamos.co/assets/images/dashboard/box3.jpg" alt="" class="imagen-acabecera-card">
+
+                </div>
+
+                <div style="font-size: 14px;">
+                  <span class="span-title">Recursos Geográficos</span>
+                  <p class="p-title">Visualice y administre sus recursos geográfico</p>
+                  <div >
+                   <a href="#"><h3 class="title-h3">Mis geocercas <i class="fi fi-br-land-layer-location"></i></h3> </a> 
+                  </div>
+                  <p-divider type="dashed"/>
+                  <div>
+                    <span class="span-title">Recursos Geográficos<i style=" margin-left:5px;" class="fi fi-rs-ballot-check"></i></span>
+               
+                  </div>
+                  <p-divider type="dashed"/>
+                  <div style="height: 80px; overflow: auto;">
+                    <div style="font-size: 12px; ">
+                      <span class="span-title">Gruas pereira <strong class="text-strong" >(Geocerca)</strong></span>
+                    
+  
+                    </div>
+                    <p-divider type="dashed"/>
+                    <div style="font-size: 12px; ">
+                      <span class="span-title">Reporte velocidad promedio</span>
+                      <div>
+                        <strong style="display: flex; padding: 0px 8px;">Periocidad: semanal</strong>
+                       
+                        <strong style="display: flex;  padding: 0px 8px;">Notifica a: santiemdgmal.com</strong>
+                      </div>
+                    
+  
+                    </div>
+                    <p-divider type="dashed"/>
+                    <div style="font-size: 12px; ">
+                      <span class="span-title">Reporte velocidad promedio</span>
+                      <div>
+                        <strong style="display: flex; padding: 0px 8px;">Periocidad: semanal</strong>
+                       
+                        <strong style="display: flex;  padding: 0px 8px;">Notifica a: santiemdgmal.com</strong>
+                      </div>
+                    
+  
+                    </div>
+                  </div>
+                
+                  <p-divider type="dashed"/>
 
                 </div>
 
                 <div>
-                  <span>Reporte y Analiticas</span>
-                  <p>Obtenga los reportes y datos acerca de su información</p>
-                  <div>
-                    <h3>Generar certificado</h3>
+                  <div class="div-button">
+                    <span class="span-button"><a href="#">Ver más <i style="font-size: 15px; display: flex;"
+                       class="fi fi-rr-arrow-small-right"></i></a></span>
                   </div>
-                  <div>
-
-                  </div>
-                  <div>
-                    <span>Reportes programados</span>
-                  </div>
-                  <div>
-
-                  </div>
-
                 </div>
 
               </div>
             </div>
+            
           
 
           </div>

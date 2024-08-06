@@ -1,0 +1,13 @@
+li:hover{
+    background: #e5e7eb;
+    border-radius: 5px;
+}
+
+:host ::ng-deep .buscador-activo-header{
+    width: 100% !important;
+    height: 40px;
+}
+
+:host ::ng-deep .dialog-buscador input.p-inputtext.p-component.p-element {
+    width: 100% !important;
+  }

@@ -194,7 +194,7 @@ private colorSeleccionado: string = '';
       {campo:"endreport.customer_name", texto: "Nombre del customer"},
       {campo:"endreport.velocity", texto: "velocidad"},
       {campo:"endreport.temperature", texto: "temperatura"},
-      {campo:"endreport.battery", texto: "Placa"},
+      {campo:"endreport.battery", texto: "bateria"},
       {campo:"endreport.course", texto: "Curso"},
       {campo:"endreport.degree", texto: "Grados"},
       {campo:"brand", texto: "Marca"},
