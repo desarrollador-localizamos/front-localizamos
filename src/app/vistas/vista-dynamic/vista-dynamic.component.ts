@@ -5,10 +5,14 @@ import { Subscription, catchError, tap, throwError } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { TableSencillaComponent } from "../../shared/components/tables/table-sencilla/table-sencilla.component";
 import { ButtonTooltiComponent } from "../../shared/components/buttons/button-toolti/button-toolti.component";
+import { SidebarRegistrosComponent, FieldConfig } from "../../shared/components/sidebar/sidebar-registros/sidebar-registros.component";
 import { TagModule } from 'primeng/tag';
-import { environments } from '../../../environments/environments';
-import { DataService } from '../../core/services/data.service';
+import { DataSimpleService } from '../../core/services/datasimple.service';
 
+// Importación de las constantes y interfaces necesarias para el manejo de datos
+import { FORM_FIELDS } from "../../core/constants/field-definitions.constants";
+import { Entities } from "../../core/constants/globalEntities/globalEntities";
+import { CONSTANS } from "../../core/constants/vista-dynamic-reporte/constantes";
 interface EstructuraData {
   id: number;
   [key: string]: any;
@@ -21,6 +25,23 @@ interface EnvioData {
   joins?: any[];
 }
 
+interface ButtonConfig {
+  icon: string;
+  tooltipText: string;
+  severity: string;
+  action: (rowData: any) => void;
+  shouldDisplay: (rowData: any) => boolean;
+  order: number;
+}
+
+interface Customer {
+  id: string | number; // Ajusta el tipo según el tipo real de tu ID
+  // Añade aquí otras propiedades que tenga tu objeto customer
+  name?: string;
+  email?: string;
+  // ... otras propiedades
+}
+
 @Component({
   selector: 'app-vista-dynamic',
   standalone: true,
@@ -30,12 +51,12 @@ interface EnvioData {
     CommonModule,
     TableSencillaComponent,
     ButtonTooltiComponent,
-    TagModule
+    TagModule,
+    SidebarRegistrosComponent,
   ]
 })
 export class VistaDynamicComponent implements OnInit, OnDestroy {
 
-  private readonly baseUrl: string = environments.baseUrl;
   
   protected selectedLink: string = '';
   protected data: { header: any[], body: EstructuraData[] } = { header: [], body: [] };
@@ -44,7 +65,10 @@ export class VistaDynamicComponent implements OnInit, OnDestroy {
   protected routeSubscription!: Subscription;
   protected body!: EnvioData;
   protected fieldNames: string[] = [];
-
+  protected cantidad: number = 5;
+  private id_dato_entidad = 0;
+  //activa el sidebar para registrar o editar información
+  protected sidebarVisible: boolean = false;
 
   private fieldMappings: { [key: string]: any[] } = {
     MobileUnityEvents: [ // Tabla que depreonto no va existir
@@ -408,7 +432,19 @@ export class VistaDynamicComponent implements OnInit, OnDestroy {
     ],
   };
 
-  
+  /**
+   * Campos disponibles para la creación de formularios según la entidad seleccionada.
+   */
+  protected formFields = FORM_FIELDS;
+  protected entities: any = Entities;
+
+  protected Servicios_global: any = CONSTANS.Servicios;
+  /**
+   * Inicializa los campos del formulario para el cliente ya sea para editar o crear un dato.
+   */
+  entityFields: FieldConfig [] = [];
+  entityData = {}; 
+
   private fieldRelations: { [key: string]: any[] } = {
     Customers: [
      "city","department","plan","userType"
@@ -491,10 +527,59 @@ export class VistaDynamicComponent implements OnInit, OnDestroy {
         {"mainkey":"commandId", "join":"CommandsList","joinkey":"id"},
       ],
   };
+
+  private Servicios_local: {[key: string]: string} = {
+    Customers: 'database/actualizar',
+  }
+
+  buttonConfigurations: ButtonConfig[] = [
+    {
+      icon: 'pi pi-user',
+      tooltipText: 'Usuarios',
+      severity: 'info',
+      action: (rowData) => this.updateUser(rowData.id),
+      shouldDisplay: () => true, 
+      order: 1
+    },
+    {
+      icon: 'pi pi-book',
+      tooltipText: 'Contactos',
+      severity: 'secondary',
+      action: (rowData) => this.saveUser(rowData.id),
+      shouldDisplay: () => true,
+      order: 2
+    },
+    {
+      icon: 'pi pi-th-large',
+      tooltipText: 'Grupos',
+      severity: 'success',
+      action: (rowData) => this.saveGroups(rowData.id),
+      shouldDisplay: () => true,
+      order: 3
+    },
+    {
+      icon: 'pi pi-pencil',
+      tooltipText: 'Editar',
+      severity: 'warning',
+      action: (rowData) => this.abrirModal(rowData.id),
+      shouldDisplay: () => true,
+      order: 4
+    },
+    {
+      icon: 'pi pi-trash',
+      tooltipText: 'Eliminar',
+      severity: 'danger',
+      action: (rowData) => this.deleteCustomer(rowData.id),
+      shouldDisplay: () => true,
+      order: 5
+    }
+  ];
+
   constructor(
     private route: ActivatedRoute,
     private http: HttpClient,
-    private dataService: DataService) {
+    private dataService: DataSimpleService
+  ){
 
     this.body = {
       entityName : "",
@@ -507,11 +592,12 @@ export class VistaDynamicComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.routeSubscription = this.route.paramMap.subscribe(params => {
       this.selectedLink = params.get('page') ?? '';
-      console.log('Selected Link:', this.selectedLink);
-
+      
       // Fetch data each time the route changes
+      // this.fetchData();
       this.fetchData();
     });
+    this.buttonConfigurations.sort((a, b) => a.order - b.order);
   }
 
 
@@ -521,23 +607,18 @@ export class VistaDynamicComponent implements OnInit, OnDestroy {
   }
 
   private fetchData() {
-    console.log(this.fieldJoins)
-    this.dataService.fetchData(this.fieldMappings, this.selectedLink, this.fieldRelations,undefined, this.fieldJoins)
-      .pipe(
-        tap(response => {
-          // Procesa la respuesta según sea necesario
-          this.result = response;
-
+    this.dataService.fetchData(this.Servicios_global[this.selectedLink], this.entities[this.selectedLink], this.fieldMappings[this.selectedLink], this.fieldRelations[this.selectedLink] )
+    .pipe(tap(response => {
+        this.result = response;          
           if (this.result.header && Array.isArray(this.result.header)) {
             this.fieldNames = this.result.header.map((item: any) => item.campo.replace(/\./g, ''));
           }
-          console.log("Field Names:", this.fieldNames);
           this.updateDisplayedColumns();
-        }), 
-        catchError(error => {
+      }), 
+      catchError(error => {
           console.log('Error en la solicitud:', error);
           return throwError(() => error);
-        })
+      })
       ).subscribe();
   }
 
@@ -545,31 +626,69 @@ export class VistaDynamicComponent implements OnInit, OnDestroy {
   protected updateDisplayedColumns(): void {
     
     if (this.result.body.length > 0) {
-      console.log("data",this.result);
+      // console.log("data",this.result);
       this.displayedColumns = Object.keys(this.result.body[0]);
     }
   }
-
-  protected isObject(value: any): boolean {
-    return value && typeof value === 'object' && !Array.isArray(value);
+  
+  updateUser(id: string) {
+    console.log('Actualizando usuario con ID:', id);
+    // Implementa la lógica para actualizar usuario
   }
 
-  protected formatObject(obj: any): string {
-    if (Array.isArray(obj)) {
-      return obj.map(item => this.formatObject(item)).join(', ');
-    } else if (this.isObject(obj)) {
-      return Object.values(obj).map(val => this.formatObject(val)).join(', ');
+  saveUser(id: string) {
+    console.log('Guardando usuario con ID:', id);
+    
+    // Implementa la lógica para guardar usuario
+  }
+
+  saveGroups(id: string) {
+    console.log('Guardando grupos con ID:', id);
+    
+    // Implementa la lógica para guardar grupos
+  }
+
+
+  /**
+   * Permite mostrar el componente Sidebar para editar información de una entidad
+   * @param id Representa el ID del dato en la entidad que se quiere editar.
+   */
+  abrirModal(id: number) {   
+    this.entityFields = this.formFields[this.selectedLink] || [];         
+    if (id != 0 ) {      
+      let datos_entidad = this.result.body.find((customer:Customer) => customer.id == id);    
+      this.id_dato_entidad = datos_entidad.id;
+      this.entityData = datos_entidad;
     }
-    return obj;
+    this.sidebarVisible = true;
   }
 
+  /**
+   * Esta función es llamada cuando se presiona el botón enviar en el componente Sidebar
+   * @param formData Información enviada por el formulario en el Sidebar.
+   */
+  onSubmit(formData: any) {
+    console.log('Datos del formulario:', formData);
 
-  saveUser() {
-    console.log('User saved!');
+    this.dataService.actualizarDatos(this.Servicios_local[this.selectedLink], this.selectedLink, formData, {id: this.id_dato_entidad} ) 
+    .pipe(
+        tap(response => {
+          console.log("respo", response);
+        
+        }),
+        catchError(error => {
+          console.log('Error en la solicitud:', error);
+          return throwError(() => error);
+        })
+      ).subscribe();
+
+    // Aquí manejarías la lógica de guardar o actualizar
   }
 
-  updateUser() {
-    console.log('User updated!');
+  deleteCustomer(id: string) {
+    console.log('Eliminando cliente con ID:', id);
+    // Implementa la lógica para eliminar cliente
   }
+
 }
 

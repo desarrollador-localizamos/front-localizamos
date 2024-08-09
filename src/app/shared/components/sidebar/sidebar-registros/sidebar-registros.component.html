@@ -1,11 +1,47 @@
 <div class="card flex flex-wrap justify-content-center gap-2">
     <p-sidebar [(visible)]="visible" (onHide)="onHide()" [position]="position">
-        <ng-content></ng-content>
+        @if (form) {
+          <form [formGroup]="form" (ngSubmit)="onSubmit()">
+            @for (field of fields; track field.name) {
+              <div>
+                <label [for]="field.name">{{field.label}}</label>
+                @switch (field.type) {
+                  @case ('text') {
+                    <input [formControlName]="field.name" [id]="field.name" type="text" [placeholder]="field.placeholder || ''">
+                  }
+                  @case ('number') {
+                    <input [formControlName]="field.name" [id]="field.name" type="number" [placeholder]="field.placeholder || ''">
+                  }
+                  @case ('email') {
+                    <input [formControlName]="field.name" [id]="field.name" type="email" [placeholder]="field.placeholder || ''">
+                  }
+                  @case ('password') {
+                    <input [formControlName]="field.name" [id]="field.name" type="password" [placeholder]="field.placeholder || ''">
+                  }
+                  @case ('checkbox') {
+                    <input [formControlName]="field.name" [id]="field.name" type="checkbox">
+                  }
+                  @case ('select') {
+                    <select [formControlName]="field.name" [id]="field.name">
+                      <option value="" disabled selected>{{field.placeholder || 'Seleccione una opción'}}</option>
+                      @for (option of field.options; track option.value) {
+                        <option [value]="option.value">{{option.name}}</option>
+                      }
+                    </select>
+                  }
+                }
+              </div>
+            }
+            <button type="submit" [disabled]="form.invalid">Guardar</button>
+          </form>
+        }
+  
     </p-sidebar>
-  </div>
+
+</div>
   
 
-    <!--<p-button 
+<!--<p-button 
         type="button" 
         class="mr-2" 
         (click)="sidebarVisible2 = true" 

@@ -1,6 +1,19 @@
-<h2>Vista solicitada: {{ selectedLink }}</h2>
 
 <div style="padding: 30px;">
+  <h2>Vista solicitada: {{ selectedLink }}</h2>
+
+<app-button-toolti
+              (onClick)="abrirModal(0)"
+              [icon]= "'pi pi-plus'"
+              [tooltipPosition]="'right'"
+              [tooltipText]="'Crear '"
+              [rounded]="true"
+              [text]="true"
+              [severity]="''"
+              [styles]="{ 'width': '40px', 'height': '40px', 'padding': '5px',  'margin': '2px' }"
+>
+</app-button-toolti>
+
   <app-table-sencilla [data]="result"
         [paginator]="true"
         [rows]="10"
@@ -14,22 +27,42 @@
 
   <ng-template #bodyTemplate let-rowData>
     <tr>
-      <td *ngFor="let key of displayedColumns">
-        <ng-container *ngIf="isObject(rowData[key]); else normalCell">
-          {{ formatObject(rowData[key]) }}
-        </ng-container>
-        <ng-template #normalCell>
-          {{ rowData[key] }}
-        </ng-template>
-      </td>
-    
+      @for (key of displayedColumns; track $index) {
+        <td>
+          <ng-container *ngIf="key; else normalCell">
+            {{ rowData[key] }}
+          </ng-container>
+          <ng-template #normalCell>
+            {{ rowData[key] }}
+          </ng-template>
+        </td>
+      }
+
       <td>
-        <app-button-toolti (onClick)="updateUser()" [icon]="'pi pi-user'" [tooltipPosition]="'bottom'" [tooltipText]="'Usuarios'" [rounded]="true" [text]="true" [severity]="'info'"></app-button-toolti>
-        <app-button-toolti (onClick)="saveUser()" [icon]="'pi pi-book'" [tooltipPosition]="'bottom'" [tooltipText]="'Contactos'" [rounded]="true" [text]="true" [severity]="'secondary'"></app-button-toolti>
-        <app-button-toolti [icon]="'pi pi-th-large'" [tooltipPosition]="'bottom'" [tooltipText]="'Grupos'" [rounded]="true" [text]="true" [severity]="'success'"></app-button-toolti>
-        <app-button-toolti [icon]="'pi pi-pencil'" [tooltipPosition]="'bottom'" [tooltipText]="'Editar'" [rounded]="true" [text]="true" [severity]="'warning'"></app-button-toolti>
-        <app-button-toolti [icon]="'pi pi-trash'" [tooltipPosition]="'bottom'" [tooltipText]="'Eliminar'" [rounded]="true" [text]="true" [severity]="'danger'"></app-button-toolti>
+        @for (button of buttonConfigurations | slice:0:cantidad; track button) {
+          @if (button.shouldDisplay(rowData)) {
+            <app-button-toolti 
+              (onClick)="button.action(rowData)"
+              [icon]="button.icon"
+              [tooltipPosition]="'bottom'"
+              [tooltipText]="button.tooltipText"
+              [rounded]="true"
+              [text]="true"
+              [severity]="button.severity">
+            </app-button-toolti>
+          }
+        }
       </td>
     </tr>
   </ng-template>
+
+  <app-sidebar-registros 
+    [(visible)]="sidebarVisible" 
+    [position]="'right'"
+    [fields]="entityFields"
+    [data]="entityData" 
+    (formSubmit)="onSubmit($event)">
+    <h3>Left Sidebar</h3>
+    <button (click)="sidebarVisible = false">Close Sidebar</button>
+  </app-sidebar-registros>
 </div>

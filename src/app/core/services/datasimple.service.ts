@@ -38,11 +38,9 @@ export class DataSimpleService {
     this.itemsSelectedSubject.next(list);
   }
 
-
-   fetchData(urlservice: string, entity: string, fields: [], fieldsrelations: [], 
-    conditions?: {}, fieldJoins?: [], multiconditions?: [], orders?:string, 
-    take?: number): Observable<any> {
-
+  fetchData(urlservice: string, entity: string, fields: any[], fieldsrelations: any[], 
+    conditions?: {}, fieldJoins?: any[], multiconditions?: any[], orders?:string, 
+    take?: number): Observable<any> {            
     let url = `${this.baseUrl}${urlservice}`;
     const body = {
       entityName : entity,
@@ -54,7 +52,6 @@ export class DataSimpleService {
       orders:orders,
       takes:take
     } ;
-    console.log('Formato del cuerpo:', JSON.stringify(body)); // Verifica el formato en consola
     
     return this.http.post(url, body); // Asegura el encabezado de Content-Type
   }
@@ -67,12 +64,36 @@ export class DataSimpleService {
       data: dataInsert
 
     } ;
-    console.log('Formato del cuerpo:', JSON.stringify(body)); // Verifica el formato en consola
     
     return this.http.post(url, body); // Asegura el encabezado de Content-Type
   }
   
-  
+  /**
+   * Se reciben datos para actualiza registro de una entidad.
+   * @param urlservice URL de API para actualizar datos
+   * @param entity Entidad que se quiere actualizar
+   * @param dataInsert Información a actualizar
+   * @param conditions Trae el id del registro a actualizar
+   * @param identifier Campos de identificación unicos en base de datos
+   * @param fieldsrelations Relaciones con otras entidades
+   * @param fieldJoins Joinas con otras entidades
+   * @returns json con el resultado de la operación
+   */
+  actualizarDatos(urlservice: string, entity: string, dataInsert:{}, conditions: {},  identifier?: {},  fieldsrelations?: [], fieldJoins?: []): Observable<any> {
+
+    let url = `${this.baseUrl}${urlservice}`;
+    const body = {
+      // ---
+      entityName: entity,
+      data: dataInsert,
+      conditions: conditions,
+      identifier: identifier,
+      relations: fieldsrelations,
+      joins: fieldJoins,
+    } ;
+    // return [{ "message": "Inserción exitosa" }, { "message": "Error en la inserción" }, {"estatus": "200"}];
+    return this.http.post(url, body); // Asegura el encabezado de Content-Type
+  }
 
   setResponse(response: any) {
     this.responseSubject.next(response);

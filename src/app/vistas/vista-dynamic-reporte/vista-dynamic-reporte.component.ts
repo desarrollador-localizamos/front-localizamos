@@ -6,17 +6,13 @@ import { BarChartComponent } from "../../shared/components/charts/bar-chart/bar-
 import { SelectAvanzadoComponent, data } from "../../shared/components/inputs/select/select-avanzado/select-avanzado.component";
 import { TableSencillaComponent } from "../../shared/components/tables/table-sencilla/table-sencilla.component";
 import { MultiSelectComponent} from "../../shared/components/inputs/select/multi-select/multi-select.component";
-import { catchError, Observable, of, tap, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
 import { DataSimpleService } from '../../core/services/datasimple.service';
 import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
 import { User } from '../../core/interfaces';
-import {NgIf} from '@angular/common'
-
-interface EstructuraData {
-  id: number;
-  [key: string]: any;
-}
+import { CONSTANS } from "../../core/constants/vista-dynamic-reporte/constantes";
+import { Entities } from "../../core/constants/globalEntities/globalEntities";
 
 
 @Component({
@@ -26,6 +22,7 @@ interface EstructuraData {
     styleUrl: './vista-dynamic-reporte.component.scss',
     imports: [DividerModule, PanelModule, SelectAvanzadoComponent, TableSencillaComponent, MultiSelectComponent, CalendarModule,FormsModule, PieChartComponent, BarChartComponent ]
 })
+
 export class VistaDynamicReporteComponent implements OnInit {
   protected datos: data[]=[];
   private res:any[]=[];
@@ -94,239 +91,19 @@ export class VistaDynamicReporteComponent implements OnInit {
       { name: 'Vencimiento de licencia', value: 6  },
     ]
 
-
     this.opciones.gasolina= [
       { name: 'Galones consumidos', value: 1},  
       { name: 'Rendimiento',  value: 2  },
     ]
-
-    this.cabeceras.Fields = {
-      EventTypes:[
-        {campo:"id", texto: "id" },
-        {campo:"name", texto: "campo" },
-      ],
-      Customers: [
-        {campo:"id", texto: "id" },
-        {campo:"fullName", texto: "campo" },
-      ],
-      Devices: [
-        {campo:"mobileUnities.id", texto: "id" },
-        {campo:"mobileUnities.plate", texto: "campo" },
-        {campo:"customerId", texto: "campo" },
-      ],
-      MobileUnityGroups: [
-        {campo:"id", texto: "id" },
-        {campo:"name", texto: "campo" },
-      ],
-  
-      MobileUnityGroupunity: [
-        {campo:"unity.id", texto: "id" },
-        {campo:"unity.plate", texto: "campo" },
-      ],
-      
-      'Reporte general': [
-        {"campo":"MobileUnities.plate","texto":"Placa","sortable":true,"filter":true},
-        {"campo":"cantidad","texto":"", "id": "Cantidad","sortable":true,"filter":true},
-        {"campo":"porcentaje","texto":"", "id": "Porcentaje","sortable":true,"filter":true}
-       ],
-      'Reporte horas trabajadas': [
-        {"campo":"id","texto":"id","sortable":true,"filter":true},
-        {"campo":"start","texto":"Cliente","sortable":true,"filter":true},
-        {"campo":"MobileUnities.plate","texto":"\tActivos móviles","sortable":true,"filter":true}
-      ],
-      'Reporte kilometros recorridos': [
-        {"campo":"MobileUnities.plate","texto":"Placa","sortable":true,"filter":true},
-        {"campo":"km","texto":"Kilometros recorridos","sortable":true,"filter":true},
-        {"campo":"MobileUnities.milesXGallon","texto":"Frenado Brusco","sortable":true,"filter":true}
-      ],
-      'Reporte de velocidad promedio': [
-        {"campo":"MobileUnities.plate","texto":"Placa","sortable":true,"filter":true},
-        {"campo":"velocity","texto":"Velocidad promedio","sortable":true,"filter":true},
-        {"campo":"rank1","texto":"Menos de 64 km/h","sortable":true,"filter":true},
-        {"campo":"rank2","texto":"65 km/h - 79 km/h","sortable":false,"filter":true},
-        {"campo":"rank3","texto":"80km/h en adelante","sortable":true,"filter":true}
-      ],
-      // 'Reporte geocercas': [],
-      // 'Reporte de mantenimiento': [],
-      // 'Reporte gerencial': [],
-      // 'Reporte de certificado': [],
-      // 'Reporte horas reposo': [],
-      // 'Reporte de temperatura': [],
-      // 'Reporte de conductores': [],
-      'Reporte preoperacional': [
-        {"campo":"MobileUnities.plate","texto":"Placa","sortable":true,"filter":true},
-        {"campo":"resultDate","texto":"", "id": "Fecha","sortable":true,"filter":true},
-        {"campo":"Customers.fullName","texto":"Realizado por","sortable":false,"filter":true},
-        {"campo":"status","texto":"Estado","sortable":false,"filter":true}
-      ],
-      'Reporte hábitos de conducción': [
-        {"campo":"MobileUnities.plate","texto":"Placa","sortable":true,"filter":true},
-        {"campo":"aceleracionBrusca","texto":"Aceleración brusca","sortable":true,"filter":true},
-        {"campo":"frenadoBrusco","texto":"Frenado Brusco","sortable":true,"filter":true},
-        {"campo":"excesoVelocidad","texto":"Exceso de velocidad","sortable":true,"filter":true},
-        {"campo":"eventTypeId","texto":"","sortable":true,"filter":true}
-      ],
-      'Reporte de gasolina': [{"campo":"plate","texto":"Placa","sortable":true,"filter":true},
-        {"campo":"date","texto":"Fecha","sortable":true,"filter":true},
-        {"campo":"price","texto":"Precio","sortable":true,"filter":true},
-        {"campo":"carMileage","texto":"Kilometraje","sortable":false,"filter":true},
-        {"campo":"fuelQuantity","texto":"Galones recargados","sortable":true,"filter":true},
-        {"campo":"resultgal","texto":"Galones consumidos","sortable":true,"filter":true},
-        {"campo":"resultkm","texto":"Kilometros recorridos","sortable":true,"filter":true},
-        {"campo":"rendimiento","texto":"Rendimiento","sortable":true,"filter":true}
-      ],
-    }; 
     
-    this.cabeceras.Entities= {
-      'EventTypes':'EventTypes',
-      'Customers':"Customers",
-      'MobileUnityGroups':"MobileUnityGroups",
-      'MobileUnityGroupunity':"MobileUnityGroupunity",
-      'Devices':"Devices",
-      'Reporte general': "MobileUnityEvents",
-      'Reporte horas trabajadas': "Works",
-      'Reporte kilometros recorridos': "Works",
-      'Reporte de velocidad promedio': "MobileUnityEvents",
-      // 'Reporte geocercas': "",
-      // 'Reporte de mantenimiento': "",
-      // 'Reporte gerencial': "",
-      // 'Reporte de certificado': "",
-      // 'Reporte horas reposo': "", // ptra ruta verificar
-      // 'Reporte de temperatura': "",
-      // 'Reporte de conductores': "",
-      'Reporte preoperacional': "Preoperacional",
-      'Reporte hábitos de conducción': "MobileUnityEvents",
-      'Reporte de gasolina': "FuelConsumption",
-    };
+    this.cabeceras.Fields = CONSTANS.Fields;
+    this.cabeceras.Entities = Entities; 
+    this.cabeceras.Relations = CONSTANS.Relations; 
+    this.cabeceras.Joins = CONSTANS.Joins; 
+    this.cabeceras.Multiconditions = CONSTANS.Multiconditions 
+    this.cabeceras.Servicios = CONSTANS.Servicios; 
+    console.log('cabeceras ',this.cabeceras);
     
-    this.cabeceras.Relations= {
-      Customers: [],
-      Devices: [
-        "mobileUnities"
-       ],
-       MobileUnityGroups: [
-       "customer"
-       ],
-       MobileUnityGroupunity: [
-         "unity"
-       ],
-      'Reporte general': [],
-      'Reporte horas trabajadas': [],
-      'Reporte kilometros recorridos': [],
-      'Reporte de velocidad promedio': [],
-      // 'Reporte geocercas': [],
-      // 'Reporte de mantenimiento': [],
-      // 'Reporte gerencial': [],
-      // 'Reporte de certificado': [],
-      // 'Reporte horas reposo': [],
-      // 'Reporte de temperatura': [],
-      // 'Reporte de conductores': [],
-      'Reporte preoperacional': [],
-      'Reporte hábitos de conducción': [],
-      'Reporte de gasolina': [],
-    }
-
-    this.cabeceras.Joins= {
-      'Customers':[],
-      'MobileUnityGroups':[],
-      'MobileUnityGroupunity':[],
-      'Devices':[],
-      'Reporte general': [
-        {"mainkey":"unityId", "join":"MobileUnities","joinkey":"id"}
-      ],
-      'Reporte kilometros recorridos': [
-        { "mainkey": "unityId", "join": "MobileUnities", "joinkey": "id" }
-      ],
-      'Reporte de velocidad promedio': [
-        {"mainkey":"unityId", "join":"MobileUnities","joinkey":"id"}
-      ],
-      // 'Reporte geocercas': [],
-      // 'Reporte de mantenimiento': [],
-      // 'Reporte gerencial': [],
-      // 'Reporte de certificado': [],
-      // 'Reporte horas reposo': [],
-      // 'Reporte de temperatura': [],
-      // 'Reporte de conductores': [],
-      'Reporte preoperacional': [
-        {"mainkey":"customer", "join":"Customers","joinkey":"id"},
-        {"mainkey":"unityId", "join":"MobileUnities","joinkey":"id"}
-      ],
-      'Reporte hábitos de conducción': [
-        { "mainkey": "unityId", "join": "MobileUnities", "joinkey": "id" }
-      ],
-      'Reporte de gasolina': [
-        {"mainkey":"customer", "join":"Customers","joinkey":"id"},
-        {"mainkey":"unityId", "join":"MobileUnities","joinkey":"id"}
-      ],
-    }
-
-    this.cabeceras.Multiconditions= {
-      'MobileUnityGroups':[{"ref":"customerId","valor": []}],
-      'MobileUnityGroupunity':[{"ref":"groupId","valor": [],"tipo":"in" }],
-      'Devices':[{"ref":"customerId","valor": []}],
-      'Reporte general': [
-        {"ref":"unityId","valor":[1185,4704],"tipo":"in"},
-        {"ref":"deviceDateHour","valor":["2024-06-01","2024-06-02"],"tipo":"between"},
-        {"ref":"eventTypeId","valor": 6},
-      ],
-      'Reporte horas trabajadas': [
-        { "ref": "unityId", "valor": [4704], "tipo" : "in"},
-        {"ref":"start","valor":["2024-06-07","2024-06-13"],"tipo":"between"}
-      ],
-      'Reporte kilometros recorridos': [
-        {"ref": "unityId", "valor": [4704,4737], "tipo" : "in"},
-        {"ref":"start","valor":["2024-05-06","2024-06-13"],"tipo":"between"},
-        {"ref":"type","valor":1},
-      ],
-      'Reporte de velocidad promedio': [
-        {"ref": "unityId", "valor" : [4704], "tipo" : "in"},
-        {"ref":"deviceDateHour","valor":["2024-06-01","2024-06-06"],"tipo":"between"}
-      ],
-      // 'Reporte geocercas': [],
-      // 'Reporte de mantenimiento': [],
-      // 'Reporte gerencial': [],
-      // 'Reporte de certificado': [],
-      // 'Reporte horas reposo': [],
-      // 'Reporte de temperatura': [],
-      // 'Reporte de conductores': [],
-      'Reporte preoperacional': [
-        {"ref":"unityId","valor":[5535,5540],"tipo":"in"},
-        {"ref":"resultDate","valor":["2024-06-11","2024-06-12"],"tipo":"between"},
-      ],
-      'Reporte hábitos de conducción': [
-        { "ref": "unityId", "valor": [4551,4269], "tipo" : "in"},
-        {"ref":"deviceDateHour","valor":["2024-06-01","2024-06-01"],"tipo":"between"},
-        { "ref": "eventTypeId", "valor": [6, 59, 7], "tipo" : "in"} 
-      ],
-      'Reporte de gasolina': [
-        { "ref": "unityId", "valor": [4551,4269], "tipo" : "in"},
-        {"ref":"deviceDateHour","valor":["2024-06-01","2024-06-01"],"tipo":"between"},
-        { "ref": "eventTypeId", "valor": [6, 59, 7], "tipo" : "in"} 
-      ],
-    }
-
-    this.cabeceras.Servicios= {
-      'EventTypes':'visor',
-      'Customers':'visor',
-      'MobileUnityGroups':'visor',
-      'MobileUnityGroupunity':'visor',
-      'Devices':'visor',
-      'Reporte general': 'report-general',      
-      'Reporte horas trabajadas': 'report-hours-worked',
-      'Reporte kilometros recorridos': 'report-km-traveled',
-      'Reporte de velocidad promedio': 'report-velocity-aver',
-      // 'Reporte geocercas': '',
-      // 'Reporte de mantenimiento': '',
-      // 'Reporte gerencial': '',
-      // 'Reporte de certificado': 'pdf/report-certificate',
-      // 'Reporte horas reposo': '',
-      // 'Reporte de temperatura': '',
-      // 'Reporte de conductores': '',
-      'Reporte preoperacional': 'report-preoperacional',
-      'Reporte hábitos de conducción': 'report-hc',
-      'Reporte de gasolina': 'report-fuel-consuption'
-    }
-
   }
  
   protected async consultas(entidad:string,datos?:any) : Promise<void> {
@@ -493,9 +270,16 @@ export class VistaDynamicReporteComponent implements OnInit {
     }
   }
  
-  private consultaback(entidad: string,tipo: string, cabecera?: string,identif?:string, ordenar?: any): Observable<any> {
-    //console.log("servicio", this.cabeceras.Servicios);
-    //console.log("entidad", entidad);
+  /**
+   * Esta finción permite manejar de manera rápida y eficiente las cabeceras que se usan para las consultas de API
+   * @param entidad 
+   * @param tipo 
+   * @param cabecera 
+   * @param identif 
+   * @param ordenar 
+   * @returns 
+   */
+  public consultaback(entidad: string,tipo: string, cabecera?: string,identif?:string, ordenar?: any): Observable<any> {
     let id="";
     if(identif)
       id=identif;
