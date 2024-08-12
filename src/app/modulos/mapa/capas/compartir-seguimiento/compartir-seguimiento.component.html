@@ -1,0 +1,43 @@
+<div class="card flex flex-column align-items-center gap-2">
+    <p-dialog 
+      [position]="'top'" 
+      header="Reporte de viaje" 
+      [(visible)]="visible" 
+      [modal]="true" 
+      [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
+      [style]="{ width: '50vw', minHeight: '200px' }" 
+      [draggable]="false" 
+      [resizable]="false"
+      [autoZIndex]="true">
+        
+      <div class="p-grid p-fluid">
+        <div class="p-col-12 p-md-6" style="padding: 15px;">
+          <div class="p-field">
+            <label for="diaEnvio" style="margin-bottom: 5px;">Día de envío</label>
+            <p-dropdown 
+              id="diaEnvio"
+              [options]="dias" 
+              [(ngModel)]="selecccionarDias" 
+              optionLabel="name" 
+              placeholder="Seleccionar día" />
+          </div>
+        </div>
+        <div class="p-col-12 p-md-6" style="padding: 15px;">
+          <div class="p-field">
+            <label for="correo">Correo</label>
+            <p-chips id="correo" [(ngModel)]="values">
+              <ng-template let-item pTemplate="item">
+                <i class="pi pi-envelope mr-3"></i> {{ item }} 
+              </ng-template>
+            </p-chips>
+          </div>
+        </div>
+      </div>
+  
+      <div class="p-d-flex p-jc-end p-mx-2 p-my-3 mt-3 mb-4">
+        <p-button label="Agregar" severity="success" (click)="guardarValores()"></p-button>
+      </div>
+  
+    </p-dialog> 
+  </div>
+  

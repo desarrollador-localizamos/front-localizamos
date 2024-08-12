@@ -1,7 +1,9 @@
+//===== Graficos ===== //
+
 npm instal charts
 npm install --save-dev @types/chart.js @types/leaflet
 
-
+//===== Leaflet ===== //
 npm install @capacitor/geolocation@^6.0.0
 npm install @types/leaflet@^1.9.12
 npm install leaflet@^1.9.4
@@ -17,14 +19,27 @@ npm install --save-dev @types/slick-carousel@^1.6.40
 npm install @types/leaflet-routing-machine --save-dev
 npm install --save-dev @types/leaflet @types/leaflet-draw
 
+//===== Prime ng ===== //
+
 npm install primeng
 npm install primeflex
 npm install primeicons
 npm i @flaticon/flaticon-uicons
 
+
+//===== Recortar imagen ===== //
+
 npm i ngx-image-cropper
 
-Vulnerabilidades 
+
+//===== Street view ===== //
+
+npm install @types/google.maps --save-dev
+
+//===== Formatear fechas ===== //
+npm install date-fns
+
+//===== Vulnerabilidades ===== //
 
 npm audit
 npm audit fix

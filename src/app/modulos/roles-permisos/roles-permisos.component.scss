@@ -1,0 +1,41 @@
+li:hover{
+    background-color: #f3f4f6;
+   
+    border-radius: 5px;
+}
+
+span{
+    font-weight: 600;
+    font-size: 18px;
+    color: #4b5563;
+}
+
+::ng-deep button.p-ripple.p-element.p-button.p-component.acciones{
+    width: 2rem;
+    height: 2rem;
+}
+::ng-deep button.p-ripple.p-element.p-button.p-component.nuevoRol{
+    width: 100%;
+    border: 0px; 
+    height: 30px; 
+    border-radius: 5px;
+    color: white;
+     font-size: 15px;
+     font-weight: 700;
+}
+
+::ng-deep .p-fieldset.p-fieldset-toggleable .p-fieldset-legend a {
+    padding: 0.25rem;
+    color: #374151;
+    border-radius: 6px;
+    transition: box-shadow 0.2s;
+}
+
+::ng-deep .p-fieldset .p-fieldset-legend { 
+     border: 0px solid #e5e7eb; 
+     background: transparent; 
+}
+
+::ng-deep .p-fieldset .p-fieldset-content {
+    padding: 0.25rem;
+}

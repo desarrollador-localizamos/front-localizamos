@@ -52,18 +52,37 @@ export class DataSimpleService {
       orders:orders,
       takes:take
     } ;
+    console.log(body);
+    
     
     return this.http.post(url, body); // Asegura el encabezado de Content-Type
   }
 
   Insert(urlservice: string, entity: string,dataInsert?: []): Observable<any> {
 
+    let url = `${this.baseUrl}Database/Insert`;
+    const body = {
+      entityName : entity,
+      data: dataInsert,
+
+    } ;
+
+    console.log(body);
+    
+    
+    return this.http.post(url, body); // Asegura el encabezado de Content-Type
+  }
+
+  Edit(urlservice: string,  entity: string, conditions: any,dataInsert?: []): Observable<any> {
+
     let url = `${this.baseUrl}${urlservice}`;
     const body = {
       entityName : entity,
+      conditions: conditions,
       data: dataInsert
 
     } ;
+    console.log('Formato del cuerpo:', JSON.stringify(body)); // Verifica el formato en consola
     
     return this.http.post(url, body); // Asegura el encabezado de Content-Type
   }

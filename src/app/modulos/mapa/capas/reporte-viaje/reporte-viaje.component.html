@@ -7,80 +7,378 @@
         [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
         [style]="{ width: '50vw', minHeight: '200px' }" 
         [draggable]="false" 
-        [resizable]="false"
+        [resizable]="false" 
         [autoZIndex]="true">
 
-        <div style="display: flex; justify-content: flex-end;">
-            <p-button label="Agregar" severity="success"  (click)="consultas('UserScheduledEmails')"/>
+        <div style="display: flex; justify-content: flex-end; margin: 5px 8px 10px 8px;">
+            <p-button label="Agregar" severity="success" (click)="mostrarSeleccionPlantilla = true"/>
         </div>
 
-        <p-table [value]="resultData.body" [paginator]="true" [rows]="10" [responsive]="true">
+        <p-table [value]="resultData.body"
+        [paginator]="true"
+        [rows]="5"
+        [tableStyle]="{ 'min-width': '50rem' }"
+        [rowsPerPageOptions]="[10, 50]">
             <ng-template pTemplate="header">
-              <tr>
-                <th *ngFor="let header of resultData.header">{{ header.texto }}</th>
-              </tr>
+            <tr>
+                @for (header of resultData.header; track header) {
+                  @if (header.texto !== 'no va') {
+                      <th>{{ header.texto }}</th>
+                  }
+                }
+                <th>Acciones</th>
+            </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-row>
-              <tr>
-                <td *ngFor="let header of data.header">{{ row[header.campo] }}</td>
-              </tr>
+            <ng-template pTemplate="body" let-item>
+            <tr>
+                @for (header of resultData.header; track header) {
+                    @if (header.texto !== 'no va') {
+                        <td>{{ item[0][header.campo] }}</td>
+                    }
+                }
+                <td >
+                  <div style="display: flex;">
+                    <p-button icon="pi pi-pencil" severity="secondary" (click)="editarReporte(item[0].id, item[0].email, item[0].scheduledEndTime)" />
+                     <p-button icon="pi pi-trash" severity="danger" (click)="confirm(item[0].id)" />
+                    </div>
+                  </td>  
+               
+            </tr>
             </ng-template>
-          </p-table>
+        </p-table>
 
-        <!-- <div class="p-fluid grid">
-            <div class="field col-12 md:col-6">
-                <label for="fecha" class="block">Fecha</label>
-                <div class="p-1">
-                    <app-select-avanzado
-                        [options]="rango"
-                        placeholder="Seleccionar Rango de tiempo"
-                        styleClass="w-full"
-                        (selectionChange)="rangoTiempo($event)">
-                    </app-select-avanzado>
-                </div>
+
+        
+        @if (mostrarSeleccionPlantilla) {
+           
+            <div class="flex justify-content-between align-items-center mb-3 mt-3">
+                <h3 class="m-0">Selecciona una plantilla</h3>
+                <p-button severity="secondary" (click)="mostrarSeleccionPlantilla = false; resetSeleccionPlantilla()"
+                (click)="mostrarFormularioGeneral = false">Cerrar</p-button>
             </div>
-            @if (MostrarCalendario) {
-                <div class="field col-12 md:col-6">
-                  <label for="dia" class="block">Día</label>
+            <div class="mb-3">
+                <p-dropdown 
+                    [options]="plantillas"
+                    [(ngModel)]="seleccionarPlantillas"
+                    (onChange)="onPlantillaSeleccionada()"
+                    optionLabel="name"
+                    [filter]="true"
+                    filterBy="name" 
+                    [showClear]="true"
+                    placeholder="Seleccionar una plantilla"
+                    [appendTo]="'body'"
+                    [dropdownIcon]="'pi pi-chevron-down'"
+                    styleClass="p-dropdown-panel-above">
+                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                            <div class="flex align-items-center gap-2">
+                                <div>{{ selectedOption.name }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-plantillas pTemplate="item">
+                            <div class="flex align-items-center gap-2">
+                                <div>{{ plantillas.name }}</div>
+                            </div>
+                        </ng-template>
+                </p-dropdown>
+            </div>
+        }
+        @if (mostrarFormularioGeneral && mostrarSeleccionPlantilla) {
+            <p-divider type="dashed"/>
+        <div>
+            <!-- form general  -->
+            <div class="card" style="margin-top: 30px;">
+                  <div class="grid">
+                    <div class="col-12 md:col-4 mb-4">
+                      <span class="p-float-label">
+                        <p-calendar 
+                        [(ngModel)]="fechaInicio"
+                        [iconDisplay]="'input'" 
+                        [showIcon]="true" 
+                        inputId="icondisplay" />
+                        <label for="fechaInicio">Fecha de inicio</label>
+                      </span>
+                    </div>
+                    
+                    <div class="col-12 md:col-4 mb-4">
+                      <span class="p-float-label">
+                        <p-calendar 
+                        [(ngModel)]="horaInicio"
+                        [iconDisplay]="'input'" 
+                        [showIcon]="true" 
+                        [timeOnly]="true" 
+                        inputId="templatedisplay">
+                            <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+                                <i class="pi pi-clock" (click)="clickCallBack($event)"></i>
+                            </ng-template>
+                    </p-calendar>
+                        <label for="horaInicio">Hora de inicio</label>
+                      </span>
+                    </div>
+
+                     
+                    <div class="col-12 md:col-4 mb-4">
+                        <span class="p-float-label">
+                          <input id="correo" type="email" [(ngModel)]="correo" pInputText>
+                          <label for="correo">Correo electrónico</label>
+                        </span>
+                      </div>
+                    
+                    <div class="col-12 md:col-4 mb-4">
+                      <span class="p-float-label">
+                        <p-calendar 
+                        [(ngModel)]="fechaFin"
+                        [iconDisplay]="'input'" 
+                        [showIcon]="true" 
+                        inputId="icondisplay" />
+                        <label for="fechaFin">Fecha de fin</label>
+                      </span>
+                    </div>
+                    
+                    <div class="col-12 md:col-4 mb-4">
+                        <span class="p-float-label">
+                          <p-calendar 
+                          [(ngModel)]="horaFin"
+                          [iconDisplay]="'input'" 
+                          [showIcon]="true" 
+                          [timeOnly]="true" 
+                          inputId="templatedisplay">
+                              <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+                                  <i class="pi pi-clock" (click)="clickCallBack($event)"></i>
+                              </ng-template>
+                      </p-calendar>
+                          <label for="horaInicio">Hora de fin</label>
+                        </span>
+                      </div>
+                   
+                  </div>
+            </div>
+        </div>
+        <p-divider type="dashed"/>
+ 
+    @if (seleccionarPlantillas?.name === 'Magnetron' ) {
+        <div class="card" style="margin-top: 30px;">
+            <h3>Datos del viaje</h3>
+            <div class="grid">
+              
+    
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="placa" type="text" [(ngModel)]="placa" pInputText>
+                  <label for="placa">Placa</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="cedula" type="text" [(ngModel)]="cedula" pInputText>
+                  <label for="cedula">Cédula</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="conductor" type="text" [(ngModel)]="conductor" pInputText>
+                  <label for="conductor">Conductor</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="origen" type="text" [(ngModel)]="origen" pInputText>
+                  <label for="origen">Origen</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="destino" type="text" [(ngModel)]="destino" pInputText>
+                  <label for="destino">Destino</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="referencia" type="text" [(ngModel)]="referencia" pInputText>
+                  <label for="referencia">Referencia</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="novedad" type="text" [(ngModel)]="ultimaNovedad" pInputText>
+                  <label for="novedad">Ultima novedad</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="fechagps" type="text" disabled pInputText>
+                  <label for="fechagps">Fecha-Hora(GPS)</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="detalle" type="text" disabled pInputText>
+                  <label for="detalle">Detalle</label>
+                </span>
+              </div>
+
+            </div>
+        </div>
+    }
+    @if (seleccionarPlantillas?.name === 'Hitachi') {
+        <div class="card" style="margin-top: 30px;">
+            <h3>Datos del viaje</h3>
+            <div class="grid">
+              
+              
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="vehiculo" type="text" [(ngModel)]="vehiculo" pInputText>
+                  <label for="vehiculo">Vehículo</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="placa" type="text" [(ngModel)]="placa" pInputText>
+                  <label for="placa">Placa</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="cedula" type="text" [(ngModel)]="cedula" pInputText>
+                  <label for="cedula">Cédula</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="conductor" type="text" [(ngModel)]="conductor" pInputText>
+                  <label for="conductor">Conductor</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="origen" type="text" [(ngModel)]="origen" pInputText>
+                  <label for="origen">Origen</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="destino" type="text" [(ngModel)]="destino" pInputText>
+                  <label for="destino">Destino</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="servicio" type="text" [(ngModel)]="servicio" pInputText>
+                  <label for="servicio">Servicio/Actividad</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="mercancia" type="text" [(ngModel)]="mercancia" pInputText>
+                  <label for="mercancia">Tipo de mercancía</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="referencia" type="text" [(ngModel)]="referencia" pInputText>
+                  <label for="referencia">Referencia</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="evento" type="text" [(ngModel)]="ultimaNovedad" pInputText>
+                  <label for="evento">Evento/novedad</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="fechagps" type="text" disabled pInputText>
+                  <label for="fechagps">Fecha-Hora(GPS)</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="detalle" type="text" disabled pInputText>
+                  <label for="detalle">Detalle</label>
+                </span>
+              </div>
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="velocidad" type="text" disabled pInputText>
+                  <label for="velocidad">Velocidad</label>
+                </span>
+              </div>
+
+            </div>
+        </div>
+    }  
+  } 
+
+  <!-- Campos editar  -->
+
+  @if(seccionEdit){
+    <div>
+      <!-- form general  -->
+      <div class="card" style="margin-top: 30px;">
+        <h3>Editar reporte</h3>
+            <div class="grid">
+               
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
+                  <input id="correo" type="email" [(ngModel)]="correo" pInputText>
+                  <label for="correo">Correo electrónico</label>
+                </span>
+              </div>
+              
+              <div class="col-12 md:col-4 mb-4">
+                <span class="p-float-label">
                   <p-calendar 
-                    styleClass="w-full"
-                    [(ngModel)]="rangeDates" 
-                    selectionMode="range" 
+                  [(ngModel)]="fechaFin"
+                  [iconDisplay]="'input'" 
+                  [showIcon]="true" 
+                  inputId="icondisplay" />
+                  <label for="fechaFin">Fecha de fin</label>
+                </span>
+              </div>
+              
+              <div class="col-12 md:col-4 mb-4">
+                  <span class="p-float-label">
+                    <p-calendar 
+                    [(ngModel)]="horaFin"
                     [iconDisplay]="'input'" 
                     [showIcon]="true" 
-                    [readonlyInput]="true" />
-                </div>
-              }
-            
-        </div>
-
-        <div class="p-fluid grid">
-            <div class="field col-12 md:col-6">
-                <label for="email" class="block">Hora inicio</label>
-                <p-calendar 
-                [(ngModel)]="dateInicio" 
-                [iconDisplay]="'input'" 
-                [showIcon]="true" 
-                [timeOnly]="true" 
-                [showTime]="true"
-                inputId="timeInicio">
+                    [timeOnly]="true" 
+                    inputId="templatedisplay">
+                        <ng-template pTemplate="inputicon" let-clickCallBack="clickCallBack">
+                            <i class="pi pi-clock" (click)="clickCallBack($event)"></i>
+                        </ng-template>
                 </p-calendar>
+                    <label for="horaInicio">Hora de fin</label>
+                  </span>
+                </div>
+             
             </div>
-            <div class="field col-12 md:col-6">
-                <label for="email" class="block">Hora fin</label>
-                <p-calendar 
-                [(ngModel)]="dateFin" 
-                [iconDisplay]="'input'" 
-                [showIcon]="true" 
-                [timeOnly]="true" 
-                [showTime]="true"
-                inputId="timeFin">
-              </p-calendar>
-            </div>
-        </div> -->
+      </div>
+  </div>
+  <div style="display: flex;justify-content: flex-end;">
+    <p-button icon="pi pi-pencil"  label="Editar reporte" severity="success"  (click)="UpdateReporte()" />
+  </div>
+ 
+  <p-divider type="dashed"/>
+  }
 
-        <div class="flex justify-content-end gap-2">
-            <!-- <p-button label="Generar reporte" severity="success"  (onClick)="generarReporte(); visible = false" /> -->
+
+    @if (mostrarFormularioGeneral) {
+        <div style="display: flex;justify-content: flex-end; margin-top: 20px;">
+          <p-button label="Guardar" severity="success" [disabled]="!todosLosCamposLlenos()" (click)="GuardarReporteViaje()"></p-button>
+            <p-button severity="secondary" (click)="mostrarSeleccionPlantilla = false">Cerrar</p-button>
         </div>
+    }   
     </p-dialog> 
+</div>
+<div class="card flex justify-content-center">
+<p-toast />
+<p-confirmDialog>
+  <ng-template pTemplate="message" let-message>
+      <div class="flex flex-column align-items-center w-full gap-3 border-bottom-1 surface-border">
+          <i class="pi pi-exclamation-circle text-6xl text-primary-500"></i>
+          <p>{{ message.message }}</p>
+      </div>
+  </ng-template>
+</p-confirmDialog>
 </div>

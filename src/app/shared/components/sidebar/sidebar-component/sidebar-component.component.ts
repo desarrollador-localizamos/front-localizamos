@@ -1,14 +1,14 @@
 import { Component, ElementRef, Renderer2 } from '@angular/core';
 import { CustomersComponent } from "../../../../customers/customers.component";
 import { BurgerMenuService } from '../../../../burger-menu.service';
-import { Router } from '@angular/router';
+import { Router,RouterModule  } from '@angular/router';
 
 @Component({
     selector: 'app-sidebar-component',
     standalone: true,
     templateUrl: './sidebar-component.component.html',
     styleUrl: './sidebar-component.component.scss',
-    imports: [CustomersComponent]
+    imports: [CustomersComponent,RouterModule]
 })
 export class SidebarComponentComponent {
 

@@ -44,9 +44,17 @@ export class ModalBuscadorComponent {
 
     if(this.condicions["idCustomer"] == 1){
       this.idCliente = 1;
+
+      this.cabeceras.Multiconditions= {
+      
+        'MobileUnities':[],
+      }
     }else{
       this.idCliente = this.condicions["idCustomer"];
-
+        this.cabeceras.Multiconditions= {
+        
+          'MobileUnities':[{'ref':'customerId',  valor: [this.idCliente],"tipo":"in","relacion":"device"}],
+        }
     }
     
     this.cabeceras.Fields = { 
@@ -75,9 +83,7 @@ export class ModalBuscadorComponent {
       'MobileUnities':[],
     }
 
-    this.cabeceras.Multiconditions= {
-      'MobileUnities':[{'ref':'customerId',  valor: [this.idCliente],"tipo":"in","relacion":"device"}],
-    }
+      
 
     this.cabeceras.Servicios= {
       'MobileUnities':'Database/visor',
@@ -102,11 +108,7 @@ export class ModalBuscadorComponent {
   
         await this.consultaback(entidad, "obtencion","","").toPromise();
           this.resultMobile = this.datos;
-          console.log();
-       
         break;
-
-
     }
   }
   

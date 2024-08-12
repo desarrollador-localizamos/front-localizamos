@@ -19,6 +19,9 @@ export class DataService {
   private reporteViajeSubject = new Subject<number>();
   reporteViaje$ = this.reporteViajeSubject.asObservable();
 
+  private compartirSeguimientoSubject = new Subject<number>();
+  compartirSeguimiento$ = this.compartirSeguimientoSubject.asObservable();
+
   private reporteRutaDataSubject = new BehaviorSubject<any>(null);
   reporteRutaData$ = this.reporteRutaDataSubject.asObservable();
 
@@ -43,6 +46,9 @@ export class DataService {
 
   private showModalSource = new Subject<boolean>();
   showModal$ = this.showModalSource.asObservable();
+
+  private showStreetViewSubject = new Subject<{lat: number, lng: number}>();
+  showStreetView$ = this.showStreetViewSubject.asObservable();
 
   private readonly baseUrl: string = environments.baseUrl;
 
@@ -276,6 +282,14 @@ export class DataService {
 
   emitReporteViaje(unityId : number) {
     this.reporteViajeSubject.next(unityId);
+  }
+
+  emitCompartirSeguimiento(unityId : number) {
+    this.compartirSeguimientoSubject.next(unityId);
+  }
+
+  emitShowStreetView(lat: number, lng: number) {
+    this.showStreetViewSubject.next({lat, lng});
   }
 
   setColor(color: string) {

@@ -1,0 +1,30 @@
+::ng-deep .p-dialog-content {
+    overflow: auto !important;
+}
+
+::ng-deep .p-paginator-bottom.p-paginator.p-component.ng-star-inserted{
+margin-bottom: 80px;
+}
+
+::ng-deep .p-dropdown-panel-above {
+    top: auto !important;
+    bottom: 100% !important;
+    margin-bottom: 4px !important;
+}
+
+::ng-deep .p-dropdown-panel {
+    transform-origin: bottom !important;
+}
+
+::ng-deep  button.p-ripple.p-element.p-button.p-component {
+    padding: 0px 8px 0px 8px;
+}
+
+::ng-deep input.p-inputtext.p-component.p-element {
+    width: 100% !important;
+    height: 40px;
+}
+
+::ng-deep span .p-calendar.p-input-icon-right{
+    width: 100%;
+}

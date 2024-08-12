@@ -1,0 +1,117 @@
+<div style="padding: 20px;">
+    <h2>Permisos</h2>
+    <p-divider />
+    <div>
+        <div class="flex flex-wrap align-items-center  ">
+            <span class=" mr-5"  style="font-size: 18px;font-weight: 600; color: #6b7280;">Tipo de usuario</span>
+            <div class="card flex justify-content-center" >
+                <p-dropdown 
+                    [options]="roles"
+                    [(ngModel)]="seleccionarRoles"
+                    optionLabel="name"
+                    [filter]="true"
+                    filterBy="name"
+                    [showClear]="true"
+                    (onChange)="consultarRoles()"
+                    placeholder="Selecciona un rol">
+                        <ng-template pTemplate="selectedItem" let-selectedOption>
+                            <div class="flex align-items-center gap-2">
+                                <div>{{ selectedOption.name }}</div>
+                            </div>
+                        </ng-template>
+                        <ng-template let-role pTemplate="item">
+                            <div class="flex align-items-center gap-2">
+                                <div>{{ role.name }}</div>
+                            </div>
+                        </ng-template>
+                </p-dropdown>
+            </div>
+
+        </div>
+
+        @if (this.seleccionarRoles) {
+            <div class="grid  mt-5">
+                <div class="col-12 md:col-4 pr-md-2">
+                    <div class="border-round-sm bg-white">
+                        <div class="p-3 ">
+                            <ul class="p-0">
+                                @for (item of result.roles.body; track $index) {
+                                    <li  class="flex flex-wrap justify-content-between align-items-center">
+                                        <div>
+                                            <span>
+                                                {{ item[0].name.split('-').slice(1).join('-') }}
+                                            </span> 
+                                        </div>
+                                        <div class="flex flex-direction-row ml-2 mt-2 ml-3"> 
+                                            <p-button styleClass="acciones" class="mr-2" icon="pi pi-pencil" [rounded]="true" severity="success" (click)="editarRol(item[0].id,item[0].name)"/>
+                                            <p-button styleClass="acciones" icon="pi pi-trash" [rounded]="true" severity="danger" (click)="eliminarRol(item[0].id)"/>
+                                        </div>
+                                       
+                                    </li>
+                                    <p-divider />
+                                }
+                            </ul>
+                           
+                        </div>
+                        <div>
+                            @if (verInput) {
+                                <div class="card flex justify-content-center" style="padding: 0px 8px; margin-bottom: 10px;">
+                                <input  type="text" placeholder="Ingrese un rol" pInputText [(ngModel)]="nuevoRol" />
+                                </div>
+                            }
+                            <div style="padding: 0px 8px;">
+                              <p-button styleClass="nuevoRol" label="Nuevo rol" severity="success" (click)="crearRol()" />
+                            </div>
+                          </div>
+                       
+                    </div>
+                    
+                  
+                </div>
+                <div class="col-12 md:col-8  pl-md-2">
+                    <div class="border-round-sm bg-white">
+                        <div class="p-3 ">
+                            <div>
+                                <div>
+                                    <div class="mb-3">
+                                        <span class="">General</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <span class="">Recursos</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <span class="">Administración</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <span class="">Reportes</span>
+                                    </div>
+                                    <div class="mb-3">
+                                        <span class="">Configuración</span>
+                                    </div>
+                                    <div class="mb-2">
+                                        <p-fieldset legend="Mapa" [toggleable]="true" [(collapsed)]="collapsed">
+                                            <div class="flex justify-content-between">
+                                                <div>
+                                                    <span>Ver mapa</span>
+                                                </div>
+                                                
+                                                <div class="card flex justify-content-center">
+                                                    <p-inputSwitch [(ngModel)]="checked" />
+                                                </div>
+                                            </div>
+                                        </p-fieldset>
+                                    </div>
+                             
+                                </div>
+        
+                            </div>
+                        </div>
+                    </div>
+                    
+                </div>
+            </div>   
+        }
+        
+    </div>
+</div>
+ 

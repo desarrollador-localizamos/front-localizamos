@@ -88,7 +88,7 @@ export const Entities = {
     'SimcardLogs': 'SimcardLogs',
     'SimcardPlan': 'SimcardPlan',
     'Simcards': 'Simcards',
-    
+
     // Entidades llamadas desde componentes especificos 
     'Reporte general': "MobileUnityEvents",
     'Reporte horas trabajadas': "Works",

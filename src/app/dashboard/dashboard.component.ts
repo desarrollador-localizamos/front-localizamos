@@ -6,17 +6,19 @@ import { DividerModule } from 'primeng/divider';
 import { TagModule } from 'primeng/tag';
 import { AuthService } from '../core/services/auth.service';
 import { DataService } from '../core/services/data.service';
-import { Router } from '@angular/router';
 import { BurgerMenuService } from '../burger-menu.service'; 
 import { data } from '../shared/components/inputs/select/select-avanzado/select-avanzado.component';
 import { Observable, tap, catchError, throwError } from 'rxjs';
 import { DataSimpleService } from '../core/services/datasimple.service';
+import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';
+
 @Component({
     selector: 'app-dashboard',
     standalone: true,
     templateUrl: './dashboard.component.html',
     styleUrl: './dashboard.component.scss',
-    imports: [DividerModule,CarouselModule,TagModule, FormsModule]
+    imports: [DividerModule,CarouselModule,TagModule, FormsModule,RouterModule]
 })
 
 
@@ -40,11 +42,27 @@ export class DashboardComponent implements AfterViewInit{
   protected resultadoTotalActivos: any;
   protected resultadoTotalVehiculosActivos: any;
   protected resultCountNotificaciones: any;
+  protected resultGeocercas: any;
+  protected resultReportes: any;
   protected opciones= {MobileUnities: this.datos}
   protected result = {MobileUnities: this.res}
   private cabeceras:any={Entities: {},Fields: {}, Relations: {},Joins: {},Multiconditions:{},Servicios:{}};
   protected idCliente: number = 0;
-
+  protected typeReportMap: { [key: number]: string } = {
+    1: 'Reporte general',
+    2: 'Horas trabajadas',
+    3: 'Kilometros recorridos',
+    4: 'Velocidad promedio',
+    5: 'Geocercas',
+    6: 'Mantenimiento',
+    7: 'Gerencial',
+    8: 'Certificado',
+    9: 'Horas reposo',
+    10: 'Temperatura',
+    11: 'Conductores',
+    12: 'Preoperacional',
+    13: 'Gasolina'
+  };
 
   private condicions: any = { "idCustomer": 779 }; // valor del customer almacenar por medio de la variable computada
   
@@ -69,6 +87,8 @@ export class DashboardComponent implements AfterViewInit{
       this.idCliente = this.condicions["idCustomer"];
 
     }
+
+    
     
 
      this.cabeceras.Fields = { 
@@ -81,18 +101,37 @@ export class DashboardComponent implements AfterViewInit{
         {campo:"endreport.battery", texto: "bateria"},
         {campo:"endreport.course", texto: "Curso"},
         {campo:"endreport.degree", texto: "Grados"},
+        {campo:"device.customerId", texto: "campo" },
         {campo:"device.deviceType.brand.name", texto: "Tipo de dispositivo"},
         {campo:"device.deviceType.code", texto: "Referencia del dispositivo"},
        ],
 
        MobileUnities_:  [
         {campo:"id", texto: "value" },
+        {campo:"device.customerId", texto: "campo" },
         {campo:"updatedAt", texto: "value" },
        ],
 
        UserNotifications:  [
         {campo:"id", texto: "value" },
         {campo:"status", texto: "value" },
+       ],
+
+      ScheduledReports:  [
+        {campo:"id", texto: "value" },
+        {campo:"customerId", texto: "customer" },
+        {campo:"emails", texto: "correo" },
+        {campo:"typeReport", texto: "reportes" },
+        {campo:"periodicity", texto: "periocidad" },
+        {campo:"status", texto: "value" },
+      ],
+
+       GeographicalResources:  [
+        {campo:"id", texto: "value" },
+        {campo:"name", texto: "nombre" },
+        {campo:"customerId", texto: "customer" },
+        {campo:"type", texto: "tipo" },
+        {campo:"color", texto: "color" },
        ],
     }; 
 
@@ -101,12 +140,17 @@ export class DashboardComponent implements AfterViewInit{
       'MobileUnities':'MobileUnities',
       'MobileUnities_':'MobileUnities',
       'UserNotifications':'UserNotifications',
+      'GeographicalResources':'GeographicalResources',
+      'ScheduledReports':'ScheduledReports',
     };
 
     this.cabeceras.Relations= {
       MobileUnities: [
-        "device","type", "subclass", "class",
+        "device","type", "subclass", "class", "device.customer",
         "device.deviceType","device.deviceType.brand","subclass", 
+       ],
+       MobileUnities_: [
+        "device", "device.customer",
        ],
     }
 
@@ -115,8 +159,10 @@ export class DashboardComponent implements AfterViewInit{
     }
 
     this.cabeceras.Multiconditions= {
-      'MobileUnities':[{'ref':'endreport',  valor: '"customer_id":' + this.idCliente,'tipo':'like'}],
-      'MobileUnities_':[{'ref':'endreport',  valor: '"customer_id":' + this.idCliente,'tipo':'like'}],
+      'MobileUnities':[{'ref':'customerId',  valor: [this.idCliente],"tipo":"in","relacion":"device"}],
+      'MobileUnities_':[{'ref':'customerId',  valor: [this.idCliente],"tipo":"in","relacion":"device"}],
+      'GeographicalResources':[{'ref':'customerId',  valor: [this.idCliente]}],
+      'ScheduledReports':[{'ref':'customerId',  valor: [this.idCliente]}],
       'UserNotifications':[{'ref':'status',  valor: '0'}],
     }
 
@@ -124,6 +170,8 @@ export class DashboardComponent implements AfterViewInit{
       'MobileUnities':'Database/visor',
       'MobileUnities_':'Database/visor',
       'UserNotifications':'Database/visor',
+      'GeographicalResources':'Database/visor',
+      'ScheduledReports':'Database/visor',
     }
 
 
@@ -152,6 +200,8 @@ export class DashboardComponent implements AfterViewInit{
     this.consultas('MobileUnities');
     this.consultas('MobileUnities_');
     this.consultas('UserNotifications');
+    this.consultas('GeographicalResources');
+    this.consultas('ScheduledReports');
   }
 
 
@@ -161,7 +211,6 @@ export class DashboardComponent implements AfterViewInit{
 
       await this.consultaback(entidad, "obtencion","","", {'updatedAt':'DESC'}, 5).toPromise();
         this.resultMobile = this.datos;
-        console.log();
      
       break;
 
@@ -182,13 +231,26 @@ export class DashboardComponent implements AfterViewInit{
         this.resultCountNotificaciones = count;
      
       break;
+
+      case 'GeographicalResources':
+
+      await this.consultaback(entidad, "obtencion","","",{}).toPromise();
+        this.resultGeocercas = this.datos;
+
+      break;
+
+      case 'ScheduledReports':
+
+      await this.consultaback(entidad, "obtencion","","",{}).toPromise();
+        this.resultReportes = this.datos;
+        console.log("reportes", this.resultReportes);
+        
+
+      break;
   }
 }
 
   private consultaback(entidad: string, tipo: string, cabecera?: string, identif?:string, ordenar?: any, takes?: number): Observable<any> {
-    console.log("fields", this.cabeceras);
-    console.log("fields", this.cabeceras.Servicios);
-    console.log("entidad", entidad);
     let id = "";
     
     return this.dataSimpleService.fetchData(this.cabeceras.Servicios[entidad], this.cabeceras.Entities[entidad], 
@@ -257,6 +319,13 @@ export class DashboardComponent implements AfterViewInit{
     console.log("Total activos en las últimas 24 horas:", count);
   }
 
+  formatEmails(emails: string): string[] {
+    return emails.split(',').map(email => email.trim());
+  }
+
+  getTypeReportText(typeReport: string): string {
+    return typeReport.split(',').map(id => this.typeReportMap[+id] || 'Desconocido').join(', ');
+  }
 
     
 }

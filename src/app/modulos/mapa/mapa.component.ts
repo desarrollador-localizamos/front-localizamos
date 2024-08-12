@@ -23,6 +23,8 @@ import { MessageService } from 'primeng/api';
 import { ButtonModule } from 'primeng/button';
 import { CommonModule } from '@angular/common';
 import { DataSimpleService } from '../../core/services/datasimple.service';
+import { StreetViewComponent } from "./capas/street-view/street-view.component";
+import { CompartirSeguimientoComponent } from "./capas/compartir-seguimiento/compartir-seguimiento.component";
 
 const drawLocalSpanish = {
   draw: {
@@ -137,7 +139,7 @@ const drawLocalSpanish = {
     templateUrl: './mapa.component.html',
     styleUrls: ['./mapa.component.scss'],
     imports: [CommonModule, ButtonModule, ToastModule, CardModule, ButtonTooltiComponent, BannerInferiorComponent, ModalFiltroComponent, VentanaInfoAccionComponent,
-    PopupCarroComponent, ReporteRutaComponent, ReporteViajeComponent, RecursosGeograficosMapaComponent],
+    PopupCarroComponent, ReporteRutaComponent, ReporteViajeComponent, RecursosGeograficosMapaComponent, StreetViewComponent, CompartirSeguimientoComponent],
     providers: [MessageService]
 })
 export class MapaComponent  implements AfterViewInit{
@@ -209,6 +211,7 @@ private colorSeleccionado: string = '';
       {campo:"endreport.lat", texto: "latitud"},
       {campo:"endreport.long", texto: "longitud"},
       {campo:"endreport.horaSR", texto: "tiempo sin reportar"},
+      {campo:"endreport.mobilestatus", texto: "estado"},
       {campo:"endreport.eventOn.address", texto: "dirección"},
       {campo:"endreport.battery", texto: "bateria"},
       {campo:"endreport.timeOff", texto: "tiempo en el mismo lugar"},  // falta calculo desde el back

@@ -38,8 +38,14 @@
             
           </div>
           <p>  <span class="title">ICCID: </span> {{ responseData?.devicesimcardimei }}</p>
-          <p> <span class="title">Estado actual: </span> <p-tag icon="pi pi-check" severity="success" value="Success" ></p-tag>
-
+          <p>
+            <span class="title">Estado actual: </span>
+            <p-tag [severity]="responseData?.endreportmobilestatus === 'No Reporta' ? 'secondary' :
+                               responseData?.endreportmobilestatus === 'Apagado' ? 'danger' :
+                               responseData?.endreportmobilestatus === 'Encendido' ? 'success' :
+                               responseData?.endreportmobilestatus === 'Detenido' ? 'warning' : 'info'"
+                   [value]="responseData?.endreportmobilestatus">
+            </p-tag>
           </p>
         </div>
         <div class="panel-section">
@@ -79,7 +85,8 @@
           <p><span class="title">Venc. Tecnomecanica: </span> {{ responseData?.techMechRevitionDueDate }}</p>
           <p><span class="title">Venc. SOAT: </span> {{ responseData?.soatDueDate }}</p>
           <p><span class="title">Fecha de instalación: </span> {{ responseData?.installationDate }}</p>
-          <p><span class="title">Contactos de emergencia</span> </p>
+          <p><span class="title" style="    text-decoration: underline; cursor: pointer;" (click)="contactosEmergencia()">
+            Contactos de emergencia</span> </p>
         </div>
        
   
@@ -133,3 +140,45 @@
       </div>
     </div>
 </div>
+
+<div class="card flex flex-column align-items-center gap-2">
+  <p-dialog 
+      [position]="'top'" 
+      header="Contactos de emergencia"
+      [(visible)]="visible" 
+      [modal]="true" 
+      [breakpoints]="{ '1199px': '75vw', '575px': '90vw' }" 
+      [style]="{ width: '50vw', minHeight: '200px' }" 
+      [draggable]="false" 
+      [resizable]="false"
+      [autoZIndex]="true">
+
+
+      <p-table [value]="resultData.body"
+      [paginator]="true"
+      [rows]="5"
+      [tableStyle]="{ 'min-width': '50rem' }"
+      [rowsPerPageOptions]="[10, 50]">
+        <ng-template pTemplate="header">
+          <tr>
+              @for (header of resultData.header; track header) {
+              @if (header.texto !== 'no va') {
+                  <th>{{ header.texto }}</th>
+              }
+              }
+          </tr>
+          </ng-template>
+          <ng-template pTemplate="body" let-item>
+          <tr>
+              @for (header of resultData.header; track header) {
+                  @if (header.texto !== 'no va') {
+                      <td>{{ item[0][header.campo] }}</td>
+                  }
+              }
+          </tr>
+          </ng-template>
+      </p-table>
+
+    </p-dialog>
+</div>
+

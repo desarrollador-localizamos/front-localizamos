@@ -44,12 +44,12 @@
             </li> -->
 
              <li>
-                <a (click)="onLinkClick('MobileUnityEvents' , 1)" >
+                <a [routerLink]="['/centralMonitoreo']">
                     <i class="pi pi-globe"></i>
                     <span class="link_name">Visor general</span>
                 </a>
                 <ul class="menu-desplegable">
-                    <li class="lista-submenu"><a class="link_name-desplegable" (click)="onLinkClick('MobileUnityEvents',1)">Visor general</a></li>
+                    <li class="lista-submenu"><a class="link_name-desplegable" [routerLink]="['/centralMonitoreo']">Visor general</a></li>
     
                 </ul>
             </li>
@@ -113,7 +113,7 @@
                 <ul class="sub-menu ">
                     <li><a class="link_name-desplegable" href="">Administración</a></li>
                     <li><a class="blank2" (click)="onLinkClick('Users',1)"><i class="pi pi-users"></i> Usuarios</a></li>
-                    <li><a class="blank2" href=""><i class="pi pi-unlock"></i>Permisos</a></li>
+                    <li><a class="blank2" [routerLink]="['/roles']"><i class="pi pi-unlock"></i>Permisos</a></li>
                     <li><a class="blank2" (click)="onLinkClick('Plans',1)"><i class="pi pi-clone"></i> Planes</a></li>
                     <li><a class="blank2" (click)="onLinkClick('Consultants',1)"><i class="pi pi-verified"></i> Asesores comerciales</a></li>  
                 </ul>

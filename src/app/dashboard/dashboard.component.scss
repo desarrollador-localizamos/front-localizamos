@@ -146,6 +146,7 @@ a{
 .text-strong{
     display: flex;
     padding: 0px 8px;
+    font-weight: 700;
 }
 
 .div-button{
@@ -208,6 +209,16 @@ a{
     margin-right: 5px;
 }
 
+.contenedor-email-reportes{
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 100%; 
+    text-align: left; 
+    width: 100%; 
+    display: flex; 
+    flex-direction: column; 
+    margin-left: 10px;
+}
 
 .battery-low {
     background-color: #EF4444; /* rojo */
@@ -237,6 +248,14 @@ a{
     background-color: #EF4444; /* rojo */
   }
 
+  a{
+    cursor: pointer;
+  }
+
+  i.fi.fi-ss-circle-small.geo{
+    display: flex;
+    align-items: center;
+  }
 
 
   

@@ -92,7 +92,7 @@
             </app-button-toolti>
             <app-button-toolti [icon]="'pi pi-map-marker'"
                 [tooltipText]="'Ir a la derecha'"
-                [rounded]="true"
+                [rounded]="true" (onClick)="onreporteStreetView()"
                 [text]="false"
                 [severity]="'info'"
                 [styles]="{ 'width': '25px', 'height': '25px', 'padding': '5px', 'background-color': '#f2b413', 'border-color' : '#f2b413', 'margin': '2px' }">

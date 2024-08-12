@@ -16,16 +16,15 @@ import { DataService } from '../../../../core/services/data.service';
     imports: [TieredMenuModule, ButtonModule,CardModule, CommonModule,  ButtonTooltiComponent,TagModule,DividerModule]
 })
 export class VentanaInfoAccionComponent {
-    items: MenuItem[] | undefined;
-    responseData: any;
-    unityId: number;
+    protected items: MenuItem[] | undefined;
+    protected responseData: any;
+    protected unityId: number;
+    protected ultimasCoordenadas: any;
     @Output() refresh = new EventEmitter<void>();
     @Output() reporteRutas = new EventEmitter<void>();
 
     @Input() VisibilidadCapaVentana: boolean = false ;
  
-
-  
 
     constructor(
         private dataService: DataService,
@@ -91,7 +90,8 @@ export class VentanaInfoAccionComponent {
             // },
             {
                 label: 'Compartir seguimiento',
-                icon: 'pi pi-share-alt'
+                icon: 'pi pi-share-alt',
+                command: () => this.onCompartirSeguimiento()
             },
             {
                 label: 'Limipiar mapa',
@@ -127,6 +127,17 @@ export class VentanaInfoAccionComponent {
 
     }
 
+    onCompartirSeguimiento() {
+        const unityIds = this.unityId;
+        try {
+            this.dataService.emitCompartirSeguimiento(unityIds);
+            console.log("Emitiendo evento", this.unityId);
+        } catch (error) {
+            console.log(error);
+            
+        }
+    }
+
     onreporteRuta() {
         const unityIds = this.unityId;
         try {
@@ -145,6 +156,19 @@ export class VentanaInfoAccionComponent {
         } catch (error) {
             console.log(error);
             
+        }
+    }
+
+    onreporteStreetView() {
+        const lat = this.responseData?.endreportlat;
+        const log = this.responseData?.endreportlong;
+
+        console.log(lat,log);
+        
+        if (lat && log) {
+          this.dataService.emitShowStreetView(lat, log);
+        } else {
+          console.error('Coordenadas no disponibles');
         }
     }
 }

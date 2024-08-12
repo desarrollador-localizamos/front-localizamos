@@ -5,8 +5,8 @@
         [value]="images"
         [circular]="true"
         [autoplayInterval]="5000"
-        [showIndicators]="false"
-      >
+        [showIndicators]="false">
+
         <ng-template pTemplate="item" let-image>
           <img [src]="image.url" [alt]="image.alt" class="carousel-image" />
         </ng-template>
@@ -20,8 +20,10 @@
 
               <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
                   <div class="card-icon rounded-circle d-flex align-items-center justify-content-center " style="height: 100%;align-content: flex-start;">
-                    <div class="contenedor-icono-card">
-                      <i class="fi fi-rr-cars"></i>
+                    <div  class="contenedor-icono-card">
+                      <a  (click)="onLinkClick('MobileUnityEvents' , 1)">
+                        <i class="fi fi-rr-cars"></i>
+                      </a>
                     </div>
                 
                   </div>
@@ -36,17 +38,20 @@
                   </div>
 
                   <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="height: 100%;align-content: flex-end;">
-                    <div  class="contenedor-icono-card">
-                      <i class="fi fi-rr-arrow-small-right"></i>
+                    <div class="contenedor-icono-card">
+                      <a  (click)="onLinkClick('MobileUnityEvents' , 1)">
+                        <i class="fi fi-rr-arrow-small-right"></i>
+                      </a>
                     </div>
-                
                   </div>
               </div>
 
               <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
                   <div class="card-icon rounded-circle d-flex align-items-center justify-content-center " style="height: 100%;align-content: flex-start;">
-                    <div class="contenedor-icono-card">
-                      <i class="fi fi-br-signal-stream"></i>
+                    <div  class="contenedor-icono-card">
+                      <a  (click)="onLinkClick('MobileUnityEvents' , 1)">
+                        <i class="fi fi-br-signal-stream"></i>
+                      </a>
                     </div>
                 
                   </div>
@@ -56,22 +61,23 @@
                       <span class="span-valor">{{resultadoTotalVehiculosActivos}}/{{resultadoTotalActivos }}</span>
                       <p class="texto-valor" > Unidades Reportando</p>
                     </div>
-
-                  
                   </div>
 
                   <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="height: 100%;align-content: flex-end;">
                     <div  class="contenedor-icono-card">
-                      <i class="fi fi-rr-arrow-small-right"></i>
+                      <a  (click)="onLinkClick('MobileUnityEvents' , 1)">
+                        <i class="fi fi-rr-arrow-small-right"></i>
+                      </a>
                     </div>
-                
                   </div>
               </div>
 
               <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center " style="height: 100%;align-content: flex-start;">
                   <div class="contenedor-icono-card">
-                    <i class="fi fi-bs-bell-notification-social-media"></i>
+                    <a  [routerLink]="['/notificaciones']">
+                      <i class="fi fi-bs-bell-notification-social-media"></i>
+                    </a>
                   </div>
               
                 </div>
@@ -86,8 +92,10 @@
                 </div>
 
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="height: 100%;align-content: flex-end;">
-                  <div  class="contenedor-icono-card">
-                    <i class="fi fi-rr-arrow-small-right"></i>
+                  <div class="contenedor-icono-card">
+                    <a  [routerLink]="['/notificaciones']">
+                      <i class="fi fi-rr-arrow-small-right"></i>
+                    </a>
                   </div>
               
                 </div>
@@ -96,9 +104,11 @@
               <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center " style="height: 100%;align-content: flex-start;">
                   <div class="contenedor-icono-card">
-                    <i class="fi fi-rr-map-location-track"></i>
+                    <a  (click)="onLinkClick('ScheduledReports', 3)">
+                      <i class="fi fi-rr-map-location-track"></i>
+                    </a>
                   </div>
-              
+
                 </div>
 
                 <div class="ps-3 components">
@@ -112,7 +122,9 @@
 
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="height: 100%;align-content: flex-end;">
                   <div  class="contenedor-icono-card">
-                    <i class="fi fi-rr-arrow-small-right"></i>
+                    <a  (click)="onLinkClick('ScheduledReports', 3)">
+                      <i class="fi fi-rr-arrow-small-right"></i>
+                    </a>
                   </div>
               
                 </div>
@@ -121,7 +133,9 @@
               <div class="card-top-info flex align-items-center p-2 flex-1 min-w-min" style="justify-content: space-between;">
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center " style="height: 100%;align-content: flex-start;">
                   <div class="contenedor-icono-card">
-                    <i class="fi fi-rs-time-twenty-four"></i>
+                    <a  (click)="onLinkClick('ScheduledReports', 3)">
+                      <i class="fi fi-rs-time-twenty-four"></i>
+                    </a>
                   </div>
               
                 </div>
@@ -137,7 +151,9 @@
 
                 <div class="card-icon rounded-circle d-flex align-items-center justify-content-center" style="height: 100%;align-content: flex-end;">
                   <div  class="contenedor-icono-card">
-                    <i class="fi fi-rr-arrow-small-right"></i>
+                    <a  (click)="onLinkClick('ScheduledReports', 3)">
+                      <i class="fi fi-rr-arrow-small-right"></i>
+                    </a>
                   </div>
               
                 </div>
@@ -167,11 +183,7 @@
               
                 </div>
               </div>
-
-
-            
             </div>
-
           </div>
 
           <div>
@@ -240,10 +252,6 @@
                       }
                     }
                   </div>
-
-                 
-              
-                
                 </div>
               
                 <p-divider type="dashed"/>
@@ -265,19 +273,17 @@
         <div class="col-12 lg:col-4">
         
           <div>
-
             <div class="col-12">
               <div class="card-top-info " >
-                <div > 
+                <div> 
                   <img src="http://aplicacion.localizamos.co/assets/images/dashboard/box2.jpg" alt="" class="imagen-acabecera-card">
-
                 </div>
 
                 <div style="font-size: 14px;">
                   <span class="span-title">Reporte y Analiticas</span>
                   <p class="p-title">Obtenga los reportes y datos acerca de su información</p>
                   <div >
-                   <a href="#"><h3 class="title-h3">Generar certificado <i class="fi fi-rs-features-alt"></i></h3> </a> 
+                   <a (click)="onLinkClick('ScheduledReports' , 3)"><h3 class="title-h3">Generar certificado <i class="fi fi-rs-features-alt"></i></h3> </a> 
                   </div>
                   <p-divider type="dashed"/>
                   <div>
@@ -285,44 +291,34 @@
                
                   </div>
                   <p-divider type="dashed"/>
-                  <div style="height: 80px; overflow: auto;">
-                    <div style="font-size: 12px; ">
-                      <span class="span-title">Reporte velocidad promedio</span>
-                      <div>
-                        <strong class="text-strong" >Periocidad: semanal</strong>
-                       
-                        <strong class="text-strong" >Notifica a: santiemdgmal.com</strong>
-                      </div>
-                    
-  
-                    </div>
-                    <p-divider type="dashed"/>
-                    <div style="font-size: 12px; ">
-                      <span class="span-title">Reporte velocidad promedio</span>
-                      <div>
-                        <strong style="display: flex; padding: 0px 8px;">Periocidad: semanal</strong>
-                       
-                        <strong style="display: flex;  padding: 0px 8px;">Notifica a: santiemdgmal.com</strong>
-                      </div>
-                    
-  
-                    </div>
-                    <p-divider type="dashed"/>
-                    <div style="font-size: 12px; ">
-                      <span class="span-title">Reporte velocidad promedio</span>
-                      <div>
-                        <strong style="display: flex; padding: 0px 8px;">Periocidad: semanal</strong>
-                       
-                        <strong style="display: flex;  padding: 0px 8px;">Notifica a: santiemdgmal.com</strong>
-                      </div>
-                    
-  
-                    </div>
+                  <div style="height: 80px; overflow-y: scroll; overflow-x: hidden;">
+                    <ng-container *ngFor="let subArray of resultReportes?.body">
+                      <ng-container *ngFor="let item of subArray">
+                        <div style="font-size: 12px;">
+                          <div>
+                            <span class="span-title">{{ getTypeReportText(item.typeReport) }}</span>
+                          </div>
+                         
+                          <div>
+                            <div style="display: flex;">
+                              <span class="text-strong">Periodicidad: </span>
+                              <span>{{ item.periodicity === 1 ? 'semanal' : (item.periodicity === 2 ? 'mensual' : 'desconocido') }}</span>
+                            </div>
+                            <div>
+                              <span class="text-strong">Notifica a:</span>
+                              <div style="white-space: normal; word-wrap: break-word; max-width: 100%; text-align: left; width: 100%; display: flex; flex-direction: column; margin-left: 10px;">
+                                <ng-container *ngFor="let email of formatEmails(item.emails)">
+                                  <span>{{ email }}</span>
+                                </ng-container>
+                              </div>
+                            </div>
+                           
+                          </div>
+                        </div>
+                        <p-divider type="dashed"/>
+                      </ng-container>
+                    </ng-container>
                   </div>
-                
-                  <p-divider type="dashed"/>
-
-                </div>
 
                 <div>
                   <div class="div-button">
@@ -345,7 +341,7 @@
                   <span class="span-title">Recursos Geográficos</span>
                   <p class="p-title">Visualice y administre sus recursos geográfico</p>
                   <div >
-                   <a href="#"><h3 class="title-h3">Mis geocercas <i class="fi fi-br-land-layer-location"></i></h3> </a> 
+                   <a (click)="onLinkClick('GeographicalResources' , 1)"><h3 class="title-h3">Mis geocercas <i class="fi fi-br-land-layer-location"></i></h3> </a> 
                   </div>
                   <p-divider type="dashed"/>
                   <div>
@@ -353,43 +349,24 @@
                
                   </div>
                   <p-divider type="dashed"/>
-                  <div style="height: 80px; overflow: auto;">
-                    <div style="font-size: 12px; ">
-                      <span class="span-title">Gruas pereira <strong class="text-strong" >(Geocerca)</strong></span>
-                    
-  
-                    </div>
-                    <p-divider type="dashed"/>
-                    <div style="font-size: 12px; ">
-                      <span class="span-title">Reporte velocidad promedio</span>
-                      <div>
-                        <strong style="display: flex; padding: 0px 8px;">Periocidad: semanal</strong>
-                       
-                        <strong style="display: flex;  padding: 0px 8px;">Notifica a: santiemdgmal.com</strong>
-                      </div>
-                    
-  
-                    </div>
-                    <p-divider type="dashed"/>
-                    <div style="font-size: 12px; ">
-                      <span class="span-title">Reporte velocidad promedio</span>
-                      <div>
-                        <strong style="display: flex; padding: 0px 8px;">Periocidad: semanal</strong>
-                       
-                        <strong style="display: flex;  padding: 0px 8px;">Notifica a: santiemdgmal.com</strong>
-                      </div>
-                    
-  
-                    </div>
-                  </div>
                 
-                  <p-divider type="dashed"/>
-
+                  <div style="height: 100px; overflow: auto;">
+                    @for (subArray of resultGeocercas?.body; track $index) {
+                      @for (item of subArray; track item.id) {
+                        <div style="font-size: 12px; ">
+                          <span class="span-title">
+                            <i  class="fi fi-ss-circle-small geo" [style.color]="item.color"></i>{{item.name}}<strong class="text-strong" >(Geocerca)</strong>
+                          </span>
+                        </div>
+                        <p-divider type="dashed"/>
+                      }
+                    }
+                  </div>
                 </div>
 
                 <div>
                   <div class="div-button">
-                    <span class="span-button"><a href="#">Ver más <i style="font-size: 15px; display: flex;"
+                    <span class="span-button"><a (click)="onLinkClick('GeographicalResources' , 1)">Ver más <i style="font-size: 15px; display: flex;"
                        class="fi fi-rr-arrow-small-right"></i></a></span>
                   </div>
                 </div>
